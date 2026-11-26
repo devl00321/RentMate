@@ -64,7 +64,7 @@ flowchart LR
 - [x] M0.1 Create repo layout from rules/01 s3, `.gitignore`, README stub | accept: tree matches
 - [x] M0.2 Copy `tools/check-lines.sh`, run it | accept: prints OK
 - [x] M0.3 Verify and pin Firebase SDK version; log in brain.md | accept: version + doc link logged
-- [ ] M0.4 `config/constants.js`, `errors.js`, `env.example.js` | accept: PLACEHOLDER labels present
+- [x] M0.4 `config/constants.js`, `errors.js`, `env.example.js` | accept: PLACEHOLDER labels present
 - [ ] M0.5 Static dev server instructions and a blank page loading modules | accept: console clean
 
 ### M1 Design system and shell (rules/06)

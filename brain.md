@@ -7,20 +7,21 @@ items to `brain-archive.md` when this file nears 250 lines.
 ## 1. Current state
 
 - Phase: M0 Foundation
-- Last completed task: M0.3
-- Next task: M0.4
-- Uncommitted work: goal.md, brain.md
+- Last completed task: M0.4
+- Next task: M0.5
+- Uncommitted work: src/config/*, goal.md, brain.md
 - Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Node v26.5.0; Python 3.14.0
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M0.3 Verify and pin Firebase SDK version; log in brain.md
+- Task: M0.4 `config/constants.js`, `errors.js`, `env.example.js`
 - Plan:
-  1. Check official Firebase JS SDK docs for latest modular ES module CDN version.
-  2. Check official Firebase pricing docs for Spark plan Cloud Storage status (OB-3).
-  3. Record verified version, CDN URLs, and doc links in `brain.md` section 6.
-- Files being edited: `brain.md`, `goal.md`
-- Done when: version + doc link logged in `brain.md`
+  1. Create `src/config/constants.js` with statuses, roles, fee rate (`PLACEHOLDER`), pagination limit, and image upload limits.
+  2. Create `src/config/errors.js` with `AppError` and `ERROR_CODES` per rules/04 s4.
+  3. Create `src/config/env.example.js` with Firebase, Cloudinary, Razorpay test, and Google Maps config placeholders.
+  4. Verify `PLACEHOLDER` labels are present and `tools/check-lines.sh` passes.
+- Files being edited: `src/config/constants.js`, `src/config/errors.js`, `src/config/env.example.js`, `brain.md`, `goal.md`
+- Done when: PLACEHOLDER labels present and check-lines passes
 
 ## 3. Obstacles (open and resolved)
 
