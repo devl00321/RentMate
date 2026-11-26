@@ -1,7 +1,7 @@
 /**
  * RentMate application entry point.
  */
-import { html, renderHtml } from './components/dom.js';
+import { initTheme, renderShell, updateNavActive } from './components/shell.js';
 import { createRouter } from './router.js';
 
 const ROUTES = [
@@ -11,16 +11,19 @@ const ROUTES = [
 ];
 
 /**
- * Boot the application router inside #app.
+ * Boot the application shell and router inside #app.
  */
 function boot() {
   const root = document.getElementById('app');
   if (!root) return;
-  renderHtml(root, html`<div class="wrap"><main id="main-content" tabindex="-1"></main></div>`);
+
+  initTheme();
+  renderShell(root, { user: null });
 
   const router = createRouter({
     routes: ROUTES,
     getOutlet: () => document.getElementById('main-content'),
+    onRouteChange: (path) => updateNavActive(path),
   });
   router.start();
 }

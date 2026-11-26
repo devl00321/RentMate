@@ -70,7 +70,7 @@ flowchart LR
 ### M1 Design system and shell (rules/06)
 - [x] M1.1 Port `design/tokens.css` to `src/styles/`, split base and components | accept: matches preview
 - [x] M1.2 Hash router with lazy view loading and 404 view | accept: 3 stub routes work
-- [ ] M1.3 App shell: header, nav, footer, theme support, skip link | accept: keyboard test passes
+- [x] M1.3 App shell: header, nav, footer, theme support, skip link | accept: keyboard test passes
 - [ ] M1.4 Components: button, field, chip, modal, toast, skeleton, empty state | accept: demo route shows all states
 - [ ] M1.5 Components: price tag, ribbon (horizontal and vertical), rating stars | accept: ribbon shows all 9 statuses
 - [x] M1.6 `dom.js` safe html helper with escaping test | accept: injection test passes

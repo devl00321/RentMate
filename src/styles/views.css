@@ -1,9 +1,10 @@
 /* App shell and view-specific layouts */
 .top {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: var(--s4);
+  gap: var(--s3) var(--s4);
   padding: var(--s4) 0;
 }
 
@@ -23,15 +24,19 @@
 }
 .brand .price-tag::before { left: 9px; width: 5px; height: 5px; margin-top: -2.5px; }
 
-.nav { display: flex; gap: var(--s4); align-items: center; }
+.nav { display: flex; gap: var(--s4); align-items: center; flex-wrap: wrap; }
 .nav a { color: var(--ink); text-decoration: none; font-weight: 600; font-size: var(--fs-m); min-height: 44px; display: inline-flex; align-items: center; }
 .nav a[aria-current="page"] { color: var(--cobalt); }
+.nav .theme-btn { padding: 0 var(--s3); font-size: var(--fs-s); }
 .nav .avatar {
   width: 36px; height: 36px; border-radius: 50%;
   background: var(--cobalt-wash); color: var(--cobalt);
   display: grid; place-items: center; font-weight: 700;
 }
-@media (max-width: 639px) { .nav a:not(.keep) { display: none; } }
+@media (max-width: 639px) {
+  .nav { width: 100%; justify-content: space-between; gap: var(--s2); }
+  .nav a { font-size: var(--fs-s); }
+}
 
 .hero { padding: var(--s7) 0 var(--s6); display: grid; gap: var(--s5); }
 .hero h1 { max-width: 15ch; }

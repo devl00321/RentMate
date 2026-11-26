@@ -7,20 +7,20 @@ items to `brain-archive.md` when this file nears 250 lines.
 ## 1. Current state
 
 - Phase: M1 Design system and shell
-- Last completed task: M1.2
-- Next task: M1.3
+- Last completed task: M1.3
+- Next task: M1.4
 - Uncommitted work: none
 - Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Node v26.5.0; Python 3.14.0
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M1.3 App shell: header, nav, footer, theme support, skip link
+- Task: M1.4 Components: button, field, chip, modal, toast, skeleton, empty state
 - Plan:
-  1. Create `src/components/shell.js` rendering skip-to-content link, top header with RentMate hang-tag brand, nav (`Browse`, `List an item`, `Dashboard`, `Sign in`), theme toggle (`light`/`dark` persisted in `localStorage`), main outlet, toast container, and footer.
-  2. Update `src/app.js` to mount the shell and sync `aria-current="page"` on route change.
-  3. Verify keyboard navigation, skip link, and theme toggle in headless Chrome at 360 and 1280 px.
-- Files being edited: `src/components/shell.js`, `src/app.js`, `src/styles/views.css`, `brain.md`, `goal.md`
-- Done when: shell renders with skip link, theme support, accessible nav, and clean console
+  1. Create reusable component modules in `src/components/`: `ui.js` (button, field, chip, skeleton), `modal.js`, `toast.js`, `emptyState.js`.
+  2. Update `src/views/demo.js` to showcase all components and states (default, disabled/busy, error, empty, skeleton, modal trigger, toast trigger).
+  3. Verify `demo.js` in headless browser and run `node --test` + `check-lines.sh`.
+- Files being edited: `src/components/ui.js`, `src/components/modal.js`, `src/components/toast.js`, `src/components/emptyState.js`, `src/views/demo.js`, `brain.md`, `goal.md`
+- Done when: `#/demo` renders all components and states with clean console
 
 ## 3. Obstacles (open and resolved)
 
