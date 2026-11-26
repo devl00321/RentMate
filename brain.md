@@ -7,21 +7,20 @@ items to `brain-archive.md` when this file nears 250 lines.
 ## 1. Current state
 
 - Phase: M0 Foundation
-- Last completed task: M0.1
-- Next task: M0.2
-- Uncommitted work: none
-- Verified tool versions: none yet (record in section 6)
+- Last completed task: M0.3
+- Next task: M0.4
+- Uncommitted work: goal.md, brain.md
+- Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Node v26.5.0; Python 3.14.0
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M0.1 Create repo layout from rules/01 s3, `.gitignore`, README stub
+- Task: M0.3 Verify and pin Firebase SDK version; log in brain.md
 - Plan:
-  1. Initialize git repository.
-  2. Create `.gitignore` excluding `config.local.js`, `node_modules`, `.firebase`, `.DS_Store`.
-  3. Create `src/` (`config`, `domain`, `services`, `components`, `views`, `styles`), `tests/` (`domain`, `rules`), and `docs/` directories.
-  4. Update `README.md` with a RentMate project stub noting test-mode payments.
-- Files being edited: `.gitignore`, `README.md`, `brain.md`, `goal.md`
-- Done when: tree matches rules/01 s3 layout and `tools/check-lines.sh` passes
+  1. Check official Firebase JS SDK docs for latest modular ES module CDN version.
+  2. Check official Firebase pricing docs for Spark plan Cloud Storage status (OB-3).
+  3. Record verified version, CDN URLs, and doc links in `brain.md` section 6.
+- Files being edited: `brain.md`, `goal.md`
+- Done when: version + doc link logged in `brain.md`
 
 ## 3. Obstacles (open and resolved)
 
@@ -29,7 +28,7 @@ Format: `OB-n | status | symptom | attempts | cause or next idea`
 
 - OB-1 | OPEN (watch) | Firebase Spark quota (20,000 writes and 50,000 reads a day per the report; shutdown when exhausted) | not an error yet | mitigated by rules/01 s4; measure in M10.3
 - OB-2 | OPEN (watch) | Secure deposit release needs server-side checks (Cloud Functions, paid Blaze plan, per the report) | n/a | simulate in test mode (D-012); stretch S1
-- OB-3 | OPEN (verify) | Report ref 10 (community guide) says Cloud Storage for Firebase is not on Spark since 2 Feb 2026 | n/a | verify on official Firebase pricing page in M0.3; photos use an external image host regardless
+- OB-3 | RESOLVED | Report ref 10 (community guide) says Cloud Storage for Firebase is not on Spark since 2 Feb 2026 | verified 2026-11-27 | Firebase pricing docs show Spark tier free Cloud Storage has regional restrictions (US regions) and some bucket configs require Blaze; photos use external image host regardless (rules/01 s5)
 
 ## 4. Open questions (report is silent; answer or keep PLACEHOLDER)
 
@@ -68,7 +67,7 @@ Format: `D-n | date | decision | reason | alternatives | status`
 
 | Date | Fact verified | Source link | Used in |
 |---|---|---|---|
-| (empty) | | | |
+| 2026-11-27 | Firebase JS SDK 13.4.0 modular ES modules at `https://www.gstatic.com/firebasejs/13.4.0/firebase-{app,auth,firestore}.js` (HTTP 200 verified) | https://firebase.google.com/docs/web/setup | M0.3, `src/config/firebase.js` |
 
 ## 7. Needs human (only when truly blocked)
 
