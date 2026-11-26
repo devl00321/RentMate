@@ -7,21 +7,20 @@ items to `brain-archive.md` when this file nears 250 lines.
 ## 1. Current state
 
 - Phase: M1 Design system and shell
-- Last completed task: M1.1
-- Next task: M1.2
+- Last completed task: M1.2
+- Next task: M1.3
 - Uncommitted work: none
-- Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Node v26.5.0; Python 3.14.0
 - Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Node v26.5.0; Python 3.14.0
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M1.6 `dom.js` safe html helper with escaping test
+- Task: M1.3 App shell: header, nav, footer, theme support, skip link
 - Plan:
-  1. Create `src/components/dom.js` with `escapeHtml`, `html` tagged template, `raw`, `renderHtml`, `formatPaise`.
-  2. Write `tests/domain/dom.test.js` testing XSS injection escaping, nested templates, arrays, and `renderHtml` guard.
-  3. Run `node --test` and `tools/check-lines.sh`.
-- Files being edited: `src/components/dom.js`, `tests/domain/dom.test.js`, `brain.md`, `goal.md`
-- Done when: `node --test` passes injection tests and `tools/check-lines.sh` passes
+  1. Create `src/components/shell.js` rendering skip-to-content link, top header with RentMate hang-tag brand, nav (`Browse`, `List an item`, `Dashboard`, `Sign in`), theme toggle (`light`/`dark` persisted in `localStorage`), main outlet, toast container, and footer.
+  2. Update `src/app.js` to mount the shell and sync `aria-current="page"` on route change.
+  3. Verify keyboard navigation, skip link, and theme toggle in headless Chrome at 360 and 1280 px.
+- Files being edited: `src/components/shell.js`, `src/app.js`, `src/styles/views.css`, `brain.md`, `goal.md`
+- Done when: shell renders with skip link, theme support, accessible nav, and clean console
 
 ## 3. Obstacles (open and resolved)
 
