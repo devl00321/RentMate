@@ -68,7 +68,7 @@ flowchart LR
 - [x] M0.5 Static dev server instructions and a blank page loading modules | accept: console clean
 
 ### M1 Design system and shell (rules/06)
-- [ ] M1.1 Port `design/tokens.css` to `src/styles/`, split base and components | accept: matches preview
+- [x] M1.1 Port `design/tokens.css` to `src/styles/`, split base and components | accept: matches preview
 - [ ] M1.2 Hash router with lazy view loading and 404 view | accept: 3 stub routes work
 - [ ] M1.3 App shell: header, nav, footer, theme support, skip link | accept: keyboard test passes
 - [ ] M1.4 Components: button, field, chip, modal, toast, skeleton, empty state | accept: demo route shows all states

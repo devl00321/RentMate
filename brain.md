@@ -7,22 +7,22 @@ items to `brain-archive.md` when this file nears 250 lines.
 ## 1. Current state
 
 - Phase: M1 Design system and shell
-- Last completed task: M0.5
-- Next task: M1.1
+- Last completed task: M1.1
+- Next task: M1.2
 - Uncommitted work: none
 - Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Node v26.5.0; Python 3.14.0
 - Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Node v26.5.0; Python 3.14.0
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M0.5 Static dev server instructions and a blank page loading modules
+- Task: M1.1 Port `design/tokens.css` to `src/styles/`, split base and components
 - Plan:
-  1. Create `index.html` loading `./src/app.js` as an ES module.
-  2. Create minimal `src/app.js` importing `constants.js` and `errors.js`.
-  3. Add static dev server instructions to `README.md`.
-  4. Serve locally and verify in browser that console is clean.
-- Files being edited: `index.html`, `src/app.js`, `README.md`, `brain.md`, `goal.md`
-- Done when: browser loads page with zero console errors and `tools/check-lines.sh` passes
+  1. Read `rules/06-uiux-design-system.md` and `design/*` files.
+  2. Copy `design/tokens.css` to `src/styles/tokens.css`.
+  3. Create `src/styles/base.css`, `src/styles/components.css`, and `src/styles/views.css` (each <250 lines).
+  4. Link stylesheets and Google Fonts in `index.html`.
+- Files being edited: `src/styles/tokens.css`, `src/styles/base.css`, `src/styles/components.css`, `src/styles/views.css`, `index.html`, `brain.md`, `goal.md`
+- Done when: styles match `design/` preview and `tools/check-lines.sh` passes
 
 ## 3. Obstacles (open and resolved)
 

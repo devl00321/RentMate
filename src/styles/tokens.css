@@ -1,0 +1,77 @@
+/* RentMate "Handover" design tokens. Spec: rules/06 */
+:root {
+  --chalk: #eef1f6;
+  --surface: #ffffff;
+  --mist: #dce2ee;
+  --ink: #111631;
+  --ink-2: #4a5170;
+  --cobalt: #2d4be0;
+  --cobalt-ink: #ffffff;
+  --cobalt-wash: #e3e8fd;
+  --held: #0b7a6b;
+  --held-wash: #daf1ec;
+  --marigold: #f4b63e;
+  --marigold-ink: #3a2600;
+  --berry: #c6305b;
+  --berry-wash: #fbe3ea;
+
+  --font-display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+  --font-body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --fs-s: 0.8125rem;
+  --fs-m: 0.9375rem;
+  --fs-b: 1.0625rem;
+  --fs-l: 1.3125rem;
+  --fs-xl: clamp(1.5rem, 1.2rem + 1.2vw, 1.75rem);
+  --fs-2xl: clamp(2rem, 1.4rem + 2.6vw, 3.25rem);
+
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 24px;
+  --s6: 32px;
+  --s7: 48px;
+  --s8: 72px;
+  --r-tag: 6px;
+  --r-ctl: 10px;
+  --r-card: 18px;
+  --r-full: 999px;
+  --lift: 0 1px 0 rgb(17 22 49 / 0.04), 0 14px 28px -16px rgb(17 22 49 / 0.35);
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --t-fast: 120ms;
+  --t: 220ms;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --chalk: #0d1126;
+    --surface: #151a38;
+    --mist: #262d54;
+    --ink: #edeffa;
+    --ink-2: #a5abcb;
+    --cobalt: #8ea0ff;
+    --cobalt-ink: #0d1126;
+    --cobalt-wash: #1f2760;
+    --held: #4fd1bc;
+    --held-wash: #10332f;
+    --berry: #ff7d9f;
+    --berry-wash: #3b1626;
+    --lift: 0 14px 28px -16px rgb(0 0 0 / 0.7);
+  }
+}
+
+:root[data-theme="dark"] {
+  --chalk: #0d1126;
+  --surface: #151a38;
+  --mist: #262d54;
+  --ink: #edeffa;
+  --ink-2: #a5abcb;
+  --cobalt: #8ea0ff;
+  --cobalt-ink: #0d1126;
+  --cobalt-wash: #1f2760;
+  --held: #4fd1bc;
+  --held-wash: #10332f;
+  --berry: #ff7d9f;
+  --berry-wash: #3b1626;
+  --lift: 0 14px 28px -16px rgb(0 0 0 / 0.7);
+}

@@ -1,0 +1,115 @@
+/* Core reusable components: buttons, fields, chips, price-tag, ribbon, modal, toast */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--s2);
+  min-height: 44px; padding: 0 var(--s5); border: 1.5px solid transparent;
+  border-radius: var(--r-ctl); font: 600 var(--fs-m)/1 var(--font-body); cursor: pointer;
+  background: var(--cobalt); color: var(--cobalt-ink); text-decoration: none;
+  transition: transform var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease);
+}
+.btn:hover { box-shadow: var(--lift); transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+.btn--ghost { background: transparent; color: var(--ink); border-color: var(--mist); }
+.btn--danger { background: var(--berry); color: #fff; }
+.btn[disabled], .btn[aria-busy="true"] { opacity: 0.55; cursor: progress; transform: none; box-shadow: none; }
+
+.field { display: grid; gap: var(--s1); }
+.field label { font-size: var(--fs-m); font-weight: 600; }
+.field input, .field select, .field textarea {
+  min-height: 44px; padding: var(--s2) var(--s3); border: 1.5px solid var(--mist);
+  border-radius: var(--r-ctl); background: var(--surface); color: var(--ink); font: inherit;
+}
+.field input:focus-visible, .field select:focus-visible, .field textarea:focus-visible {
+  border-color: var(--cobalt); outline-offset: 1px;
+}
+.field--error input, .field--error select, .field--error textarea { border-color: var(--berry); }
+.field__hint { color: var(--ink-2); font-size: var(--fs-s); }
+.field__error { color: var(--berry); font-size: var(--fs-s); }
+
+.chip {
+  display: inline-flex; align-items: center; gap: var(--s1); padding: 2px var(--s3);
+  border-radius: var(--r-full); background: var(--cobalt-wash); color: var(--cobalt);
+  font-size: var(--fs-s); font-weight: 600;
+}
+.chip--held { background: var(--held-wash); color: var(--held); }
+.chip--danger { background: var(--berry-wash); color: var(--berry); }
+
+/* Hang tag price: signature element 2 */
+.price-tag {
+  --hole: var(--surface);
+  position: relative; display: inline-flex; align-items: baseline; gap: var(--s1);
+  padding: 6px 14px 6px 28px; background: var(--marigold); color: var(--marigold-ink);
+  font-family: var(--font-display); font-weight: 700; font-size: var(--fs-l);
+  clip-path: polygon(14px 0, 100% 0, 100% 100%, 14px 100%, 0 50%);
+}
+.price-tag::before {
+  content: ""; position: absolute; left: 13px; top: 50%; width: 7px; height: 7px;
+  margin-top: -3.5px; border-radius: 50%; background: var(--hole);
+}
+.price-tag small { font: 500 var(--fs-s) var(--font-body); }
+
+.card { background: var(--surface); border: 1px solid var(--mist); border-radius: var(--r-card); overflow: hidden; }
+.card--raised { box-shadow: var(--lift); border-color: transparent; }
+
+/* Handover ribbon: signature element 1 */
+.ribbon { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(7, 1fr); }
+.ribbon li { position: relative; padding-top: 28px; text-align: center; font-size: var(--fs-s); color: var(--ink-2); }
+.ribbon li::before {
+  content: ""; position: absolute; top: 7px; left: 50%; width: 100%; height: 3px; background: var(--mist);
+}
+.ribbon li:last-child::before { display: none; }
+.ribbon li::after {
+  content: ""; position: absolute; top: 0; left: 50%; width: 17px; height: 17px; margin-left: -8.5px;
+  border-radius: 50%; background: var(--surface); border: 3px solid var(--mist); z-index: 1;
+}
+.ribbon li.is-done::before { background: var(--cobalt); transform-origin: left; animation: fill 600ms var(--ease) both; }
+.ribbon li.is-done::after { background: var(--cobalt); border-color: var(--cobalt); }
+.ribbon li.is-current { color: var(--ink); font-weight: 650; }
+.ribbon li.is-current::after { border-color: var(--cobalt); box-shadow: 0 0 0 5px var(--cobalt-wash); }
+.ribbon-hold { display: grid; grid-template-columns: repeat(7, 1fr); margin-top: var(--s3); }
+.ribbon-hold span {
+  grid-column: 4 / 7; text-align: center; padding: 4px var(--s2); border-radius: var(--r-full);
+  background: var(--held-wash); color: var(--held); font-size: var(--fs-s); font-weight: 600;
+}
+@keyframes fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes fill-y { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+
+@media (max-width: 639px) {
+  .ribbon, .ribbon-hold { grid-template-columns: 1fr; }
+  .ribbon li { text-align: left; padding: 0 0 20px 34px; font-size: var(--fs-m); }
+  .ribbon li::before { top: 10px; bottom: -10px; left: 7px; width: 3px; height: auto; }
+  .ribbon li.is-done::before { transform-origin: top; animation-name: fill-y; }
+  .ribbon li::after { left: 0; margin-left: 0; }
+  .ribbon-hold span { grid-column: 1; text-align: left; }
+}
+.ribbon--vertical, .ribbon--vertical + .ribbon-hold { grid-template-columns: 1fr; }
+.ribbon--vertical li { text-align: left; padding: 0 0 20px 34px; font-size: var(--fs-m); }
+.ribbon--vertical li::before { top: 10px; bottom: -10px; left: 7px; width: 3px; height: auto; }
+.ribbon--vertical li.is-done::before { transform-origin: top; animation-name: fill-y; }
+.ribbon--vertical li::after { left: 0; margin-left: 0; }
+.ribbon--vertical + .ribbon-hold span { grid-column: 1; text-align: left; }
+
+/* Modal, toast, skeleton, empty state, stars */
+.modal-backdrop {
+  position: fixed; inset: 0; z-index: 60; background: rgb(17 22 49 / 0.55);
+  display: grid; place-items: center; padding: var(--s4);
+}
+.modal { width: min(520px, 100%); padding: var(--s5); display: grid; gap: var(--s4); }
+.modal__head { display: flex; justify-content: space-between; align-items: center; gap: var(--s3); }
+.modal__actions { display: flex; justify-content: flex-end; gap: var(--s2); flex-wrap: wrap; }
+
+.toast-stack { position: fixed; right: var(--s4); bottom: var(--s4); z-index: 70; display: grid; gap: var(--s2); max-width: 360px; }
+.toast {
+  padding: var(--s3) var(--s4); border-radius: var(--r-ctl); background: var(--ink); color: var(--surface);
+  box-shadow: var(--lift); font-size: var(--fs-m); display: flex; justify-content: space-between; gap: var(--s3); align-items: center;
+}
+.toast--success { background: var(--held); color: #fff; }
+.toast--error { background: var(--berry); color: #fff; }
+
+.skeleton {
+  background: linear-gradient(90deg, var(--mist) 25%, var(--chalk) 50%, var(--mist) 75%);
+  background-size: 200% 100%; animation: shimmer 1.2s infinite; border-radius: var(--r-ctl);
+}
+@keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
+.empty-state { text-align: center; padding: var(--s7) var(--s5); display: grid; gap: var(--s3); justify-items: center; }
+.stars { display: inline-flex; align-items: center; gap: 2px; color: var(--marigold); font-size: var(--fs-m); }
