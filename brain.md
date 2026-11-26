@@ -7,20 +7,20 @@ items to `brain-archive.md` when this file nears 250 lines.
 ## 1. Current state
 
 - Phase: M1 Design system and shell
-- Last completed task: M1.3
-- Next task: M1.4
+- Last completed task: M1.4
+- Next task: M1.5
 - Uncommitted work: none
 - Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Node v26.5.0; Python 3.14.0
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M1.4 Components: button, field, chip, modal, toast, skeleton, empty state
+- Task: M1.5 Components: price tag, ribbon (horizontal and vertical), rating stars
 - Plan:
-  1. Create reusable component modules in `src/components/`: `ui.js` (button, field, chip, skeleton), `modal.js`, `toast.js`, `emptyState.js`.
-  2. Update `src/views/demo.js` to showcase all components and states (default, disabled/busy, error, empty, skeleton, modal trigger, toast trigger).
-  3. Verify `demo.js` in headless browser and run `node --test` + `check-lines.sh`.
-- Files being edited: `src/components/ui.js`, `src/components/modal.js`, `src/components/toast.js`, `src/components/emptyState.js`, `src/views/demo.js`, `brain.md`, `goal.md`
-- Done when: `#/demo` renders all components and states with clean console
+  1. Create `src/components/priceTag.js`, `src/components/ribbon.js` (horizontal & vertical, showing 7-step track + deposit held band + Cancelled/Disputed states across all 9 statuses), and `src/components/ratingStars.js`.
+  2. Update `src/views/demo.js` to showcase price tags, rating stars, and the ribbon across all 9 statuses (both horizontal and vertical preview).
+  3. Add unit test or render check for all 9 statuses in `tests/domain/ribbon.test.js`, run `node --test`, `check-lines.sh`, and verify in headless Chrome.
+- Files being edited: `src/components/priceTag.js`, `src/components/ribbon.js`, `src/components/ratingStars.js`, `src/views/demo.js`, `tests/domain/ribbon.test.js`, `brain.md`, `goal.md`
+- Done when: ribbon displays all 9 statuses cleanly (horizontal and vertical) and checks pass
 
 ## 3. Obstacles (open and resolved)
 

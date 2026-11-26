@@ -104,6 +104,7 @@
 }
 .toast--success { background: var(--held); color: #fff; }
 .toast--error { background: var(--berry); color: #fff; }
+.toast__dismiss { min-height: 36px; padding: 0 var(--s3); color: inherit; border-color: currentColor; }
 
 .skeleton {
   background: linear-gradient(90deg, var(--mist) 25%, var(--chalk) 50%, var(--mist) 75%);
