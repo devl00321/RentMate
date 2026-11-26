@@ -7,20 +7,21 @@ items to `brain-archive.md` when this file nears 250 lines.
 ## 1. Current state
 
 - Phase: M2 Auth and profile
-- Last completed task: M1.5
-- Next task: M2.1
+- Last completed task: M2.1
+- Next task: M2.2
 - Uncommitted work: none
-- Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Node v26.5.0; Python 3.14.0
+- Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Firebase CLI 15.32.1; OpenJDK 21.0.10; Node v26.5.0; Python 3.14.0
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M2.1 Verify current Firebase Auth email and phone APIs in docs; log
+- Task: M2.2 Email sign-up, sign-in, sign-out, reset
 - Plan:
-  1. Search official Firebase Auth modular Web JS SDK docs (`13.4.0`) for email/password sign-up/sign-in/reset and phone OTP (`RecaptchaVerifier`, `signInWithPhoneNumber`, test phone numbers).
-  2. Search official Firebase Firestore modular Web JS SDK docs (`13.4.0`) for `getFirestore`, `doc`, `getDoc`, `setDoc`, `updateDoc`, `serverTimestamp`.
-  3. Record verified exact function names, signatures, and doc links in `brain.md` section 6.
-- Files being edited: `brain.md`, `goal.md`
-- Done when: exact Firebase Auth & Firestore modular API notes + links logged in `brain.md`
+  1. Create `src/config/firebase.js` loading `config.local.js` (or `env.example.js`), connecting Auth/Firestore emulators when `useEmulator` is set, and adding dev quota counter helper.
+  2. Create `firebase.json` + baseline `firestore.rules` + `firestore.indexes.json` so emulator works locally for M2 testing.
+  3. Create `src/services/auth.js` and `src/views/auth.js` for email sign-up, sign-in, sign-out, and password reset.
+  4. Wire `#/auth` route and verify against Firebase Auth Emulator (plus headless Chrome UI verification).
+- Files being edited: `src/config/firebase.js`, `src/config/env.example.js`, `firebase.json`, `firestore.rules`, `firestore.indexes.json`, `src/services/auth.js`, `src/views/auth.js`, `src/app.js`, `brain.md`, `goal.md`
+- Done when: email sign-up, sign-in, sign-out, reset work against Auth Emulator and console is clean
 
 ## 3. Obstacles (open and resolved)
 
@@ -68,6 +69,8 @@ Format: `D-n | date | decision | reason | alternatives | status`
 | Date | Fact verified | Source link | Used in |
 |---|---|---|---|
 | 2026-11-27 | Firebase JS SDK 13.4.0 modular ES modules at `https://www.gstatic.com/firebasejs/13.4.0/firebase-{app,auth,firestore}.js` (HTTP 200 verified) | https://firebase.google.com/docs/web/setup | M0.3, `src/config/firebase.js` |
+| 2026-11-27 | Firebase Auth 13.4.0 exports verified: `getAuth`, `createUserWithEmailAndPassword`, `signInWithEmailAndPassword`, `sendPasswordResetEmail`, `signOut`, `onAuthStateChanged`, `RecaptchaVerifier(auth, containerId, opts)` (auth-first arg), `signInWithPhoneNumber`; test phone numbers configured in Console bypass real SMS/Blaze limits | https://firebase.google.com/docs/auth/web/password-auth & https://firebase.google.com/docs/auth/web/phone-auth | M2.1, `src/services/auth.js` |
+| 2026-11-27 | Firestore 13.4.0 exports verified: `getFirestore`, `doc`, `collection`, `getDoc`, `getDocs`, `setDoc`, `addDoc`, `updateDoc`, `deleteDoc`, `writeBatch`, `query`, `where`, `orderBy`, `limit`, `startAfter`, `onSnapshot`, `serverTimestamp`, `documentId` | https://firebase.google.com/docs/firestore/quickstart | M2.1, `src/services/*.js` |
 
 ## 7. Needs human (only when truly blocked)
 
