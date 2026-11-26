@@ -1,14 +1,20 @@
 /**
- * UI component showcase view for verifying states and accessibility.
+ * UI component showcase view for verifying states, ribbon statuses, and accessibility.
  */
+import { BOOKING_STATUS, DEPOSIT_STATE } from '../config/constants.js';
 import { html, renderHtml } from '../components/dom.js';
 import { button, chip, field, skeletonCards } from '../components/ui.js';
 import { emptyState, errorState } from '../components/emptyState.js';
 import { openModal } from '../components/modal.js';
 import { showToast } from '../components/toast.js';
+import { priceTag } from '../components/priceTag.js';
+import { ratingStars } from '../components/ratingStars.js';
+import { ribbon } from '../components/ribbon.js';
+
+const ALL_STATUSES = Object.values(BOOKING_STATUS);
 
 /**
- * Render all core UI components and states on #/demo.
+ * Render all core UI components, states, and all 9 ribbon statuses on #/demo.
  * @param {Element} outlet
  */
 export function render(outlet) {
@@ -20,8 +26,40 @@ export function render(outlet) {
         <p class="muted">Reference view for Handover design system primitives (M1.4 &amp; M1.5).</p>
       </div>
 
-      <section class="card panel" aria-labelledby="demo-actions">
-        <h2 id="demo-actions">Buttons, chips, modal &amp; toast</h2>
+      <section class="card panel" aria-labelledby="demo-identity">
+        <h2 id="demo-identity">Hang tag price &amp; rating stars</h2>
+        <div style="display:flex;flex-wrap:wrap;gap:var(--s4);align-items:center">
+          ${priceTag(120000)}
+          ${priceTag(45000)}
+          ${ratingStars(4.9, 31)}
+          ${ratingStars(0, 0)}
+        </div>
+      </section>
+
+      <div class="section-head"><h2>Handover ribbon (all 9 statuses)</h2></div>
+      <div style="display:grid;gap:var(--s4)">
+        ${ALL_STATUSES.map(
+          (status) => html`
+            <article class="card panel">
+              <h3>${status}</h3>
+              ${ribbon({
+                status,
+                lastActiveStatus:
+                  status === BOOKING_STATUS.DISPUTED ? BOOKING_STATUS.HANDED_OVER : BOOKING_STATUS.ACCEPTED,
+                depositState:
+                  status === BOOKING_STATUS.DISPUTED ? DEPOSIT_STATE.HELD : '',
+              })}
+            </article>
+          `,
+        )}
+        <article class="card panel">
+          <h3>Vertical ribbon variant</h3>
+          ${ribbon({ status: BOOKING_STATUS.PAID, orientation: 'vertical' })}
+        </article>
+      </div>
+
+      <div class="section-head"><h2>Buttons, chips, modal &amp; toast</h2></div>
+      <section class="card panel">
         <div style="display:flex;flex-wrap:wrap;gap:var(--s3)">
           ${button({ label: 'Open modal', attrs: 'data-open-modal' })}
           ${button({ label: 'Show toast', variant: 'ghost', attrs: 'data-show-toast' })}
@@ -86,11 +124,9 @@ export function render(outlet) {
       onConfirm: () => showToast('Pickup confirmed', { variant: 'success' }),
     });
   });
-
   outlet.querySelector('[data-show-toast]')?.addEventListener('click', () => {
     showToast('Request sent', { variant: 'success' });
   });
-
   outlet.querySelector('[data-show-err-toast]')?.addEventListener('click', () => {
     showToast('Payment failed in test mode. Try again.', { variant: 'error' });
   });

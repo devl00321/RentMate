@@ -6,21 +6,21 @@ items to `brain-archive.md` when this file nears 250 lines.
 
 ## 1. Current state
 
-- Phase: M1 Design system and shell
-- Last completed task: M1.4
-- Next task: M1.5
+- Phase: M2 Auth and profile
+- Last completed task: M1.5
+- Next task: M2.1
 - Uncommitted work: none
 - Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Node v26.5.0; Python 3.14.0
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M1.5 Components: price tag, ribbon (horizontal and vertical), rating stars
+- Task: M2.1 Verify current Firebase Auth email and phone APIs in docs; log
 - Plan:
-  1. Create `src/components/priceTag.js`, `src/components/ribbon.js` (horizontal & vertical, showing 7-step track + deposit held band + Cancelled/Disputed states across all 9 statuses), and `src/components/ratingStars.js`.
-  2. Update `src/views/demo.js` to showcase price tags, rating stars, and the ribbon across all 9 statuses (both horizontal and vertical preview).
-  3. Add unit test or render check for all 9 statuses in `tests/domain/ribbon.test.js`, run `node --test`, `check-lines.sh`, and verify in headless Chrome.
-- Files being edited: `src/components/priceTag.js`, `src/components/ribbon.js`, `src/components/ratingStars.js`, `src/views/demo.js`, `tests/domain/ribbon.test.js`, `brain.md`, `goal.md`
-- Done when: ribbon displays all 9 statuses cleanly (horizontal and vertical) and checks pass
+  1. Search official Firebase Auth modular Web JS SDK docs (`13.4.0`) for email/password sign-up/sign-in/reset and phone OTP (`RecaptchaVerifier`, `signInWithPhoneNumber`, test phone numbers).
+  2. Search official Firebase Firestore modular Web JS SDK docs (`13.4.0`) for `getFirestore`, `doc`, `getDoc`, `setDoc`, `updateDoc`, `serverTimestamp`.
+  3. Record verified exact function names, signatures, and doc links in `brain.md` section 6.
+- Files being edited: `brain.md`, `goal.md`
+- Done when: exact Firebase Auth & Firestore modular API notes + links logged in `brain.md`
 
 ## 3. Obstacles (open and resolved)
 

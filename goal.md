@@ -46,7 +46,7 @@ flowchart LR
 | Milestone | Tasks | Done | Status |
 |---|---|---|---|
 | M0 | 5 | 5 | done |
-| M1 | 6 | 0 | not started |
+| M1 | 6 | 6 | done |
 | M2 | 6 | 0 | not started |
 | M3 | 6 | 0 | not started |
 | M4 | 4 | 0 | not started |
@@ -72,7 +72,7 @@ flowchart LR
 - [x] M1.2 Hash router with lazy view loading and 404 view | accept: 3 stub routes work
 - [x] M1.3 App shell: header, nav, footer, theme support, skip link | accept: keyboard test passes
 - [x] M1.4 Components: button, field, chip, modal, toast, skeleton, empty state | accept: demo route shows all states
-- [ ] M1.5 Components: price tag, ribbon (horizontal and vertical), rating stars | accept: ribbon shows all 9 statuses
+- [x] M1.5 Components: price tag, ribbon (horizontal and vertical), rating stars | accept: ribbon shows all 9 statuses
 - [x] M1.6 `dom.js` safe html helper with escaping test | accept: injection test passes
 
 ### M2 Auth and profile (Obj 1)
