@@ -15,14 +15,13 @@ items to `brain-archive.md` when this file nears 250 lines.
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M1.1 Port `design/tokens.css` to `src/styles/`, split base and components
+- Task: M1.6 `dom.js` safe html helper with escaping test
 - Plan:
-  1. Read `rules/06-uiux-design-system.md` and `design/*` files.
-  2. Copy `design/tokens.css` to `src/styles/tokens.css`.
-  3. Create `src/styles/base.css`, `src/styles/components.css`, and `src/styles/views.css` (each <250 lines).
-  4. Link stylesheets and Google Fonts in `index.html`.
-- Files being edited: `src/styles/tokens.css`, `src/styles/base.css`, `src/styles/components.css`, `src/styles/views.css`, `index.html`, `brain.md`, `goal.md`
-- Done when: styles match `design/` preview and `tools/check-lines.sh` passes
+  1. Create `src/components/dom.js` with `escapeHtml`, `html` tagged template, `raw`, `renderHtml`, `formatPaise`.
+  2. Write `tests/domain/dom.test.js` testing XSS injection escaping, nested templates, arrays, and `renderHtml` guard.
+  3. Run `node --test` and `tools/check-lines.sh`.
+- Files being edited: `src/components/dom.js`, `tests/domain/dom.test.js`, `brain.md`, `goal.md`
+- Done when: `node --test` passes injection tests and `tools/check-lines.sh` passes
 
 ## 3. Obstacles (open and resolved)
 

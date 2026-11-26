@@ -73,7 +73,7 @@ flowchart LR
 - [ ] M1.3 App shell: header, nav, footer, theme support, skip link | accept: keyboard test passes
 - [ ] M1.4 Components: button, field, chip, modal, toast, skeleton, empty state | accept: demo route shows all states
 - [ ] M1.5 Components: price tag, ribbon (horizontal and vertical), rating stars | accept: ribbon shows all 9 statuses
-- [ ] M1.6 `dom.js` safe html helper with escaping test | accept: injection test passes
+- [x] M1.6 `dom.js` safe html helper with escaping test | accept: injection test passes
 
 ### M2 Auth and profile (Obj 1)
 - [ ] M2.1 Verify current Firebase Auth email and phone APIs in docs; log | accept: doc notes in brain.md
