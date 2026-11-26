@@ -1,0 +1,144 @@
+/* RentMate "Handover" design tokens and core components. Spec: rules/06 */
+:root {
+  --chalk: #eef1f6;  --surface: #ffffff; --mist: #dce2ee;
+  --ink: #111631;    --ink-2: #4a5170;
+  --cobalt: #2d4be0; --cobalt-ink: #ffffff; --cobalt-wash: #e3e8fd;
+  --held: #0b7a6b;   --held-wash: #daf1ec;
+  --marigold: #f4b63e; --marigold-ink: #3a2600;
+  --berry: #c6305b;  --berry-wash: #fbe3ea;
+
+  --font-display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+  --font-body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --fs-s: 0.8125rem; --fs-m: 0.9375rem; --fs-b: 1.0625rem; --fs-l: 1.3125rem;
+  --fs-xl: clamp(1.5rem, 1.2rem + 1.2vw, 1.75rem);
+  --fs-2xl: clamp(2rem, 1.4rem + 2.6vw, 3.25rem);
+
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px; --s8: 72px;
+  --r-tag: 6px; --r-ctl: 10px; --r-card: 18px; --r-full: 999px;
+  --lift: 0 1px 0 rgb(17 22 49 / 0.04), 0 14px 28px -16px rgb(17 22 49 / 0.35);
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1); --t-fast: 120ms; --t: 220ms;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --chalk: #0d1126; --surface: #151a38; --mist: #262d54;
+    --ink: #edeffa; --ink-2: #a5abcb;
+    --cobalt: #8ea0ff; --cobalt-ink: #0d1126; --cobalt-wash: #1f2760;
+    --held: #4fd1bc; --held-wash: #10332f;
+    --berry: #ff7d9f; --berry-wash: #3b1626;
+    --lift: 0 14px 28px -16px rgb(0 0 0 / 0.7);
+  }
+}
+:root[data-theme="dark"] {
+  --chalk: #0d1126; --surface: #151a38; --mist: #262d54;
+  --ink: #edeffa; --ink-2: #a5abcb;
+  --cobalt: #8ea0ff; --cobalt-ink: #0d1126; --cobalt-wash: #1f2760;
+  --held: #4fd1bc; --held-wash: #10332f;
+  --berry: #ff7d9f; --berry-wash: #3b1626;
+  --lift: 0 14px 28px -16px rgb(0 0 0 / 0.7);
+}
+
+/* Base */
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--chalk); color: var(--ink);
+  font: 400 var(--fs-b)/1.55 var(--font-body); -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 { font-family: var(--font-display); line-height: 1.12; letter-spacing: -0.01em; margin: 0; }
+h1 { font-size: var(--fs-2xl); font-weight: 700; }
+h2 { font-size: var(--fs-xl); font-weight: 650; }
+h3 { font-size: var(--fs-l); font-weight: 600; }
+p { margin: 0; max-width: 68ch; }
+a { color: var(--cobalt); text-underline-offset: 3px; }
+:focus-visible { outline: 3px solid var(--cobalt); outline-offset: 2px; border-radius: var(--r-tag); }
+.muted { color: var(--ink-2); font-size: var(--fs-m); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Buttons: one primary per view */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--s2);
+  min-height: 44px; padding: 0 var(--s5); border: 1.5px solid transparent;
+  border-radius: var(--r-ctl); font: 600 var(--fs-m)/1 var(--font-body); cursor: pointer;
+  background: var(--cobalt); color: var(--cobalt-ink);
+  transition: transform var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease);
+}
+.btn:hover { box-shadow: var(--lift); transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+.btn--ghost { background: transparent; color: var(--ink); border-color: var(--mist); }
+.btn--danger { background: var(--berry); color: #fff; }
+.btn[disabled], .btn[aria-busy="true"] { opacity: 0.55; cursor: progress; transform: none; box-shadow: none; }
+
+/* Fields */
+.field { display: grid; gap: var(--s1); }
+.field label { font-size: var(--fs-m); font-weight: 600; }
+.field input, .field select, .field textarea {
+  min-height: 44px; padding: 0 var(--s3); border: 1.5px solid var(--mist); border-radius: var(--r-ctl);
+  background: var(--surface); color: var(--ink); font: inherit;
+}
+.field input:focus-visible, .field select:focus-visible { border-color: var(--cobalt); outline-offset: 1px; }
+.field--error input { border-color: var(--berry); }
+.field__error { color: var(--berry); font-size: var(--fs-s); }
+
+/* Chips and badges */
+.chip {
+  display: inline-flex; align-items: center; gap: var(--s1); padding: 2px var(--s3);
+  border-radius: var(--r-full); background: var(--cobalt-wash); color: var(--cobalt);
+  font-size: var(--fs-s); font-weight: 600;
+}
+.chip--held { background: var(--held-wash); color: var(--held); }
+.chip--danger { background: var(--berry-wash); color: var(--berry); }
+
+/* Hang tag price: signature element 2 */
+.price-tag {
+  --hole: var(--surface);
+  position: relative; display: inline-flex; align-items: baseline; gap: var(--s1);
+  padding: 6px 14px 6px 28px; background: var(--marigold); color: var(--marigold-ink);
+  font-family: var(--font-display); font-weight: 700; font-size: var(--fs-l);
+  clip-path: polygon(14px 0, 100% 0, 100% 100%, 14px 100%, 0 50%);
+}
+.price-tag::before {
+  content: ""; position: absolute; left: 13px; top: 50%; width: 7px; height: 7px;
+  margin-top: -3.5px; border-radius: 50%; background: var(--hole);
+}
+.price-tag small { font: 500 var(--fs-s) var(--font-body); }
+
+/* Card */
+.card { background: var(--surface); border: 1px solid var(--mist); border-radius: var(--r-card); overflow: hidden; }
+.card--raised { box-shadow: var(--lift); border-color: transparent; }
+
+/* Handover ribbon: signature element 1. Mark li: is-done / is-current */
+.ribbon { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(7, 1fr); }
+.ribbon li { position: relative; padding-top: 28px; text-align: center; font-size: var(--fs-s); color: var(--ink-2); }
+.ribbon li::before { /* line from this stop to the next */
+  content: ""; position: absolute; top: 7px; left: 50%; width: 100%; height: 3px; background: var(--mist);
+}
+.ribbon li:last-child::before { display: none; }
+.ribbon li::after { /* the stop */
+  content: ""; position: absolute; top: 0; left: 50%; width: 17px; height: 17px; margin-left: -8.5px;
+  border-radius: 50%; background: var(--surface); border: 3px solid var(--mist); z-index: 1;
+}
+.ribbon li.is-done::before { background: var(--cobalt); transform-origin: left; animation: fill 600ms var(--ease) both; }
+.ribbon li.is-done::after { background: var(--cobalt); border-color: var(--cobalt); }
+.ribbon li.is-current { color: var(--ink); font-weight: 650; }
+.ribbon li.is-current::after { border-color: var(--cobalt); box-shadow: 0 0 0 5px var(--cobalt-wash); }
+.ribbon-hold { /* deposit held from Paid through Returned (columns 4 to 6) */
+  display: grid; grid-template-columns: repeat(7, 1fr); margin-top: var(--s3);
+}
+.ribbon-hold span {
+  grid-column: 4 / 7; text-align: center; padding: 4px var(--s2); border-radius: var(--r-full);
+  background: var(--held-wash); color: var(--held); font-size: var(--fs-s); font-weight: 600;
+}
+@keyframes fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes fill-y { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+
+@media (max-width: 639px) { /* vertical ribbon */
+  .ribbon, .ribbon-hold { grid-template-columns: 1fr; }
+  .ribbon li { text-align: left; padding: 0 0 20px 34px; font-size: var(--fs-m); }
+  .ribbon li::before { top: 10px; bottom: -10px; left: 7px; width: 3px; height: auto; }
+  .ribbon li.is-done::before { transform-origin: top; animation-name: fill-y; }
+  .ribbon li::after { left: 0; margin-left: 0; }
+  .ribbon-hold span { grid-column: 1; text-align: left; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

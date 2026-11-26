@@ -1,0 +1,15 @@
+# Secrets and local config
+src/config/config.local.js
+.env
+.env.*
+
+# Dependencies and build/cache
+node_modules/
+.firebase/
+firebase-debug.log
+firestore-debug.log
+
+# OS and editor
+.DS_Store
+Thumbs.db
+*.swp

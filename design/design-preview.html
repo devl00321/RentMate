@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RentMate design preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Instrument+Sans:wght@400;600&display=swap">
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="preview.css">
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <a class="brand" href="#"><span class="price-tag">rent</span>RentMate</a>
+      <nav class="nav" aria-label="Main">
+        <a href="#">Browse</a><a href="#">List an item</a><a href="#">Messages</a>
+        <a class="keep" href="#" aria-label="Your account"><span class="avatar">A</span></a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <h1 id="hero-title">Rent it for the weekend. Lend what you rarely use.</h1>
+        <p>Verified people, agreed terms, and a deposit held until the item is back.</p>
+        <form class="card card--raised search" role="search">
+          <div class="field"><label for="what">What do you need?</label>
+            <select id="what"><option>Cameras</option><option>Drones</option><option>Tools</option><option>Camping gear</option></select></div>
+          <div class="field"><label for="where">Where</label><input id="where" value="Your city"></div>
+          <div class="field"><label for="from">From</label><input id="from" type="date"></div>
+          <div class="field"><label for="to">Until</label><input id="to" type="date"></div>
+          <button class="btn" type="submit">Search items</button>
+        </form>
+      </section>
+
+      <section class="card story" aria-labelledby="story-title">
+        <header>
+          <h2 id="story-title">A rental, start to finish</h2>
+          <span class="chip">Sample: booking is Paid</span>
+        </header>
+        <ol class="ribbon" aria-label="Booking progress">
+          <li class="is-done">Requested</li><li class="is-done">Negotiating</li><li class="is-done">Accepted</li>
+          <li class="is-current" aria-current="step">Paid</li><li>Handed over</li><li>Returned</li><li>Completed</li>
+        </ol>
+        <div class="ribbon-hold"><span>Deposit held until the owner confirms return</span></div>
+        <p class="muted">Both sides confirm pickup and return in the app with a photo of the item's condition.</p>
+      </section>
+
+      <div class="section-head"><h2>Near you</h2><span class="chip chip--danger">Sample content for design only</span></div>
+      <div class="grid">
+        <a class="card listing" href="#">
+          <div class="photo photo--a" role="img" aria-label="Sample photo of a mirrorless camera">Sample photo</div>
+          <div class="listing__body">
+            <h3>Mirrorless camera with two lenses</h3>
+            <div class="listing__meta"><span class="price-tag">₹1,200<small>/day</small></span><span class="muted">Deposit ₹8,000</span></div>
+            <div class="owner"><span class="chip chip--held">Verified</span> Asha, 4.9 (31)</div>
+          </div>
+        </a>
+        <a class="card listing" href="#">
+          <div class="photo photo--b" role="img" aria-label="Sample photo of a camping tent">Sample photo</div>
+          <div class="listing__body">
+            <h3>Four-person camping tent</h3>
+            <div class="listing__meta"><span class="price-tag">₹450<small>/day</small></span><span class="muted">Deposit ₹1,500</span></div>
+            <div class="owner"><span class="chip chip--held">Verified</span> Ravi, 4.7 (12)</div>
+          </div>
+        </a>
+        <a class="card listing" href="#">
+          <div class="photo photo--c" role="img" aria-label="Sample photo of a drill set">Sample photo</div>
+          <div class="listing__body">
+            <h3>Cordless drill and bit set</h3>
+            <div class="listing__meta"><span class="price-tag">₹180<small>/day</small></span><span class="muted">Deposit ₹600</span></div>
+            <div class="owner"><span class="chip">New member</span> Meera</div>
+          </div>
+        </a>
+      </div>
+
+      <div class="section-head"><h2>Booking</h2></div>
+      <section class="booking" aria-label="Booking example">
+        <div class="card panel">
+          <h3>Chat with Asha</h3>
+          <div class="chat" aria-live="polite">
+            <p class="msg">Can you do ₹1,000 a day for the two days?</p>
+            <div class="offer">
+              <strong>Counter-offer from Asha</strong>
+              <span>₹1,100 per day, deposit ₹8,000, pickup 10:00</span>
+              <div class="actions"><button class="btn" type="button">Accept offer</button><button class="btn btn--ghost" type="button">Send counter-offer</button></div>
+            </div>
+            <p class="msg msg--me">Deal. I'll pick it up at 10.</p>
+          </div>
+        </div>
+        <aside class="card card--raised panel" aria-label="Price breakdown">
+          <h3>Price for 2 days</h3>
+          <dl class="rows">
+            <div><dt>Rental, ₹1,100 × 2</dt><dd>₹2,200</dd></div>
+            <div><dt>Service fee</dt><dd>₹110</dd></div>
+            <div><dt>Refundable deposit</dt><dd>₹8,000</dd></div>
+            <div class="total"><dt>You pay now</dt><dd>₹10,310</dd></div>
+          </dl>
+          <p class="note">Test mode: no real money moves.</p>
+          <button class="btn" type="button">Pay and confirm</button>
+        </aside>
+      </section>
+    </main>
+    <footer class="muted">Design preview. All names, prices and photos are samples.</footer>
+  </div>
+</body>
+</html>
