@@ -6,23 +6,23 @@ items to `brain-archive.md` when this file nears 250 lines.
 
 ## 1. Current state
 
-- Phase: M9 Disputes and admin
-- Last completed task: M8.6
-- Next task: M9.1
+- Phase: M10 Security and quota
+- Last completed task: M9.5
+- Next task: M10.1
 - Uncommitted work: none
 - Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Firebase CLI 15.32.1; OpenJDK 21.0.10; Node v26.5.0; Python 3.14.0
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M9.1-M9.5 Disputes and admin moderation
+- Task: M10.1-M10.5 Security rules, CSP, quota audit, offline handling, and full audit loop
 - Plan:
-  1. Create `src/domain/reportsOps.js` pure validators & decision planners: `buildListingReport`, `buildBookingDispute`, `planDisputeResolution` (admin release deposit -> `Completed`, forfeit deposit -> `Completed`, or cancel+refund -> `Cancelled`, with required note + unlocking `bookedDays`).
-  2. Create `src/services/reports.js` (`submitListingReport`, `openBookingDispute`, `listOpenReports` with `limit(12)`, `getDisputeEvidence`, `resolveBookingDispute`, `moderateReportedListing` to pause/remove listing).
-  3. Update `firestore.rules` for `reports/{id}` (signed-in create, reporter/admin read, admin-only resolve update) and allow admin decision updates (`Completed`/`Cancelled`) + `forfeited` depositState on `bookings/{id}`.
-  4. Wire "Report listing" modal in `src/views/listingDetail.js`, "Open dispute" modal in `src/views/booking.js`, and build `src/views/admin.js` (guarded by `requireAdmin` + `#/admin` route in `src/app.js` + nav link for admins).
-  5. Write unit & rules tests in `tests/domain/reports.test.js`.
-- Files being edited: `src/domain/reportsOps.js`, `src/services/reports.js`, `src/views/admin.js`, `src/views/listingDetail.js`, `src/views/booking.js`, `src/app.js`, `src/components/shell.js`, `firestore.rules`, `firestore.indexes.json`, `tests/domain/reports.test.js`, `brain.md`, `goal.md`
-- Done when: report/dispute modals work, non-admins blocked from admin queue/rules, evidence + decisions + listing moderation tested, and all checks pass
+  1. Finalize `firestore.rules`, `firestore.indexes.json`, and create `tests/rules/securityRules.test.js` covering all rules/03 s6 requirements (unauth read, non-owner edit, cross-booking read, illegal status jump, duplicate review, double-booking lock, plus emulator status note per OB-4).
+  2. Verify official Firebase Auth, Firestore, Google Fonts, Cloudinary, and Razorpay origins in docs and add CSP `<meta>` in `index.html` + `headers` in `firebase.json` (M10.2).
+  3. Audit every `getDocs`/`onSnapshot` query in codebase for `limit()`, document per-flow quota counts in `docs/architecture.md` (M10.3).
+  4. Add global `offline` / `online` banner & error handling pass across views (M10.4).
+  5. Run full audit loop (`rules/07` s4) and record all rows in `brain.md` (M10.5).
+- Files being edited: `firestore.rules`, `tests/rules/securityRules.test.js`, `index.html`, `firebase.json`, `src/components/shell.js`, `src/app.js`, `docs/architecture.md`, `brain.md`, `goal.md`
+- Done when: M10.1-M10.5 checks pass, CSP verified clean in Chrome, quota & audit rows recorded, and all tests pass
 
 ## 3. Obstacles (open and resolved)
 

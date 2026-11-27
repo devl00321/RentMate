@@ -49,6 +49,7 @@ export function initTheme() {
  */
 export function renderShell(root, state = {}) {
   const user = state.user || null;
+  const isAdmin = state.profile?.role === 'admin';
   const initial = user?.name ? user.name.trim().charAt(0).toUpperCase() : '';
   const isDark = getActiveTheme() === 'dark';
 
@@ -65,6 +66,7 @@ export function renderShell(root, state = {}) {
             <a href="#/search" data-nav="/search">Browse</a>
             <a href="#/list" data-nav="/list">List an item</a>
             <a href="#/dashboard" data-nav="/dashboard">Dashboard</a>
+            <span data-admin-slot>${isAdmin ? html`<a href="#/admin" data-nav="/admin">Admin</a>` : ''}</span>
             <button
               type="button"
               class="btn btn--ghost theme-btn"
@@ -111,7 +113,11 @@ export function renderShell(root, state = {}) {
  * Update only the account slot in the header without re-mounting #main-content.
  * @param {{ uid: string, name?: string | null } | null} user
  */
-export function updateShellUser(user) {
+export function updateShellUser(user, profile = null) {
+  const adminSlot = document.querySelector('[data-admin-slot]');
+  if (adminSlot) {
+    renderHtml(adminSlot, profile?.role === 'admin' ? html`<a href="#/admin" data-nav="/admin">Admin</a>` : html``);
+  }
   const slot = document.querySelector('[data-auth-slot]');
   if (!slot) return;
   const initial = user?.name ? user.name.trim().charAt(0).toUpperCase() : '';

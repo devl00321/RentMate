@@ -2,9 +2,10 @@
  * RentMate application entry point.
  */
 import { initTheme, renderShell, updateNavActive, updateShellUser } from './components/shell.js';
-import { requireAuth } from './domain/guards.js';
+import { requireAdmin, requireAuth } from './domain/guards.js';
 import { createRouter } from './router.js';
 import { waitForAuthReady, watchAuthState } from './services/auth.js';
+import { getUserProfile } from './services/users.js';
 
 const ROUTES = [
   { path: '/', title: 'Home', load: () => import('./views/home.js') },
@@ -18,6 +19,7 @@ const ROUTES = [
   { path: '/dashboard', title: 'Dashboard', guard: requireAuth, load: () => import('./views/dashboard.js') },
   { path: '/profile', title: 'Your profile', guard: requireAuth, load: () => import('./views/profile.js') },
   { path: '/profile/:id', title: 'Profile', load: () => import('./views/profile.js') },
+  { path: '/admin', title: 'Admin', guard: requireAdmin, load: () => import('./views/admin.js') },
 ];
 
 /**
@@ -28,25 +30,46 @@ function boot() {
   if (!root) return;
 
   let currentUser = null;
+  let currentProfile = null;
+  let profileUid = '';
+
+  async function resolveProfile(user) {
+    if (!user?.uid) {
+      currentProfile = null;
+      profileUid = '';
+      return null;
+    }
+    if (profileUid === user.uid && currentProfile) return currentProfile;
+    try {
+      currentProfile = await getUserProfile(user.uid);
+      profileUid = user.uid;
+    } catch {
+      currentProfile = null;
+    }
+    return currentProfile;
+  }
+
   initTheme();
-  renderShell(root, { user: null });
+  renderShell(root, { user: null, profile: null });
 
   const router = createRouter({
     routes: ROUTES,
     getOutlet: () => document.getElementById('main-content'),
     getAuthContext: async () => {
       if (!currentUser) currentUser = await waitForAuthReady();
-      return { user: currentUser };
+      const profile = await resolveProfile(currentUser);
+      return { user: currentUser, profile };
     },
     onRouteChange: (path) => updateNavActive(path),
   });
   router.start();
 
-  watchAuthState((user) => {
+  watchAuthState(async (user) => {
     const prevUid = currentUser?.uid || null;
     const nextUid = user?.uid || null;
     currentUser = user;
-    updateShellUser(user);
+    const profile = await resolveProfile(user);
+    updateShellUser(user, profile);
     if (prevUid !== nextUid) {
       router.resolve();
     }

@@ -20,7 +20,7 @@ other, with admin dispute handling, built on free tools.
 | 4 | Booking flow with all statuses and double-booking-proof calendar | M5 | [x] |
 | 5 | Negotiate via chat and counter-offers | M6 | [x] |
 | 6 | Payments in test mode; deposit held until return | M7, M8 | [x] |
-| 7 | Two-way ratings, reputation score, admin review of reports and disputes | M8, M9 | [ ] |
+| 7 | Two-way ratings, reputation score, admin review of reports and disputes | M8, M9 | [x] |
 | 8 | Whole system on free tools plus a service-fee model | M0, M10, M11 | [ ] |
 
 ## 3. Milestone dependency graph
@@ -54,7 +54,7 @@ flowchart LR
 | M6 | 5 | 5 | done |
 | M7 | 5 | 5 | done |
 | M8 | 6 | 6 | done |
-| M9 | 5 | 0 | not started |
+| M9 | 5 | 5 | done |
 | M10 | 5 | 0 | not started |
 | M11 | 6 | 0 | not started |
 
@@ -128,11 +128,11 @@ flowchart LR
 - [x] M8.6 Profile reputation view with recent reviews | accept: matches design
 
 ### M9 Disputes and admin (Obj 7)
-- [ ] M9.1 Report listing and open dispute flows | accept: reason required
-- [ ] M9.2 Admin role handling per D-010 | accept: non-admin blocked
-- [ ] M9.3 Admin queue with evidence view | accept: chat, photos, events visible
-- [ ] M9.4 Admin decision: release, forfeit or cancel, with note | accept: states update
-- [ ] M9.5 Reported listings moderation (pause or remove) | accept: effect visible
+- [x] M9.1 Report listing and open dispute flows | accept: reason required
+- [x] M9.2 Admin role handling per D-010 | accept: non-admin blocked
+- [x] M9.3 Admin queue with evidence view | accept: chat, photos, events visible
+- [x] M9.4 Admin decision: release, forfeit or cancel, with note | accept: states update
+- [x] M9.5 Reported listings moderation (pause or remove) | accept: effect visible
 
 ### M10 Security and quota (Obj 8)
 - [ ] M10.1 Finalise `firestore.rules` and indexes | accept: rules tests pass

@@ -6,10 +6,12 @@ import { mountCalendar } from '../components/calendar.js';
 import { emptyState, errorState } from '../components/emptyState.js';
 import { renderListingDetailMarkup } from '../components/listingDetailView.js';
 import { showToast } from '../components/toast.js';
+import { openReasonModal } from '../components/reportModal.js';
 import { calculateBookingPricing } from '../domain/pricing.js';
 import { getListing } from '../services/listings.js';
 import { createBookingRequest } from '../services/bookings.js';
 import { getBookedDaysForListing } from '../services/bookingQueries.js';
+import { submitListingReport } from '../services/reports.js';
 import { clearSearchCache } from '../services/search.js';
 
 /**
@@ -164,7 +166,19 @@ export async function render(outlet, ctx) {
     });
 
     outlet.querySelector('[data-report-listing]')?.addEventListener('click', () => {
-      showToast('Listing report flow will be wired in Milestone M9.', { variant: 'info' });
+      if (!ctx.user?.uid) {
+        ctx.navigate(`/auth?next=${encodeURIComponent(`/listing/${item.id}`)}`);
+        return;
+      }
+      openReasonModal({
+        title: 'Report listing',
+        intro: 'Tell moderators what is wrong with this listing (e.g. misleading photos or safety concern).',
+        submitLabel: 'Submit report',
+        onSubmit: async (reason) => {
+          await submitListingReport({ listing: item, reporterUid: ctx.user.uid, reason });
+          showToast('Report submitted for admin review', { variant: 'success' });
+        },
+      });
     });
   }
 

@@ -188,6 +188,24 @@ service cloud.firestore {
       allow update, delete: if false;
     }
 
+    match /reports/{reportId} {
+      allow read: if isSignedIn()
+        && (resource.data.reporterId == request.auth.uid || isAdmin());
+      allow create: if isSignedIn()
+        && request.resource.data.reporterId == request.auth.uid
+        && request.resource.data.kind in ['listing', 'dispute']
+        && request.resource.data.status == 'open'
+        && request.resource.data.reason is string
+        && request.resource.data.reason.size() >= 5
+        && request.resource.data.reason.size() <= 500;
+      allow update: if isAdmin()
+        && request.resource.data.status == 'resolved'
+        && request.resource.data.decision is map
+        && request.resource.data.decision.note is string
+        && request.resource.data.decision.note.size() >= 5;
+      allow delete: if false;
+    }
+
     // Default deny for everything else until later milestones
     match /{document=**} {
       allow read, write: if false;

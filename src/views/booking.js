@@ -8,6 +8,7 @@ import { openCheckoutModal } from '../components/checkoutModal.js';
 import { emptyState, errorState } from '../components/emptyState.js';
 import { mountHandoverPanel } from '../components/handoverPanel.js';
 import { openModal } from '../components/modal.js';
+import { openReasonModal } from '../components/reportModal.js';
 import { mountReviewPanel } from '../components/reviewPanel.js';
 import { showToast } from '../components/toast.js';
 import { resolveBookingActor } from '../domain/bookingOps.js';
@@ -15,6 +16,7 @@ import { acceptBooking, cancelBooking } from '../services/bookings.js';
 import { listBookingEvents, watchBooking } from '../services/bookingQueries.js';
 import { releaseDepositAndComplete } from '../services/handover.js';
 import { processBookingPayment } from '../services/payments.js';
+import { openBookingDispute } from '../services/reports.js';
 
 /**
  * Mount booking view and detach all real-time listeners on route exit.
@@ -149,7 +151,16 @@ export async function render(outlet, ctx) {
     });
 
     outlet.querySelector('[data-open-dispute]')?.addEventListener('click', () => {
-      showToast('Dispute filing will be wired in Milestone M9.', { variant: 'info' });
+      openReasonModal({
+        title: 'Open dispute',
+        intro: 'An admin will review chat messages, condition photos, and booking history before deciding on the deposit.',
+        submitLabel: 'Open dispute',
+        onSubmit: async (reason) => {
+          await openBookingDispute({ booking: currentBooking, reporterUid: ctx.user.uid, reason });
+          await refreshEvents();
+          showToast('Dispute opened for admin review', { variant: 'success' });
+        },
+      });
     });
   }
 
