@@ -19,7 +19,7 @@ other, with admin dispute handling, built on free tools.
 | 3 | Renters search and filter (category, price, location, availability) | M4 | [x] |
 | 4 | Booking flow with all statuses and double-booking-proof calendar | M5 | [x] |
 | 5 | Negotiate via chat and counter-offers | M6 | [x] |
-| 6 | Payments in test mode; deposit held until return | M7, M8 | [ ] |
+| 6 | Payments in test mode; deposit held until return | M7, M8 | [x] |
 | 7 | Two-way ratings, reputation score, admin review of reports and disputes | M8, M9 | [ ] |
 | 8 | Whole system on free tools plus a service-fee model | M0, M10, M11 | [ ] |
 
@@ -53,7 +53,7 @@ flowchart LR
 | M5 | 6 | 6 | done |
 | M6 | 5 | 5 | done |
 | M7 | 5 | 5 | done |
-| M8 | 6 | 0 | not started |
+| M8 | 6 | 6 | done |
 | M9 | 5 | 0 | not started |
 | M10 | 5 | 0 | not started |
 | M11 | 6 | 0 | not started |
@@ -120,12 +120,12 @@ flowchart LR
 - [x] M7.5 Failure and retry paths | accept: failed payment leaves Accepted
 
 ### M8 Handover, return, reviews (Obj 6, 7)
-- [ ] M8.1 Handover confirmation by both plus condition photo | accept: Paid to Handed Over
-- [ ] M8.2 Return confirmation plus photo | accept: Handed Over to Returned
-- [ ] M8.3 Owner confirms return; deposit released (simulated) | accept: Completed, locks freed
-- [ ] M8.4 Review form, one per party per booking | accept: duplicate impossible
-- [ ] M8.5 `reputation.js` average and count, tested | accept: table tests pass
-- [ ] M8.6 Profile reputation view with recent reviews | accept: matches design
+- [x] M8.1 Handover confirmation by both plus condition photo | accept: Paid to Handed Over
+- [x] M8.2 Return confirmation plus photo | accept: Handed Over to Returned
+- [x] M8.3 Owner confirms return; deposit released (simulated) | accept: Completed, locks freed
+- [x] M8.4 Review form, one per party per booking | accept: duplicate impossible
+- [x] M8.5 `reputation.js` average and count, tested | accept: table tests pass
+- [x] M8.6 Profile reputation view with recent reviews | accept: matches design
 
 ### M9 Disputes and admin (Obj 7)
 - [ ] M9.1 Report listing and open dispute flows | accept: reason required

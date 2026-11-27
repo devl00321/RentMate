@@ -6,23 +6,23 @@ items to `brain-archive.md` when this file nears 250 lines.
 
 ## 1. Current state
 
-- Phase: M8 Handover, return, reviews
-- Last completed task: M7.5
-- Next task: M8.1
+- Phase: M9 Disputes and admin
+- Last completed task: M8.6
+- Next task: M9.1
 - Uncommitted work: none
 - Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Firebase CLI 15.32.1; OpenJDK 21.0.10; Node v26.5.0; Python 3.14.0
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M8.1-M8.6 Handover, return, deposit release, reviews & reputation
+- Task: M9.1-M9.5 Disputes and admin moderation
 - Plan:
-  1. Create `src/domain/handoverOps.js` (handover confirmation + condition photo planner: `Paid -> Handed Over` when both confirm & photo present; return confirmation + photo planner: `Handed Over -> Returned`; owner completion & simulated deposit release + freeing `bookedDays` locks in batch: `Returned -> Completed`).
-  2. Create `src/domain/reputation.js` (pure `computeUpdatedReputation({ currentAvg, currentCount, newRating })`, `validateReviewInput({ rating, text })`, `buildReviewDocId(bookingId, authorId)` deterministic `bookingId_authorId` preventing duplicates).
-  3. Create `src/services/handover.js` + `src/services/reviews.js` + update `firestore.rules` for `reviews/{reviewId}` (`Completed` booking, `authorId == auth.uid`, `authorId != subjectId`, deterministic ID `bookingId + '_' + auth.uid`, immutable after create).
-  4. Create `src/components/handoverPanel.js` + `src/components/reviewPanel.js`, wire into `src/views/booking.js`, and display recent reviews + reputation score on `src/views/profile.js`.
-  5. Write unit tests in `tests/domain/handover.test.js` and `tests/domain/reputation.test.js`.
-- Files being edited: `src/domain/handoverOps.js`, `src/domain/reputation.js`, `src/services/handover.js`, `src/services/reviews.js`, `src/components/handoverPanel.js`, `src/components/reviewPanel.js`, `src/views/booking.js`, `src/views/profile.js`, `firestore.rules`, `firestore.indexes.json`, `tests/domain/handover.test.js`, `tests/domain/reputation.test.js`, `brain.md`, `goal.md`
-- Done when: handover, return, simulated deposit release (locks freed), deterministic reviews, and reputation table tests pass
+  1. Create `src/domain/reportsOps.js` pure validators & decision planners: `buildListingReport`, `buildBookingDispute`, `planDisputeResolution` (admin release deposit -> `Completed`, forfeit deposit -> `Completed`, or cancel+refund -> `Cancelled`, with required note + unlocking `bookedDays`).
+  2. Create `src/services/reports.js` (`submitListingReport`, `openBookingDispute`, `listOpenReports` with `limit(12)`, `getDisputeEvidence`, `resolveBookingDispute`, `moderateReportedListing` to pause/remove listing).
+  3. Update `firestore.rules` for `reports/{id}` (signed-in create, reporter/admin read, admin-only resolve update) and allow admin decision updates (`Completed`/`Cancelled`) + `forfeited` depositState on `bookings/{id}`.
+  4. Wire "Report listing" modal in `src/views/listingDetail.js`, "Open dispute" modal in `src/views/booking.js`, and build `src/views/admin.js` (guarded by `requireAdmin` + `#/admin` route in `src/app.js` + nav link for admins).
+  5. Write unit & rules tests in `tests/domain/reports.test.js`.
+- Files being edited: `src/domain/reportsOps.js`, `src/services/reports.js`, `src/views/admin.js`, `src/views/listingDetail.js`, `src/views/booking.js`, `src/app.js`, `src/components/shell.js`, `firestore.rules`, `firestore.indexes.json`, `tests/domain/reports.test.js`, `brain.md`, `goal.md`
+- Done when: report/dispute modals work, non-admins blocked from admin queue/rules, evidence + decisions + listing moderation tested, and all checks pass
 
 ## 3. Obstacles (open and resolved)
 
@@ -66,6 +66,7 @@ Format: `D-n | date | decision | reason | alternatives | status`
 - D-012 | kit | Deposit hold and release simulated behind `payments.js` adapter | matches the report's test-mode plan; clean upgrade path | none | ACTIVE
 - D-013 | kit | Visual identity "Handover": chalk, ink, cobalt; ribbon and hang tag as signature elements; Bricolage Grotesque with Instrument Sans | distinct, trust-oriented, avoids generic defaults | see rules/06 s1 | ACTIVE
 - D-014 | 2026-11-27 | 8 starter categories in `constants.js`: Cameras & Lenses, Drones & Action Cams, Power Tools, Musical Instruments, Camping & Outdoor, Party & Events, Sports & Fitness, Audio & Projectors | covers report examples + everyday gear (OQ-006) | fewer/more | PLACEHOLDER
+- D-015 | 2026-11-27 | Compute public reputation (`ratingAvg`, `ratingCount`) on read from `reviews` (`limit(12)`) rather than relaxing `users/{uid}` rules | keeps client unable to tamper with `ratingAvg`/`ratingCount` without Cloud Functions on Spark | Cloud Functions trigger (Blaze) | ACTIVE
 
 ## 6. Verified facts log (fill while building; link the doc page)
 

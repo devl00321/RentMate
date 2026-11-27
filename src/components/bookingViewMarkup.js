@@ -106,10 +106,10 @@ export function renderBookingMarkup(booking, { actor, events = [] } = {}) {
 
           <section class="card panel" aria-label="Handover and return">
             <h2>Handover &amp; return verification</h2>
-            <div data-handover-slot>
-              <p class="muted">Condition photo confirmations will appear here in Milestone M8.</p>
-            </div>
+            <div data-handover-slot></div>
           </section>
+
+          <div data-review-slot></div>
 
           <section class="card panel" aria-label="Booking timeline">
             <h2>Activity log</h2>

@@ -1,22 +1,25 @@
 /**
- * Booking detail view (#/booking/:id): real-time booking sync, ribbon, price breakdown, chat (M5.6, M6).
+ * Booking detail view (#/booking/:id): real-time booking sync, ribbon, chat, handover, review (M5-M8).
  */
 import { html, renderHtml } from '../components/dom.js';
 import { renderBookingMarkup } from '../components/bookingViewMarkup.js';
 import { mountChatPanel } from '../components/chatPanel.js';
 import { openCheckoutModal } from '../components/checkoutModal.js';
 import { emptyState, errorState } from '../components/emptyState.js';
+import { mountHandoverPanel } from '../components/handoverPanel.js';
 import { openModal } from '../components/modal.js';
+import { mountReviewPanel } from '../components/reviewPanel.js';
 import { showToast } from '../components/toast.js';
 import { resolveBookingActor } from '../domain/bookingOps.js';
 import { acceptBooking, cancelBooking } from '../services/bookings.js';
 import { listBookingEvents, watchBooking } from '../services/bookingQueries.js';
+import { releaseDepositAndComplete } from '../services/handover.js';
 import { processBookingPayment } from '../services/payments.js';
 
 /**
  * Mount booking view and detach all real-time listeners on route exit.
  * @param {Element} outlet
- * @param {{ params: { id: string }, user: { uid: string } }} ctx
+ * @param {{ params: { id: string }, user: { uid: string, name?: string | null } }} ctx
  * @returns {Promise<() => void>}
  */
 export async function render(outlet, ctx) {
@@ -69,6 +72,25 @@ export async function render(outlet, ctx) {
       }
     }
 
+    const handoverSlot = outlet.querySelector('[data-handover-slot]');
+    if (handoverSlot) {
+      mountHandoverPanel(handoverSlot, {
+        booking: currentBooking,
+        actor,
+        currentUid: ctx.user.uid,
+        onUpdated: refreshEvents,
+      });
+    }
+
+    const reviewSlot = outlet.querySelector('[data-review-slot]');
+    if (reviewSlot) {
+      mountReviewPanel(reviewSlot, {
+        booking: currentBooking,
+        currentUid: ctx.user.uid,
+        currentName: ctx.user.name || 'Member',
+      });
+    }
+
     const primaryBtn = /** @type {HTMLButtonElement | null} */ (outlet.querySelector('[data-booking-action]'));
     primaryBtn?.addEventListener('click', async () => {
       const action = primaryBtn.getAttribute('data-booking-action');
@@ -88,17 +110,27 @@ export async function render(outlet, ctx) {
         openCheckoutModal({
           booking: currentBooking,
           onPay: async (outcome) => {
-            await processBookingPayment({
-              booking: currentBooking,
-              actorUid: ctx.user.uid,
-              outcome,
-            });
+            await processBookingPayment({ booking: currentBooking, actorUid: ctx.user.uid, outcome });
             await refreshEvents();
             showToast('Payment confirmed (test mode)', { variant: 'success' });
           },
         });
-      } else {
-        showToast(`Action "${action}" will be wired in M8.`, { variant: 'info' });
+      } else if (action === 'handover' || action === 'return') {
+        const target = /** @type {HTMLElement | null} */ (outlet.querySelector('[data-handover-slot]'));
+        target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        /** @type {HTMLElement | null} */ (target?.querySelector('input, button'))?.focus();
+      } else if (action === 'release') {
+        primaryBtn.disabled = true;
+        primaryBtn.setAttribute('aria-busy', 'true');
+        try {
+          await releaseDepositAndComplete({ booking: currentBooking, actorUid: ctx.user.uid });
+          await refreshEvents();
+          showToast('Deposit released (test mode)', { variant: 'success' });
+        } catch (err) {
+          showToast(err.message, { variant: 'error' });
+          primaryBtn.disabled = false;
+          primaryBtn.removeAttribute('aria-busy');
+        }
       }
     });
 
@@ -130,9 +162,7 @@ export async function render(outlet, ctx) {
         await refreshEvents();
         await paint();
       },
-      (err) => {
-        renderHtml(outlet, errorState({ title: 'Could not load booking', message: err.message }));
-      },
+      (err) => renderHtml(outlet, errorState({ title: 'Could not load booking', message: err.message })),
     );
   } catch (err) {
     renderHtml(outlet, errorState({ title: 'Could not load booking', message: err.message }));
