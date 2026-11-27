@@ -120,3 +120,41 @@ export function buildListingPayload({ draft, owner }) {
     },
   };
 }
+
+/**
+ * Validate and build a sanitized listing update patch (ownerId and createdAt immutable).
+ * @param {any} draft
+ */
+export function buildListingUpdatePayload(draft) {
+  const allErrors = {
+    ...validateListingStep(1, draft),
+    ...validateListingStep(2, draft),
+    ...validateListingStep(3, draft),
+    ...validateListingStep(4, draft),
+  };
+  if (Object.keys(allErrors).length > 0) {
+    return { ok: false, errors: allErrors };
+  }
+  return {
+    ok: true,
+    data: {
+      title: String(draft.title).trim(),
+      description: String(draft.description).trim(),
+      category: draft.category,
+      photos: draft.photos.slice(0, MAX_LISTING_PHOTOS),
+      dailyPaise: rupeesToPaise(draft.dailyRupees),
+      depositPaise: rupeesToPaise(draft.depositRupees === '' ? 0 : draft.depositRupees),
+      city: String(draft.city).trim(),
+      availability: draft.availability.map((r) => ({ start: r.start, end: r.end })),
+    },
+  };
+}
+
+/**
+ * Check if a listing status value is valid.
+ * @param {string} status
+ * @returns {boolean}
+ */
+export function isValidListingStatus(status) {
+  return Object.values(LISTING_STATUS).includes(status);
+}

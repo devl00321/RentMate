@@ -8,6 +8,7 @@ import { updateProfile as updateAuthProfile } from 'https://www.gstatic.com/fire
 import { initFirebase, trackRead, trackWrite } from '../config/firebase.js';
 import { AppError, ERROR_CODES } from '../config/errors.js';
 import { buildNewProfilePayload, buildProfileUpdatePayload } from '../domain/profile.js';
+import { syncOwnerListingsProfile } from './listings.js';
 
 /**
  * Map Firestore profile snapshot into plain public object (no email/phone).
@@ -87,6 +88,7 @@ export async function updateUserProfile(uid, input) {
         photoURL: payload.photoUrl || null,
       });
     }
+    await syncOwnerListingsProfile(uid, payload);
     return payload;
   } catch (err) {
     if (err instanceof AppError) throw err;

@@ -7,21 +7,20 @@ items to `brain-archive.md` when this file nears 250 lines.
 ## 1. Current state
 
 - Phase: M3 Listings
-- Last completed task: M3.2
-- Next task: M3.3
+- Last completed task: M3.3
+- Next task: M3.4
 - Uncommitted work: none
 - Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Firebase CLI 15.32.1; OpenJDK 21.0.10; Node v26.5.0; Python 3.14.0
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M3.3 `listings.js` create, update, pause, remove
+- Task: M3.4 Listing card and detail view with gallery
 - Plan:
-  1. Create `src/services/listings.js` with `createListing`, `getListing`, `listByOwner` (bounded `limit(12)`), `updateListing`, `setListingStatus` (`active`/`paused`/`removed`), and `syncOwnerListingsSnapshot` (M2.4 TODO).
-  2. Update `firestore.rules` to enforce `listings/{id}` access: public read of `active` (or owner/admin read), owner-only create/update, immutable `ownerId`/`createdAt`, field length & type validation.
-  3. Wire `listingForm.js` (`#/list` and `#/list/:id` edit mode) to `createListing`/`updateListing` (and split step renderers into `listingFormSteps.js` to keep files <180 lines).
-  4. Add unit/rules checks in `tests/domain/listingsService.test.js` and verify `tools/check-lines.sh`.
-- Files being edited: `src/services/listings.js`, `src/views/listingForm.js`, `src/views/listingFormSteps.js`, `src/services/users.js`, `firestore.rules`, `src/app.js`, `tests/domain/listingsService.test.js`, `brain.md`, `goal.md`
-- Done when: CRUD + pause/remove implemented, `firestore.rules` validates listing rules, and all tests pass
+  1. Create `src/views/listingDetail.js` with keyboard-accessible photo gallery (prev/next + thumbnail buttons), hang tag daily price, refundable deposit line, owner card (verified badge + rating stars + link to `#/profile/:id`), availability windows list, report listing button (hooked in M9.1), and sticky "Request dates" panel with price breakdown (and city-only privacy note before Paid per D-011).
+  2. Wire `#/listing/:id` route in `src/app.js` and style gallery/detail layout in `src/styles/views.css`.
+  3. Add sample fallback preview / tests and verify in headless Chrome with clean console.
+- Files being edited: `src/views/listingDetail.js`, `src/app.js`, `src/styles/views.css`, `brain.md`, `goal.md`
+- Done when: `#/listing/:id` renders gallery, owner card, availability, and request panel cleanly
 
 ## 3. Obstacles (open and resolved)
 

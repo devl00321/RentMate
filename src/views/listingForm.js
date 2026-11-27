@@ -1,26 +1,30 @@
 /**
- * 4-step listing creation/editing form with live card preview and inline validation (M3.2).
+ * 4-step listing creation/editing form with live card preview and Firestore persistence (M3.2 & M3.3).
  */
-import { CATEGORIES, MAX_LISTING_PHOTOS } from '../config/constants.js';
+import { CATEGORIES } from '../config/constants.js';
 import { html, renderHtml } from '../components/dom.js';
-import { button, field } from '../components/ui.js';
+import { button } from '../components/ui.js';
+import { errorState } from '../components/emptyState.js';
 import { listingCard } from '../components/listingCard.js';
 import { stepper } from '../components/stepper.js';
-import { mountPhotoUploader } from '../components/photoUploader.js';
-import { mountAvailabilityEditor } from '../components/availabilityEditor.js';
 import { showToast } from '../components/toast.js';
-import { buildListingPayload, rupeesToPaise, validateListingStep } from '../domain/listing.js';
+import { buildListingPayload, buildListingUpdatePayload, rupeesToPaise, validateListingStep } from '../domain/listing.js';
+import { createListing, getListing, updateListing } from '../services/listings.js';
+import { getUserProfile } from '../services/users.js';
+import { renderListingStep } from './listingFormSteps.js';
 
 const STEPS = ['Photos', 'Details', 'Price & deposit', 'Available dates'];
 
 /**
- * Render 4-step listing form view.
+ * Render 4-step listing form view (#/list or #/list/:id).
  * @param {Element} outlet
- * @param {{ user: { uid: string, name?: string | null }, navigate: (p: string) => void }} ctx
+ * @param {{ user: { uid: string, name?: string | null }, params: { id?: string }, navigate: (p: string) => void }} ctx
  */
-export function render(outlet, ctx) {
+export async function render(outlet, ctx) {
+  const editId = ctx.params?.id || '';
   let step = 1;
   let errors = /** @type {Record<string, string>} */ ({});
+  let ownerProfile = null;
   const draft = {
     photos: /** @type {string[]} */ ([]),
     title: '',
@@ -31,6 +35,36 @@ export function render(outlet, ctx) {
     depositRupees: '',
     availability: /** @type {Array<{ start: string, end: string }>} */ ([]),
   };
+
+  if (editId) {
+    renderHtml(outlet, html`<section class="card panel"><div class="skeleton" style="height:28px;width:45%"></div></section>`);
+    try {
+      const existing = await getListing(editId);
+      if (!existing || existing.ownerId !== ctx.user.uid) {
+        renderHtml(outlet, errorState({ title: 'Cannot edit listing', message: 'Listing not found or belongs to another owner.' }));
+        return;
+      }
+      Object.assign(draft, {
+        photos: existing.photos,
+        title: existing.title,
+        category: existing.category,
+        description: existing.description,
+        city: existing.city,
+        dailyRupees: String(Math.round(existing.dailyPaise / 100)),
+        depositRupees: String(Math.round(existing.depositPaise / 100)),
+        availability: existing.availability,
+      });
+    } catch (err) {
+      renderHtml(outlet, errorState({ title: 'Could not load listing', message: err.message }));
+      return;
+    }
+  }
+
+  try {
+    ownerProfile = await getUserProfile(ctx.user.uid);
+  } catch {
+    ownerProfile = null;
+  }
 
   function renderPreview(container) {
     if (!container) return;
@@ -44,35 +78,22 @@ export function render(outlet, ctx) {
           photos: draft.photos,
           dailyPaise: rupeesToPaise(draft.dailyRupees || 0) || 0,
           depositPaise: rupeesToPaise(draft.depositRupees || 0) || 0,
-          ownerName: ctx.user?.name || 'You',
-          ownerRating: 0,
-          ownerRatingCount: 0,
-          ownerVerified: false,
+          ownerName: ownerProfile?.name || ctx.user?.name || 'You',
+          ownerRating: ownerProfile?.ratingAvg || 0,
+          ownerRatingCount: ownerProfile?.ratingCount || 0,
+          ownerVerified: Boolean(ownerProfile?.verified),
         },
         { preview: true },
       ),
     );
   }
 
-  function syncInputsFromDom() {
-    if (step === 2) {
-      draft.title = /** @type {HTMLInputElement | null} */ (outlet.querySelector('#list-title'))?.value ?? draft.title;
-      draft.category = /** @type {HTMLSelectElement | null} */ (outlet.querySelector('#list-cat'))?.value ?? draft.category;
-      draft.description = /** @type {HTMLTextAreaElement | null} */ (outlet.querySelector('#list-desc'))?.value ?? draft.description;
-      draft.city = /** @type {HTMLInputElement | null} */ (outlet.querySelector('#list-city'))?.value ?? draft.city;
-    } else if (step === 3) {
-      draft.dailyRupees = /** @type {HTMLInputElement | null} */ (outlet.querySelector('#list-daily'))?.value ?? draft.dailyRupees;
-      draft.depositRupees = /** @type {HTMLInputElement | null} */ (outlet.querySelector('#list-deposit'))?.value ?? draft.depositRupees;
-    }
-  }
-
   function paint() {
-    const catOpts = CATEGORIES.map((c) => ({ value: c, label: c }));
     renderHtml(
       outlet,
       html`
         <section style="display:grid;gap:var(--s5);margin:var(--s5) 0">
-          <h1>List an item</h1>
+          <h1>${editId ? 'Edit listing' : 'List an item'}</h1>
           ${stepper(STEPS, step)}
           <div class="booking">
             <div class="card panel">
@@ -82,7 +103,7 @@ export function render(outlet, ctx) {
                 ${step > 1 ? button({ label: 'Back', variant: 'ghost', attrs: 'data-prev-step' }) : html`<span></span>`}
                 ${step < 4
                   ? button({ label: 'Next step', attrs: 'data-next-step' })
-                  : button({ label: 'Publish listing', attrs: 'data-submit-listing' })}
+                  : button({ label: editId ? 'Save changes' : 'Publish listing', attrs: 'data-submit-listing' })}
               </div>
             </div>
             <aside style="display:grid;gap:var(--s3)" aria-label="Live card preview">
@@ -97,113 +118,66 @@ export function render(outlet, ctx) {
     const stepBody = outlet.querySelector('[data-step-body]');
     const previewSlot = outlet.querySelector('[data-preview-slot]');
     renderPreview(previewSlot);
-
-    if (stepBody && step === 1) {
-      renderHtml(
+    if (stepBody) {
+      renderListingStep({
         stepBody,
-        html`
-          <div style="display:grid;gap:var(--s4)">
-            <div data-uploader-slot></div>
-            <div style="display:flex;gap:var(--s2);align-items:end;flex-wrap:wrap">
-              ${field({ id: 'photo-url-fallback', label: 'Or paste an HTTPS image URL', type: 'url', placeholder: 'https://...', hint: `Up to ${MAX_LISTING_PHOTOS} photos total` })}
-              ${button({ label: 'Add URL', variant: 'ghost', attrs: 'data-add-photo-url' })}
-            </div>
-            ${errors.photos ? html`<span class="field__error" role="alert">${errors.photos}</span>` : ''}
-          </div>
-        `,
-      );
-      const uploaderSlot = stepBody.querySelector('[data-uploader-slot]');
-      if (uploaderSlot) {
-        mountPhotoUploader(uploaderSlot, {
-          photos: draft.photos,
-          onChange: (next) => {
-            draft.photos = next;
-            errors.photos = '';
-            renderPreview(previewSlot);
-          },
-        });
-      }
-      stepBody.querySelector('[data-add-photo-url]')?.addEventListener('click', () => {
-        const input = /** @type {HTMLInputElement} */ (stepBody.querySelector('#photo-url-fallback'));
-        const url = input.value.trim();
-        if (!/^https:\/\/.+/i.test(url)) {
-          errors.photos = 'Enter a valid URL starting with https://.';
-          return paint();
-        }
-        if (draft.photos.length >= MAX_LISTING_PHOTOS) {
-          errors.photos = `Maximum ${MAX_LISTING_PHOTOS} photos allowed.`;
-          return paint();
-        }
-        draft.photos = [...draft.photos, url];
-        errors.photos = '';
-        paint();
-      });
-    } else if (stepBody && step === 2) {
-      renderHtml(
-        stepBody,
-        html`
-          <div style="display:grid;gap:var(--s4)">
-            ${field({ id: 'list-title', label: 'Item title', value: draft.title, placeholder: 'Mirrorless camera with two lenses', error: errors.title, required: true })}
-            ${field({ id: 'list-cat', label: 'Category', type: 'select', value: draft.category, options: catOpts, error: errors.category })}
-            ${field({ id: 'list-desc', label: 'Description', type: 'textarea', rows: 4, value: draft.description, placeholder: 'Condition, included accessories, pickup notes...', error: errors.description, required: true })}
-            ${field({ id: 'list-city', label: 'City or area', value: draft.city, placeholder: 'Bengaluru', error: errors.city, hint: 'Exact pickup address is shared only after Paid', required: true })}
-          </div>
-        `,
-      );
-      stepBody.addEventListener('input', () => {
-        syncInputsFromDom();
-        renderPreview(previewSlot);
-      });
-    } else if (stepBody && step === 3) {
-      renderHtml(
-        stepBody,
-        html`
-          <div style="display:grid;gap:var(--s4)">
-            ${field({ id: 'list-daily', label: 'Daily rental price (₹)', type: 'number', value: draft.dailyRupees, placeholder: '1200', error: errors.dailyRupees, required: true })}
-            ${field({ id: 'list-deposit', label: 'Refundable security deposit (₹)', type: 'number', value: draft.depositRupees, placeholder: '8000', hint: 'Held in test mode until return is confirmed', error: errors.depositRupees })}
-          </div>
-        `,
-      );
-      stepBody.addEventListener('input', () => {
-        syncInputsFromDom();
-        renderPreview(previewSlot);
-      });
-    } else if (stepBody && step === 4) {
-      mountAvailabilityEditor(stepBody, {
-        ranges: draft.availability,
-        error: errors.availability,
-        onChange: (next) => {
-          draft.availability = next;
-          errors.availability = '';
-        },
+        step,
+        draft,
+        errors,
+        onPreviewUpdate: () => renderPreview(previewSlot),
+        onRepaint: paint,
       });
     }
 
     outlet.querySelector('[data-prev-step]')?.addEventListener('click', () => {
-      syncInputsFromDom();
       errors = {};
       step -= 1;
       paint();
     });
 
     outlet.querySelector('[data-next-step]')?.addEventListener('click', () => {
-      syncInputsFromDom();
       errors = validateListingStep(step, draft);
       if (Object.keys(errors).length > 0) return paint();
       step += 1;
       paint();
     });
 
-    outlet.querySelector('[data-submit-listing]')?.addEventListener('click', () => {
-      const built = buildListingPayload({
-        draft,
-        owner: { uid: ctx.user.uid, name: ctx.user.name || 'RentMate Member' },
-      });
+    outlet.querySelector('[data-submit-listing]')?.addEventListener('click', async (e) => {
+      const btn = /** @type {HTMLButtonElement} */ (e.currentTarget);
+      const built = editId
+        ? buildListingUpdatePayload(draft)
+        : buildListingPayload({
+            draft,
+            owner: {
+              uid: ctx.user.uid,
+              name: ownerProfile?.name || ctx.user.name || 'RentMate Member',
+              photoUrl: ownerProfile?.photoUrl || '',
+              ratingAvg: ownerProfile?.ratingAvg || 0,
+              ratingCount: ownerProfile?.ratingCount || 0,
+              verified: Boolean(ownerProfile?.verified),
+            },
+          });
       if (!built.ok) {
         errors = built.errors;
         return paint();
       }
-      showToast('Listing validated (Firestore save wired in M3.3)', { variant: 'success' });
+      btn.disabled = true;
+      btn.setAttribute('aria-busy', 'true');
+      try {
+        if (editId) {
+          await updateListing(editId, built.data);
+          showToast('Listing updated', { variant: 'success' });
+          ctx.navigate(`/listing/${editId}`);
+        } else {
+          const created = await createListing(built.data);
+          showToast('Listing published', { variant: 'success' });
+          ctx.navigate(`/listing/${created.id}`);
+        }
+      } catch (err) {
+        showToast(err.message, { variant: 'error' });
+        btn.disabled = false;
+        btn.removeAttribute('aria-busy');
+      }
     });
   }
 

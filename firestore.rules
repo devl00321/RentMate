@@ -47,6 +47,36 @@ service cloud.firestore {
       allow delete: if false;
     }
 
+    function isValidListing(data) {
+      return data.title is string && data.title.size() >= 3 && data.title.size() <= 80
+        && data.description is string && data.description.size() >= 10 && data.description.size() <= 1000
+        && data.category is string && data.category.size() > 0 && data.category.size() <= 60
+        && data.city is string && data.city.size() >= 2 && data.city.size() <= 80
+        && data.photos is list && data.photos.size() >= 1 && data.photos.size() <= 5
+        && data.dailyPaise is int && data.dailyPaise >= 100
+        && data.depositPaise is int && data.depositPaise >= 0
+        && data.availability is list && data.availability.size() >= 1 && data.availability.size() <= 20
+        && data.status in ['active', 'paused', 'removed'];
+    }
+
+    match /listings/{listingId} {
+      allow read: if resource.data.status == 'active'
+        || (isSignedIn() && (resource.data.ownerId == request.auth.uid || isAdmin()));
+      allow create: if isSignedIn()
+        && request.resource.data.ownerId == request.auth.uid
+        && request.resource.data.status == 'active'
+        && isValidListing(request.resource.data);
+      allow update: if (isSignedIn()
+        && resource.data.ownerId == request.auth.uid
+        && request.resource.data.ownerId == resource.data.ownerId
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['ownerId', 'createdAt'])
+        && isValidListing(request.resource.data))
+        || (isAdmin()
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status'])
+          && request.resource.data.status in ['active', 'paused', 'removed']);
+      allow delete: if false;
+    }
+
     // Default deny for everything else until later milestones
     match /{document=**} {
       allow read, write: if false;
