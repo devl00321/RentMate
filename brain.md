@@ -7,21 +7,21 @@ items to `brain-archive.md` when this file nears 250 lines.
 ## 1. Current state
 
 - Phase: M3 Listings
-- Last completed task: M2.6
-- Next task: M3.1
+- Last completed task: M3.1
+- Next task: M3.2
 - Uncommitted work: none
 - Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Firebase CLI 15.32.1; OpenJDK 21.0.10; Node v26.5.0; Python 3.14.0
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M3.1 `images.js`: compress and upload to image host
+- Task: M3.2 Listing form (4 steps) with validation and live preview
 - Plan:
-  1. Verify Cloudinary unsigned browser upload API (`POST /v1_1/<cloudName>/image/upload`) in official docs and log in `brain.md`.
-  2. Create `src/services/images.js` with browser `<canvas>` image compression (max 1600px long edge, JPEG 0.8) and unsigned FormData upload returning `secure_url` (with explicit error when Cloudinary preset is placeholder).
-  3. Create `src/components/photoUploader.js` reusable uploader (max 5 photos, previews, remove, alt labels).
-  4. Add unit tests for compression target dimension math (`computeTargetDimensions`) and upload payload validation in `tests/domain/images.test.js`, plus browser test on a real generated image blob/canvas!
-- Files being edited: `src/services/images.js`, `src/components/photoUploader.js`, `tests/domain/images.test.js`, `brain.md`, `goal.md`
-- Done when: compression works on real image file, upload matches verified Cloudinary API, and tests pass
+  1. Create `src/components/listingCard.js` (70% photo, hang tag price, deposit, owner chip/verified badge, rating stars).
+  2. Create `src/domain/listing.js` pure helpers for building/validating listing documents and availability ranges.
+  3. Build `src/views/listingForm.js` 4-step editor (Photos, Details, Price & Deposit, Available Dates) with live card preview and inline validation.
+  4. Support HTTPS photo URL add fallback alongside `photoUploader.js` so listing creation works before Cloudinary keys are supplied.
+- Files being edited: `src/components/listingCard.js`, `src/domain/listing.js`, `src/views/listingForm.js`, `tests/domain/listing.test.js`, `brain.md`, `goal.md`
+- Done when: 4-step listing form validates each step, renders live card preview, and tests pass
 
 ## 3. Obstacles (open and resolved)
 
@@ -64,6 +64,7 @@ Format: `D-n | date | decision | reason | alternatives | status`
 - D-011 | kit | Exact address revealed only after Paid | privacy for owners and renters | reveal at accept | ACTIVE (proposed)
 - D-012 | kit | Deposit hold and release simulated behind `payments.js` adapter | matches the report's test-mode plan; clean upgrade path | none | ACTIVE
 - D-013 | kit | Visual identity "Handover": chalk, ink, cobalt; ribbon and hang tag as signature elements; Bricolage Grotesque with Instrument Sans | distinct, trust-oriented, avoids generic defaults | see rules/06 s1 | ACTIVE
+- D-014 | 2026-11-27 | 8 starter categories in `constants.js`: Cameras & Lenses, Drones & Action Cams, Power Tools, Musical Instruments, Camping & Outdoor, Party & Events, Sports & Fitness, Audio & Projectors | covers report examples + everyday gear (OQ-006) | fewer/more | PLACEHOLDER
 
 ## 6. Verified facts log (fill while building; link the doc page)
 
@@ -81,4 +82,4 @@ Format: `D-n | date | decision | reason | alternatives | status`
 
 ## 8. Lessons learned (short, reusable)
 
-- (empty)
+- Keep `https://` Firebase CDN imports isolated in `config/firebase.js` and `services/` that need Firebase; keep `config/env.js` and `domain/` free of `https://` imports so `node --test` runs cleanly without network ESM hooks.

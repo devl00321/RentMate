@@ -84,7 +84,7 @@ flowchart LR
 - [x] M2.6 Route guards: signed-out redirect, owner and renter in one account | accept: tested
 
 ### M3 Listings (Obj 2)
-- [ ] M3.1 `images.js`: compress and upload to image host | accept: real file uploaded, URL stored
+- [x] M3.1 `images.js`: compress and upload to image host | accept: real file uploaded, URL stored
 - [ ] M3.2 Listing form (4 steps) with validation and live preview | accept: invalid input blocked
 - [ ] M3.3 `listings.js` create, update, pause, remove | accept: rules tests pass
 - [ ] M3.4 Listing card and detail view with gallery | accept: matches design

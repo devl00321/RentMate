@@ -124,3 +124,10 @@
 }
 .otp-cell:focus-visible { border-color: var(--cobalt); outline: 3px solid var(--cobalt); outline-offset: 1px; }
 .field--error .otp-cell { border-color: var(--berry); }
+
+.uploader { display: grid; gap: var(--s3); }
+.uploader__bar { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s3); }
+.uploader__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: var(--s3); }
+.uploader__item { margin: 0; display: grid; gap: var(--s2); padding: var(--s2); }
+.uploader__item img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: var(--r-tag); }
+.uploader__remove { min-height: 36px; padding: 0 var(--s2); font-size: var(--fs-s); }

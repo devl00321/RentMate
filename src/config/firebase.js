@@ -5,29 +5,17 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/13.4.0/firebas
 import { getAuth, connectAuthEmulator } from 'https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js';
 import { getFirestore, connectFirestoreEmulator } from 'https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js';
 import { ENV as EXAMPLE_ENV } from './env.example.js';
+import { loadEnv } from './env.js';
 import { AppError, ERROR_CODES } from './errors.js';
 
-let cachedEnv = null;
 let cachedApp = null;
 let cachedAuth = null;
 let cachedDb = null;
+let cachedEnvRef = null;
 
 const quotaState = { reads: 0, writes: 0 };
 
-/**
- * Load config.local.js if present, otherwise fall back to env.example.js.
- * @returns {Promise<typeof EXAMPLE_ENV>}
- */
-export async function loadEnv() {
-  if (cachedEnv) return cachedEnv;
-  try {
-    const localMod = await import('./config.local.js');
-    cachedEnv = localMod.ENV || EXAMPLE_ENV;
-  } catch {
-    cachedEnv = EXAMPLE_ENV;
-  }
-  return cachedEnv;
-}
+export { loadEnv };
 
 /**
  * Check whether Firebase config has non-placeholder keys or emulator mode enabled.
@@ -46,6 +34,7 @@ export function isFirebaseConfigured(env) {
  */
 export async function initFirebase() {
   const env = await loadEnv();
+  cachedEnvRef = env;
   if (!isFirebaseConfigured(env)) {
     throw new AppError(
       ERROR_CODES.CONFIG_MISSING,
@@ -77,7 +66,7 @@ export async function initFirebase() {
  */
 export function trackRead(count, label) {
   quotaState.reads += count;
-  if (cachedEnv?.debugQuota) {
+  if (cachedEnvRef?.debugQuota) {
     console.info(`[Quota] +${count} read(s) (${label}) | session: ${quotaState.reads}R / ${quotaState.writes}W`);
   }
 }
@@ -89,7 +78,7 @@ export function trackRead(count, label) {
  */
 export function trackWrite(count, label) {
   quotaState.writes += count;
-  if (cachedEnv?.debugQuota) {
+  if (cachedEnvRef?.debugQuota) {
     console.info(`[Quota] +${count} write(s) (${label}) | session: ${quotaState.reads}R / ${quotaState.writes}W`);
   }
 }
