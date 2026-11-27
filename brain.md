@@ -6,22 +6,22 @@ items to `brain-archive.md` when this file nears 250 lines.
 
 ## 1. Current state
 
-- Phase: M5 Booking and calendar
-- Last completed task: M5.5
-- Next task: M5.6
+- Phase: M6 Negotiation chat
+- Last completed task: M5.6
+- Next task: M6.1
 - Uncommitted work: none
 - Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Firebase CLI 15.32.1; OpenJDK 21.0.10; Node v26.5.0; Python 3.14.0
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M5.6 Booking view with ribbon and price breakdown
+- Task: M6.1-M6.5 Negotiation chat (send/listen, offer bubbles, counter/accept updates, rate/length limits)
 - Plan:
-  1. Wire `mountCalendar` + live price breakdown + `createBookingRequest` into `listingDetail.js` / `listingDetailView.js` so renters pick non-booked dates and send a request.
-  2. Create `src/components/bookingViewMarkup.js` + `src/views/booking.js` displaying the Handover ribbon, price breakdown (`rental`, `serviceFee`, `deposit`, `renterPays`, test-mode note), status-specific primary action button (`Accept`, `Pay`, `Cancel`), event log timeline, and chat/handover/dispute panels.
-  3. Wire `#/booking/:id` in `src/app.js`, and wire Renting/Lending booking lists in `src/views/dashboard.js` with status ribbon chips.
-  4. Write render tests across all 9 statuses in `tests/domain/bookingView.test.js`, check `#/demo` & `#/booking` in Chrome, and complete M5 (`m5-done`).
-- Files being edited: `src/components/listingDetailView.js`, `src/views/listingDetail.js`, `src/components/bookingViewMarkup.js`, `src/views/booking.js`, `src/views/dashboard.js`, `src/app.js`, `tests/domain/bookingView.test.js`, `brain.md`, `goal.md`
-- Done when: all 9 booking statuses render in booking view with ribbon + price breakdown, calendar wired in listing detail, and all tests pass
+  1. Create `src/domain/chatOps.js` pure validators and payloads: text length <=500 (`FIELD_LIMITS.MESSAGE_MAX`), offer validation (`dailyPaise >= 100`, `depositPaise >= 0`, `pickupTime`), message rate limiter (cooldown/window), and accept-offer booking update planner (freezes `terms` + recalculates `amounts` + locks `bookedDays`).
+  2. Update `firestore.rules` with `bookings/{id}/messages/{msgId}` (party-only read, sender-only create, type/length/offer validation, no update/delete) and allow `terms` + `amounts` + `latestOfferBy` updates ONLY while `Requested` or `Negotiating` (frozen at `Accepted`!).
+  3. Create `src/services/chat.js` (`watchMessages` limited to 50 with detach on leave, `sendTextMessage`, `sendOfferMessage`, `acceptOfferAndLockBooking`) and `src/components/chatPanel.js` (`aria-live="polite"`, text form, counter-offer form, offer bubbles with Accept/Counter buttons, system messages).
+  4. Wire `mountChatPanel` into `src/views/booking.js` and write comprehensive unit tests in `tests/domain/chat.test.js`.
+- Files being edited: `src/domain/chatOps.js`, `src/services/chat.js`, `src/components/chatPanel.js`, `src/views/booking.js`, `firestore.rules`, `tests/domain/chat.test.js`, `brain.md`, `goal.md`
+- Done when: M6.1-M6.5 chat, offer validation, term freezing, aria-live UI, and rate/length tests pass
 
 ## 3. Obstacles (open and resolved)
 

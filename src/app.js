@@ -14,6 +14,7 @@ const ROUTES = [
   { path: '/auth', title: 'Sign in', load: () => import('./views/auth.js') },
   { path: '/list', title: 'List an item', guard: requireAuth, load: () => import('./views/listingForm.js') },
   { path: '/list/:id', title: 'Edit listing', guard: requireAuth, load: () => import('./views/listingForm.js') },
+  { path: '/booking/:id', title: 'Booking', guard: requireAuth, load: () => import('./views/booking.js') },
   { path: '/dashboard', title: 'Dashboard', guard: requireAuth, load: () => import('./views/dashboard.js') },
   { path: '/profile', title: 'Your profile', guard: requireAuth, load: () => import('./views/profile.js') },
   { path: '/profile/:id', title: 'Profile', load: () => import('./views/profile.js') },

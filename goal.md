@@ -17,7 +17,7 @@ other, with admin dispute handling, built on free tools.
 | 1 | Register with email or phone verification; owner and renter in one account | M2 | [x] |
 | 2 | Owners list items (photos, category, daily price, deposit, dates) | M3 | [x] |
 | 3 | Renters search and filter (category, price, location, availability) | M4 | [x] |
-| 4 | Booking flow with all statuses and double-booking-proof calendar | M5 | [ ] |
+| 4 | Booking flow with all statuses and double-booking-proof calendar | M5 | [x] |
 | 5 | Negotiate via chat and counter-offers | M6 | [ ] |
 | 6 | Payments in test mode; deposit held until return | M7, M8 | [ ] |
 | 7 | Two-way ratings, reputation score, admin review of reports and disputes | M8, M9 | [ ] |
@@ -50,7 +50,7 @@ flowchart LR
 | M2 | 6 | 6 | done |
 | M3 | 6 | 6 | done |
 | M4 | 4 | 4 | done |
-| M5 | 6 | 0 | not started |
+| M5 | 6 | 6 | done |
 | M6 | 5 | 0 | not started |
 | M7 | 5 | 0 | not started |
 | M8 | 6 | 0 | not started |
@@ -103,7 +103,7 @@ flowchart LR
 - [x] M5.3 Calendar component (blocked, selected, range) | accept: keyboard operable
 - [x] M5.4 `bookings.js`: request, accept, cancel with event log | accept: events written
 - [x] M5.5 bookedDays locks in batch; double-booking test | accept: second attempt fails
-- [ ] M5.6 Booking view with ribbon and price breakdown | accept: all statuses render
+- [x] M5.6 Booking view with ribbon and price breakdown | accept: all statuses render
 
 ### M6 Negotiation chat (Obj 5)
 - [ ] M6.1 `chat.js` send and listen (last 50, detach on leave) | accept: two browsers sync

@@ -2,7 +2,7 @@
  * Pure listing detail markup builder (components/ layer, zero Firebase imports).
  */
 import { formatPaise, html } from './dom.js';
-import { button, chip, field } from './ui.js';
+import { button, chip } from './ui.js';
 import { priceTag } from './priceTag.js';
 import { ratingStars } from './ratingStars.js';
 import { verifiedBadge } from './verifiedBadge.js';
@@ -110,12 +110,9 @@ export function renderListingDetailMarkup(item, { activeIndex = 0, isOwner = fal
                 </div>
               `
             : html`
-                <form style="display:grid;gap:var(--s3)" data-request-form>
-                  ${field({ id: 'req-start', name: 'start', type: 'date', label: 'Pickup date', required: true })}
-                  ${field({ id: 'req-end', name: 'end', type: 'date', label: 'Return date', required: true })}
-                  <div data-calendar-slot></div>
-                  ${button({ label: 'Request dates', type: 'submit', attrs: 'data-request-dates' })}
-                </form>
+                <div data-calendar-slot></div>
+                <div data-price-preview></div>
+                <button type="button" class="btn" data-request-dates>Request dates</button>
                 <button type="button" class="btn btn--ghost" data-report-listing>Report listing</button>
               `}
         </aside>
