@@ -7,21 +7,21 @@ items to `brain-archive.md` when this file nears 250 lines.
 ## 1. Current state
 
 - Phase: M3 Listings
-- Last completed task: M3.1
-- Next task: M3.2
+- Last completed task: M3.2
+- Next task: M3.3
 - Uncommitted work: none
 - Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Firebase CLI 15.32.1; OpenJDK 21.0.10; Node v26.5.0; Python 3.14.0
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M3.2 Listing form (4 steps) with validation and live preview
+- Task: M3.3 `listings.js` create, update, pause, remove
 - Plan:
-  1. Create `src/components/listingCard.js` (70% photo, hang tag price, deposit, owner chip/verified badge, rating stars).
-  2. Create `src/domain/listing.js` pure helpers for building/validating listing documents and availability ranges.
-  3. Build `src/views/listingForm.js` 4-step editor (Photos, Details, Price & Deposit, Available Dates) with live card preview and inline validation.
-  4. Support HTTPS photo URL add fallback alongside `photoUploader.js` so listing creation works before Cloudinary keys are supplied.
-- Files being edited: `src/components/listingCard.js`, `src/domain/listing.js`, `src/views/listingForm.js`, `tests/domain/listing.test.js`, `brain.md`, `goal.md`
-- Done when: 4-step listing form validates each step, renders live card preview, and tests pass
+  1. Create `src/services/listings.js` with `createListing`, `getListing`, `listByOwner` (bounded `limit(12)`), `updateListing`, `setListingStatus` (`active`/`paused`/`removed`), and `syncOwnerListingsSnapshot` (M2.4 TODO).
+  2. Update `firestore.rules` to enforce `listings/{id}` access: public read of `active` (or owner/admin read), owner-only create/update, immutable `ownerId`/`createdAt`, field length & type validation.
+  3. Wire `listingForm.js` (`#/list` and `#/list/:id` edit mode) to `createListing`/`updateListing` (and split step renderers into `listingFormSteps.js` to keep files <180 lines).
+  4. Add unit/rules checks in `tests/domain/listingsService.test.js` and verify `tools/check-lines.sh`.
+- Files being edited: `src/services/listings.js`, `src/views/listingForm.js`, `src/views/listingFormSteps.js`, `src/services/users.js`, `firestore.rules`, `src/app.js`, `tests/domain/listingsService.test.js`, `brain.md`, `goal.md`
+- Done when: CRUD + pause/remove implemented, `firestore.rules` validates listing rules, and all tests pass
 
 ## 3. Obstacles (open and resolved)
 
