@@ -10,7 +10,7 @@ for path in src/config/config.local.js .env .firebaserc serviceAccountKey.json s
 done
 
 echo "=== Checking tracked files for leaked secrets ==="
-if git grep -nE "AIza[0-9A-Za-z_-]{15,}|rzp_(test|live)_[0-9A-Za-z]{8,}|-----BEGIN .*PRIVATE KEY-----|cloudinary://[0-9]+:[A-Za-z0-9_-]+@" ; then
+if git grep -nE "AIza[0-9A-Za-z_-]{15,}|rzp_(test|live)_[0-9A-Za-z]{8,}|-----BEGIN .*PRIVATE KEY-----|cloudinary://[0-9]+:[A-Za-z0-9_-]+@" -- ':!tools/check-secrets.sh' ; then
   echo "FAIL: potential secret or credential detected in tracked files"
   exit 1
 fi

@@ -1,0 +1,51 @@
+services:
+  emulators:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rentmate-emulators
+    ports:
+      - "9099:9099"
+      - "8081:8081"
+      - "4000:4000"
+      - "4400:4400"
+      - "9150:9150"
+    volumes:
+      - ./firebase.json:/app/firebase.json:ro
+      - ./firestore.rules:/app/firestore.rules:ro
+      - ./firestore.indexes.json:/app/firestore.indexes.json:ro
+      - ./src/config:/app/src/config:ro
+      - ./tools:/app/tools:ro
+      - rentmate_emulator_data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://127.0.0.1:9099/ >/dev/null && curl -sf http://127.0.0.1:8081/ >/dev/null"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  web:
+    image: nginx:alpine
+    container_name: rentmate-web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/usr/share/nginx/html:ro
+    depends_on:
+      emulators:
+        condition: service_healthy
+
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    profiles: ["test"]
+    working_dir: /app
+    volumes:
+      - ./:/app:ro
+    command:
+      - bash
+      - -lc
+      - node --test tests/domain/*.test.js tests/rules/*.test.js && bash tools/check-lines.sh
+
+volumes:
+  rentmate_emulator_data:

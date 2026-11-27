@@ -6,7 +6,7 @@ import { canTransition } from './bookingMachine.js';
 import { resolveBookingActor } from './bookingOps.js';
 import { enumerateStayDates } from './dates.js';
 
-const SAFE_PHOTO_RE = /^https:\/\/.+/i;
+const SAFE_PHOTO_RE = /^(https:\/\/.+|\.\/assets\/samples\/[a-z0-9-]+\.svg|data:image\/jpeg;base64,[A-Za-z0-9+/=]+)$/i;
 
 /**
  * Plan pickup handover confirmation + condition photo (`Paid -> Handed Over` once both confirm).

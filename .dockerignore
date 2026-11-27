@@ -1,0 +1,14 @@
+.git
+.gitignore
+.firebase
+.firebaserc
+.colima
+node_modules
+*.log
+.DS_Store
+.env
+.env.*
+src/config/config.local.js
+secrets
+*.pem
+*.key

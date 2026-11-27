@@ -4,7 +4,7 @@
 import { CATEGORIES, FIELD_LIMITS, LISTING_STATUS, MAX_LISTING_PHOTOS } from '../config/constants.js';
 
 const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
-const SAFE_PHOTO_RE = /^(https:\/\/.+|\.\/assets\/samples\/[a-z0-9-]+\.svg)$/i;
+const SAFE_PHOTO_RE = /^(https:\/\/.+|\.\/assets\/samples\/[a-z0-9-]+\.svg|data:image\/jpeg;base64,[A-Za-z0-9+/=]+)$/i;
 
 /**
  * Convert rupee input (string or number) to integer paise.

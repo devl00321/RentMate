@@ -98,10 +98,25 @@ export function isCloudinaryConfigured(env) {
 }
 
 /**
+ * Convert a Blob to a base64 Data URL (used only in local emulator mode when Cloudinary is unconfigured).
+ * @param {Blob} blob
+ * @returns {Promise<string>}
+ */
+function blobToDataUrl(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result || ''));
+    reader.onerror = () => reject(new Error('Could not read compressed image.'));
+    reader.readAsDataURL(blob);
+  });
+}
+
+/**
  * Compress (when in browser) and upload an image file to Cloudinary unsigned upload API.
+ * In local emulator mode without Cloudinary keys, stores a compact compressed JPEG data URL locally.
  * @param {File | Blob} file
  * @param {{ fetchImpl?: typeof fetch, compress?: boolean, envOverride?: any }} [opts]
- * @returns {Promise<{ url: string, bytes: number }>}
+ * @returns {Promise<{ url: string, bytes: number, isLocalTest?: boolean }>}
  */
 export async function uploadImage(file, opts = {}) {
   const check = validateImageFile(file);
@@ -111,6 +126,11 @@ export async function uploadImage(file, opts = {}) {
 
   const env = opts.envOverride || (await loadEnv());
   if (!isCloudinaryConfigured(env)) {
+    if (env?.useEmulator) {
+      const localBlob = opts.compress === false ? file : await compressImage(file, { maxEdge: 800, quality: 0.72 });
+      const dataUrl = await blobToDataUrl(localBlob);
+      return { url: dataUrl, bytes: localBlob.size || 0, isLocalTest: true };
+    }
     throw new AppError(
       ERROR_CODES.CONFIG_MISSING,
       'Cloudinary cloudName and unsigned uploadPreset are not configured in config.local.js.',

@@ -4,7 +4,27 @@ Peer-to-peer rental marketplace for everyday belongings built with plain HTML, C
 
 > **Test mode notice:** Payments and security deposit release run in **test mode** (`Test mode: no real money moves`). Real escrow requires server code on Firebase's paid Blaze plan.
 
-## Setup (7 steps from a fresh clone)
+## Quick Start with Docker (1 command)
+
+Start the entire local stack (web app + Firebase Auth & Firestore Emulators + auto-seeded 12 sample listings & 3 demo accounts):
+
+```bash
+./tools/rentmate.sh start   # or: docker compose up -d --build
+```
+
+- **App:** `http://localhost:8080/`
+- **Firebase Emulator UI:** `http://localhost:4000/`
+- **Demo logins (password `rentmate123`):** `owner@rentmate.test`, `renter@rentmate.test`, `admin@rentmate.test`
+
+Stop everything in one command:
+
+```bash
+./tools/rentmate.sh stop    # or: docker compose down
+```
+
+Run tests inside Docker: `./tools/rentmate.sh test` (or `docker compose run --rm test`).
+
+## Setup (7 steps from a fresh clone for live Firebase)
 
 1. **Clone and copy local config:**
    `cp src/config/env.example.js src/config/config.local.js`

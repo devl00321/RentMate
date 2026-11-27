@@ -6,21 +6,21 @@ items to `brain-archive.md` when this file nears 250 lines.
 
 ## 1. Current state
 
-- Phase: M11 Tests, docs, deploy (paused at M11.5 — Needs human)
-- Last completed task: M11.4
-- Next task: M11.5 (blocked on human Firebase project & keys)
-- Uncommitted work: none
-- Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Firebase CLI 15.32.1; OpenJDK 21.0.10; Node v26.5.0; Python 3.14.0
+- Phase: M11 Tests, docs, deploy (paused before M11.5 per user — local Docker testing active)
+- Last completed task: M11.4 + Dockerized local Auth/Firestore emulator + nginx stack
+- Next task: User side-by-side testing on `http://localhost:8080/`; M11.5 deploy intentionally held
+- Uncommitted work: none (after commit & push)
+- Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Firebase CLI 15.32.1; OpenJDK 21; Node 22/26; Docker via `colima-rentmate`
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M11.5 Deploy to Firebase Hosting & M11.6 Final release checklist
+- Task: Local Docker stack verification & user side-by-side testing (deferring M11.5 Firebase Hosting deploy)
 - Plan:
-  1. Completed M11.1 (`tools/ui-smoke.sh`: 8 routes × 3 viewports = 24 checks pass), M11.2 (`docs/demo-script.md`), M11.3 (`README.md`, `docs/user-guide.md`, `docs/architecture.md`), M11.4 (responsive/a11y pass).
-  2. Verified `firebase projects:list` shows only unrelated personal projects.
-  3. Waiting on human to supply a dedicated RentMate Firebase project + Web config + Cloudinary unsigned preset (see Section 8) before deploying `firestore.rules`, `firestore.indexes.json`, Hosting, and running live two-account staging verification.
-- Files being edited: `brain.md`, `goal.md`
-- Done when: human supplies project/keys, Hosting deploys cleanly, URL recorded in `brain.md`, and M11.6 ticked
+  1. Completed M11.1–M11.4 (`tools/ui-smoke.sh`: 8 routes × 3 viewports = 24 checks pass, docs, demo script).
+  2. Built one-command Docker stack (`./tools/rentmate.sh start|stop|status|logs|test`) running nginx (`:8080`) + Firebase Auth (`:9099`), Firestore (`:8081`), and Emulator UI (`:4000`) seeded with 3 demo accounts and 12 sample listings, plus local compressed JPEG data-URL upload fallback when emulator mode runs without Cloudinary keys.
+  3. Holding live Firebase Hosting deploy (`M11.5`) until user completes local testing and requests changes.
+- Files being edited: `Dockerfile`, `docker-compose.yml`, `.dockerignore`, `firebase.json`, `tools/*`, `src/services/images.js`, `src/domain/listing.js`, `src/domain/handoverOps.js`, `README.md`, `brain.md`
+- Done when: Docker stack runs healthy on `:8080` & `:4000`, all tests & smoke checks pass, and changes are committed/pushed
 
 ## 3. Obstacles (open and resolved)
 
@@ -29,7 +29,7 @@ Format: `OB-n | status | symptom | attempts | cause or next idea`
 - OB-1 | OPEN (watch) | Firebase Spark quota (20,000 writes and 50,000 reads a day per the report; shutdown when exhausted) | not an error yet | mitigated by rules/01 s4; measure in M10.3
 - OB-2 | OPEN (watch) | Secure deposit release needs server-side checks (Cloud Functions, paid Blaze plan, per the report) | n/a | simulate in test mode (D-012); stretch S1
 - OB-3 | RESOLVED | Report ref 10 (community guide) says Cloud Storage for Firebase is not on Spark since 2 Feb 2026 | verified 2026-11-27 | Firebase pricing docs show Spark tier free Cloud Storage has regional restrictions (US regions) and some bucket configs require Blaze; photos use external image host regardless (rules/01 s5)
-- OB-4 | OPEN (env) | `firebase emulators:exec --only firestore` stalled at 1% downloading `cloud-firestore-emulator-v1.22.0.jar` (137MB) | 1 attempt | Auth emulator runs locally (`--only auth`); test rules/Firestore against staging Firebase project when human supplies keys, or retry jar download later (per rules/01 s6)
+- OB-4 | RESOLVED | `firebase emulators:exec --only firestore` stalled at 1% downloading `cloud-firestore-emulator-v1.22.0.jar` (137MB) | 2 attempts | Downloaded jar + bundled into OpenJDK 21 `Dockerfile`; live Auth (`:9099`) & Firestore (`:8081`) emulators run in Docker with `firestore.rules` + seeded listings
 
 ## 4. Open questions (report is silent; answer or keep PLACEHOLDER)
 
