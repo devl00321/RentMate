@@ -6,22 +6,23 @@ items to `brain-archive.md` when this file nears 250 lines.
 
 ## 1. Current state
 
-- Phase: M6 Negotiation chat
-- Last completed task: M5.6
-- Next task: M6.1
+- Phase: M7 Payments (test mode)
+- Last completed task: M6.5
+- Next task: M7.1
 - Uncommitted work: none
 - Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Firebase CLI 15.32.1; OpenJDK 21.0.10; Node v26.5.0; Python 3.14.0
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M6.1-M6.5 Negotiation chat (send/listen, offer bubbles, counter/accept updates, rate/length limits)
+- Task: M7.1-M7.5 Payments in test mode (gateway docs, adapter, checkout UI, Paid + held deposit, failure/retry)
 - Plan:
-  1. Create `src/domain/chatOps.js` pure validators and payloads: text length <=500 (`FIELD_LIMITS.MESSAGE_MAX`), offer validation (`dailyPaise >= 100`, `depositPaise >= 0`, `pickupTime`), message rate limiter (cooldown/window), and accept-offer booking update planner (freezes `terms` + recalculates `amounts` + locks `bookedDays`).
-  2. Update `firestore.rules` with `bookings/{id}/messages/{msgId}` (party-only read, sender-only create, type/length/offer validation, no update/delete) and allow `terms` + `amounts` + `latestOfferBy` updates ONLY while `Requested` or `Negotiating` (frozen at `Accepted`!).
-  3. Create `src/services/chat.js` (`watchMessages` limited to 50 with detach on leave, `sendTextMessage`, `sendOfferMessage`, `acceptOfferAndLockBooking`) and `src/components/chatPanel.js` (`aria-live="polite"`, text form, counter-offer form, offer bubbles with Accept/Counter buttons, system messages).
-  4. Wire `mountChatPanel` into `src/views/booking.js` and write comprehensive unit tests in `tests/domain/chat.test.js`.
-- Files being edited: `src/domain/chatOps.js`, `src/services/chat.js`, `src/components/chatPanel.js`, `src/views/booking.js`, `firestore.rules`, `tests/domain/chat.test.js`, `brain.md`, `goal.md`
-- Done when: M6.1-M6.5 chat, offer validation, term freezing, aria-live UI, and rate/length tests pass
+  1. Verify Razorpay Standard Checkout test-mode API (`checkout.razorpay.com/v1/checkout.js`) and log docs in `brain.md` (M7.1).
+  2. Create `src/services/payments.js` adapter with `SimulatedPaymentProvider` and `RazorpayTestProvider` interface (pay, refund, releaseDeposit, simulateFailure toggle).
+  3. Create `src/components/checkoutModal.js` showing exact rental + service fee (5% PLACEHOLDER) + deposit breakdown, `"Test mode: no real money moves"`, test outcome selector (Success / Simulate failure) for simulated provider, and retry flow.
+  4. Wire Paid transition (`depositState = 'held'`, event logged, system message logged) into `src/services/bookings.js` / `src/views/booking.js` (`Accept -> Pay and confirm`).
+  5. Write unit tests in `tests/domain/payments.test.js` covering payment success, `depositState = 'held'`, failure leaving status `Accepted`, and retry success.
+- Files being edited: `src/domain/paymentOps.js`, `src/services/payments.js`, `src/components/checkoutModal.js`, `src/views/booking.js`, `firestore.rules`, `tests/domain/payments.test.js`, `brain.md`, `goal.md`
+- Done when: checkout breakdown renders with test-mode notice, Paid sets `depositState = 'held'`, failure leaves `Accepted` for retry, and all tests pass
 
 ## 3. Obstacles (open and resolved)
 
@@ -74,6 +75,7 @@ Format: `D-n | date | decision | reason | alternatives | status`
 | 2026-11-27 | Firebase Auth 13.4.0 exports verified: `getAuth`, `createUserWithEmailAndPassword`, `signInWithEmailAndPassword`, `sendPasswordResetEmail`, `signOut`, `onAuthStateChanged`, `RecaptchaVerifier(auth, containerId, opts)` (auth-first arg), `signInWithPhoneNumber`; test phone numbers configured in Console bypass real SMS/Blaze limits | https://firebase.google.com/docs/auth/web/password-auth & https://firebase.google.com/docs/auth/web/phone-auth | M2.1, `src/services/auth.js` |
 | 2026-11-27 | Firestore 13.4.0 exports verified: `getFirestore`, `doc`, `collection`, `getDoc`, `getDocs`, `setDoc`, `addDoc`, `updateDoc`, `deleteDoc`, `writeBatch`, `query`, `where`, `orderBy`, `limit`, `startAfter`, `onSnapshot`, `serverTimestamp`, `documentId` | https://firebase.google.com/docs/firestore/quickstart | M2.1, `src/services/*.js` |
 | 2026-11-27 | Cloudinary unsigned upload API verified: `POST https://api.cloudinary.com/v1_1/<cloudName>/image/upload` with `FormData` (`file`, `upload_preset`), returning `{ secure_url }` | https://cloudinary.com/documentation/upload_images#unsigned_upload | M3.1, `src/services/images.js` |
+| 2026-11-27 | Razorpay Standard Checkout test mode verified: `https://checkout.razorpay.com/v1/checkout.js`, `new Razorpay({ key: 'rzp_test_...', amount, currency: 'INR', order_id, handler })`, `rzp.on('payment.failed', ...)` — requires server `order_id` & signature check for capture, matching D-012 simulated Spark adapter | https://razorpay.com/docs/payments/payment-gateway/web-integration/standard/ | M7.1, `src/services/payments.js` |
 
 ## 7. Needs human (only when truly blocked)
 

@@ -96,6 +96,8 @@
 .rows .total { border-top: 1px solid var(--mist); padding-top: var(--s3); font-size: var(--fs-l); }
 
 .chat { display: grid; gap: var(--s3); }
+.chat-stream { max-height: 360px; overflow-y: auto; padding-right: var(--s1); }
+.chat-composer { display: flex; gap: var(--s2); align-items: end; flex-wrap: wrap; }
 .msg { max-width: 82%; padding: var(--s3) var(--s4); border-radius: 16px 16px 16px 4px; background: var(--chalk); }
 .msg--me { justify-self: end; background: var(--cobalt); color: var(--cobalt-ink); border-radius: 16px 16px 4px 16px; }
 .offer { max-width: 88%; padding: var(--s4); border: 1.5px dashed var(--cobalt); border-radius: var(--r-ctl); display: grid; gap: var(--s2); }

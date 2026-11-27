@@ -18,7 +18,7 @@ other, with admin dispute handling, built on free tools.
 | 2 | Owners list items (photos, category, daily price, deposit, dates) | M3 | [x] |
 | 3 | Renters search and filter (category, price, location, availability) | M4 | [x] |
 | 4 | Booking flow with all statuses and double-booking-proof calendar | M5 | [x] |
-| 5 | Negotiate via chat and counter-offers | M6 | [ ] |
+| 5 | Negotiate via chat and counter-offers | M6 | [x] |
 | 6 | Payments in test mode; deposit held until return | M7, M8 | [ ] |
 | 7 | Two-way ratings, reputation score, admin review of reports and disputes | M8, M9 | [ ] |
 | 8 | Whole system on free tools plus a service-fee model | M0, M10, M11 | [ ] |
@@ -51,7 +51,7 @@ flowchart LR
 | M3 | 6 | 6 | done |
 | M4 | 4 | 4 | done |
 | M5 | 6 | 6 | done |
-| M6 | 5 | 0 | not started |
+| M6 | 5 | 5 | done |
 | M7 | 5 | 0 | not started |
 | M8 | 6 | 0 | not started |
 | M9 | 5 | 0 | not started |
@@ -106,11 +106,11 @@ flowchart LR
 - [x] M5.6 Booking view with ribbon and price breakdown | accept: all statuses render
 
 ### M6 Negotiation chat (Obj 5)
-- [ ] M6.1 `chat.js` send and listen (last 50, detach on leave) | accept: two browsers sync
-- [ ] M6.2 Offer message type (price, deposit, pickup time) | accept: validated in rules
-- [ ] M6.3 Accept and counter flow updates booking terms | accept: terms frozen at Accepted
-- [ ] M6.4 Chat UI with offer bubbles, system messages | accept: aria-live works
-- [ ] M6.5 Message rate and length limits | accept: over-limit blocked
+- [x] M6.1 `chat.js` send and listen (last 50, detach on leave) | accept: two browsers sync
+- [x] M6.2 Offer message type (price, deposit, pickup time) | accept: validated in rules
+- [x] M6.3 Accept and counter flow updates booking terms | accept: terms frozen at Accepted
+- [x] M6.4 Chat UI with offer bubbles, system messages | accept: aria-live works
+- [x] M6.5 Message rate and length limits | accept: over-limit blocked
 
 ### M7 Payments, test mode (Obj 6)
 - [ ] M7.1 Verify gateway docs, test keys process; log | accept: docs noted

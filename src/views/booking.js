@@ -1,8 +1,9 @@
 /**
- * Booking detail view (#/booking/:id): real-time booking sync, ribbon, price breakdown, actions (M5.6).
+ * Booking detail view (#/booking/:id): real-time booking sync, ribbon, price breakdown, chat (M5.6, M6).
  */
 import { html, renderHtml } from '../components/dom.js';
 import { renderBookingMarkup } from '../components/bookingViewMarkup.js';
+import { mountChatPanel } from '../components/chatPanel.js';
 import { emptyState, errorState } from '../components/emptyState.js';
 import { openModal } from '../components/modal.js';
 import { showToast } from '../components/toast.js';
@@ -11,7 +12,7 @@ import { acceptBooking, cancelBooking } from '../services/bookings.js';
 import { listBookingEvents, watchBooking } from '../services/bookingQueries.js';
 
 /**
- * Mount booking view and detach real-time listener on route exit.
+ * Mount booking view and detach all real-time listeners on route exit.
  * @param {Element} outlet
  * @param {{ params: { id: string }, user: { uid: string } }} ctx
  * @returns {Promise<() => void>}
@@ -24,7 +25,8 @@ export async function render(outlet, ctx) {
 
   let currentBooking = null;
   let events = /** @type {any[]} */ ([]);
-  let unsub = null;
+  let unsubBooking = null;
+  let chatCtrl = null;
 
   async function refreshEvents() {
     try {
@@ -34,7 +36,7 @@ export async function render(outlet, ctx) {
     }
   }
 
-  function paint() {
+  async function paint() {
     if (!currentBooking) {
       renderHtml(
         outlet,
@@ -50,6 +52,20 @@ export async function render(outlet, ctx) {
 
     const actor = resolveBookingActor(currentBooking, ctx.user.uid);
     renderHtml(outlet, renderBookingMarkup(currentBooking, { actor, events }));
+
+    const chatSlot = outlet.querySelector('[data-chat-slot]');
+    if (chatSlot) {
+      if (!chatCtrl) {
+        chatCtrl = await mountChatPanel(chatSlot, {
+          booking: currentBooking,
+          currentUid: ctx.user.uid,
+          onBookingUpdated: refreshEvents,
+        });
+      } else {
+        chatCtrl.setBooking(currentBooking);
+        chatCtrl.mountTo(chatSlot);
+      }
+    }
 
     const primaryBtn = /** @type {HTMLButtonElement | null} */ (outlet.querySelector('[data-booking-action]'));
     primaryBtn?.addEventListener('click', async () => {
@@ -92,12 +108,12 @@ export async function render(outlet, ctx) {
 
   try {
     await refreshEvents();
-    unsub = await watchBooking(
+    unsubBooking = await watchBooking(
       ctx.params.id,
       async (docData) => {
         currentBooking = docData;
         await refreshEvents();
-        paint();
+        await paint();
       },
       (err) => {
         renderHtml(outlet, errorState({ title: 'Could not load booking', message: err.message }));
@@ -108,6 +124,7 @@ export async function render(outlet, ctx) {
   }
 
   return () => {
-    if (typeof unsub === 'function') unsub();
+    unsubBooking?.();
+    chatCtrl?.destroy();
   };
 }

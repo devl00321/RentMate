@@ -138,6 +138,31 @@ service cloud.firestore {
               || isAdmin());
         allow update, delete: if false;
       }
+
+      match /messages/{messageId} {
+        allow read: if isSignedIn()
+          && (get(/databases/$(database)/documents/bookings/$(bookingId)).data.ownerId == request.auth.uid
+              || get(/databases/$(database)/documents/bookings/$(bookingId)).data.renterId == request.auth.uid
+              || isAdmin());
+        allow create: if isSignedIn()
+          && request.resource.data.senderId == request.auth.uid
+          && (get(/databases/$(database)/documents/bookings/$(bookingId)).data.ownerId == request.auth.uid
+              || get(/databases/$(database)/documents/bookings/$(bookingId)).data.renterId == request.auth.uid)
+          && request.resource.data.type in ['text', 'offer', 'system']
+          && request.resource.data.text is string
+          && request.resource.data.text.size() > 0
+          && request.resource.data.text.size() <= 500
+          && (request.resource.data.type != 'offer'
+              || (request.resource.data.offer is map
+                  && request.resource.data.offer.dailyPaise is int
+                  && request.resource.data.offer.dailyPaise >= 100
+                  && request.resource.data.offer.depositPaise is int
+                  && request.resource.data.offer.depositPaise >= 0
+                  && request.resource.data.offer.pickupTime is string
+                  && request.resource.data.offer.pickupTime.size() > 0
+                  && request.resource.data.offer.pickupTime.size() <= 20));
+        allow update, delete: if false;
+      }
     }
 
     // Default deny for everything else until later milestones
