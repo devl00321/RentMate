@@ -6,21 +6,21 @@ items to `brain-archive.md` when this file nears 250 lines.
 
 ## 1. Current state
 
-- Phase: M11 Tests, docs, deploy
-- Last completed task: M10.5
-- Next task: M11.1
+- Phase: M11 Tests, docs, deploy (paused at M11.5 — Needs human)
+- Last completed task: M11.4
+- Next task: M11.5 (blocked on human Firebase project & keys)
 - Uncommitted work: none
 - Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Firebase CLI 15.32.1; OpenJDK 21.0.10; Node v26.5.0; Python 3.14.0
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M11.1-M11.6 UI smoke tests, walkthrough doc, README, responsive/a11y pass, deploy check, final checklist
+- Task: M11.5 Deploy to Firebase Hosting & M11.6 Final release checklist
 - Plan:
-  1. Write scripted UI smoke checks across all key routes (`#/`, `#/search?sample=1`, `#/demo`, `#/auth`, `#/dashboard`, `#/admin`, `#/missing`) at 360px, 768px, and 1280px in `tests/uiSmoke.mjs` and run in headless Chrome (M11.1, M11.4).
-  2. Write `docs/demo-script.md` (two-account + admin walkthrough) and `docs/user-guide.md`, and complete `README.md` setup in under 10 steps with test-mode notice and Open Questions list (M11.2, M11.3).
-  3. Check deploy readiness (M11.5): verify whether human Firebase project keys/login exist or log exact blocker in "Needs human" (`brain.md` s7) after finishing all non-blocked tasks (M11.1-M11.4) and updating M11.6 checklist truthfully!
-- Files being edited: `tests/uiSmoke.mjs`, `docs/demo-script.md`, `docs/user-guide.md`, `README.md`, `brain.md`, `goal.md`
-- Done when: all unblocked M11 tasks verified and committed, Needs human updated if Firebase Hosting deploy requires human project/keys
+  1. Completed M11.1 (`tools/ui-smoke.sh`: 8 routes × 3 viewports = 24 checks pass), M11.2 (`docs/demo-script.md`), M11.3 (`README.md`, `docs/user-guide.md`, `docs/architecture.md`), M11.4 (responsive/a11y pass).
+  2. Verified `firebase projects:list` shows only unrelated personal projects.
+  3. Waiting on human to supply a dedicated RentMate Firebase project + Web config + Cloudinary unsigned preset (see Section 8) before deploying `firestore.rules`, `firestore.indexes.json`, Hosting, and running live two-account staging verification.
+- Files being edited: `brain.md`, `goal.md`
+- Done when: human supplies project/keys, Hosting deploys cleanly, URL recorded in `brain.md`, and M11.6 ticked
 
 ## 3. Obstacles (open and resolved)
 
@@ -87,11 +87,13 @@ Format: `D-n | date | decision | reason | alternatives | status`
 | Secrets | PASS (`git grep` zero keys; `git check-ignore` confirms `src/config/config.local.js` ignored) |
 | Hallucination | PASS (Firebase 13.4.0, Cloudinary, Razorpay Checkout & CSP traced to section 6) |
 | UI | PASS (Handover tokens, ribbon, hang tag, loading/empty/error/offline states, Chrome CSP clean) |
+| M11.1 / M11.4 | PASS (`tools/ui-smoke.sh`: 8 routes × 360/768/1280px = 24 checks pass; `83/83` tests pass) |
 
 ## 8. Needs human (only when truly blocked)
 
-- None yet. Expected asks: Firebase project config, Razorpay test keys,
-  image-host cloud name and unsigned preset, Google Maps key, an admin email.
+1. **RentMate Firebase Project & Web Config:** Existing logged-in projects are unrelated. Provide a dedicated Firebase project ID + Web App config (`apiKey`, `authDomain`, `projectId`, `storageBucket`, `messagingSenderId`, `appId`) for `src/config/config.local.js` and Hosting deploy (`M11.5`), plus an admin email/UID (`D-010`).
+2. **Cloudinary Image Host:** Provide `cloudName` and unsigned `uploadPreset` for live browser image uploads (`M3.1`).
+3. **Optional Keys / OQs:** Razorpay test key ID (`rzp_test_...`), Google Maps key (for stretch S2), and any overrides for `OQ-001`..`OQ-010` (`FEE_RATE = 0.05`, categories, team names 2-6, ref years 5-8).
 
 ## 9. Lessons learned (short, reusable)
 

@@ -5,7 +5,6 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**",
-      "src/config/config.local.js",
       "tests/**",
       "rules/**",
       "design/**",
@@ -13,7 +12,9 @@
       "docs/**",
       "brain*.md",
       "goal.md",
-      "MASTER_PROMPT.md"
+      "MASTER_PROMPT.md",
+      "README.md",
+      "*.log"
     ],
     "headers": [
       {

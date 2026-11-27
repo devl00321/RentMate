@@ -1,15 +1,36 @@
-# Secrets and local config
+# Local runtime configs & environment files (NEVER commit)
 src/config/config.local.js
+*.local.js
 .env
 .env.*
+!.env.example
 
-# Dependencies and build/cache
-node_modules/
+# Firebase local state & debug logs
 .firebase/
-firebase-debug.log
-firestore-debug.log
+.firebaserc
+firebase-debug*.log
+firestore-debug*.log
+ui-debug*.log
+database-debug*.log
 
-# OS and editor
+# Private credentials, certificates, & service accounts
+*serviceAccount*.json
+*service-account*.json
+*firebase-adminsdk*.json
+credentials*.json
+secrets/
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+
+# Dependencies
+node_modules/
+
+# OS and editor metadata
 .DS_Store
 Thumbs.db
 *.swp
+.vscode/
+.idea/

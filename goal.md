@@ -56,7 +56,7 @@ flowchart LR
 | M8 | 6 | 6 | done |
 | M9 | 5 | 5 | done |
 | M10 | 5 | 5 | done |
-| M11 | 6 | 0 | not started |
+| M11 | 6 | 4 | blocked (needs human keys) |
 
 ## 5. Tasks
 
@@ -142,12 +142,12 @@ flowchart LR
 - [x] M10.5 Audit loop (rules/07 s4), fix findings | accept: all rows recorded
 
 ### M11 Tests, docs, deploy
-- [ ] M11.1 UI smoke tests or scripted manual checks | accept: results recorded
-- [ ] M11.2 Full lifecycle two-account plus admin walkthrough | accept: demo-script.md
-- [ ] M11.3 README (setup under 10 steps), architecture and user guide | accept: fresh clone works
-- [ ] M11.4 Responsive and accessibility final pass | accept: rules/05 s3 on all screens
-- [ ] M11.5 Deploy to Firebase Hosting | accept: URL in brain.md
-- [ ] M11.6 Final release checklist (rules/05 s6) | accept: all ticked with proof
+- [x] M11.1 UI smoke tests or scripted manual checks | accept: results recorded
+- [x] M11.2 Full lifecycle two-account plus admin walkthrough | accept: demo-script.md
+- [x] M11.3 README (setup under 10 steps), architecture and user guide | accept: fresh clone works
+- [x] M11.4 Responsive and accessibility final pass | accept: rules/05 s3 on all screens
+- [!] M11.5 Deploy to Firebase Hosting | accept: URL in brain.md
+- [!] M11.6 Final release checklist (rules/05 s6) | accept: all ticked with proof
 
 ## 6. Stretch goals (only after M11)
 
