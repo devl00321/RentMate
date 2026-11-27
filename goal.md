@@ -98,7 +98,7 @@ flowchart LR
 - [x] M4.4 Search view UI, empty and error states | accept: all states reachable
 
 ### M5 Booking and calendar (Obj 4)
-- [ ] M5.1 `dates.js`, `pricing.js` pure functions plus tests | accept: table tests pass
+- [x] M5.1 `dates.js`, `pricing.js` pure functions plus tests | accept: table tests pass
 - [ ] M5.2 `bookingMachine.js` table and tests | accept: legal/illegal cases pass
 - [ ] M5.3 Calendar component (blocked, selected, range) | accept: keyboard operable
 - [ ] M5.4 `bookings.js`: request, accept, cancel with event log | accept: events written

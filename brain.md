@@ -7,20 +7,20 @@ items to `brain-archive.md` when this file nears 250 lines.
 ## 1. Current state
 
 - Phase: M5 Booking and calendar
-- Last completed task: M4.4
-- Next task: M5.1
+- Last completed task: M5.1
+- Next task: M5.2
 - Uncommitted work: none
 - Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Firebase CLI 15.32.1; OpenJDK 21.0.10; Node v26.5.0; Python 3.14.0
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M5.1 `dates.js`, `pricing.js` pure functions plus tests
+- Task: M5.2 `bookingMachine.js` table and tests
 - Plan:
-  1. Create `src/domain/pricing.js` with pure integer paise calculations per `rules/02` s4 (`calculateBookingPricing`, `roundHalfUp`, `FEE_RATE` PLACEHOLDER).
-  2. Write table-driven tests in `tests/domain/pricing.test.js` covering 1 day, 7 days, zero deposit, half-up rounding edges, and large values (80,000-rupee camera).
-  3. Expand `tests/domain/dates.test.js` if needed and run `node --test` + `check-lines.sh`.
-- Files being edited: `src/domain/pricing.js`, `tests/domain/pricing.test.js`, `brain.md`, `goal.md`
-- Done when: `dates.js` and `pricing.js` table-driven tests pass and `check-lines.sh` passes
+  1. Create `src/domain/bookingMachine.js` implementing the exact transition table and guards in `rules/02` s2 (`canTransition(from, to, actor, ctx)` returning `{ ok, reason }`, `getAllowedActions(status, actor, ctx)`).
+  2. Support all 9 statuses (`Requested`, `Negotiating`, `Accepted`, `Paid`, `Handed Over`, `Returned`, `Completed`, `Cancelled`, `Disputed`) and all actors (`owner`, `renter`, `admin`).
+  3. Write thorough table-driven legal and illegal transition tests in `tests/domain/bookingMachine.test.js` covering every row and every actor.
+- Files being edited: `src/domain/bookingMachine.js`, `tests/domain/bookingMachine.test.js`, `brain.md`, `goal.md`
+- Done when: every legal and illegal transition for every actor passes in `node --test`
 
 ## 3. Obstacles (open and resolved)
 

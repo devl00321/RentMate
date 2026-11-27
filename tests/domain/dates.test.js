@@ -14,6 +14,8 @@ test('parseDayInt and formatDayInt handle valid and invalid calendar dates', () 
   const day = parseDayInt('2026-12-01');
   assert.equal(Number.isFinite(day), true);
   assert.equal(formatDayInt(day), '2026-12-01');
+  assert.equal(Number.isFinite(parseDayInt('2024-02-29')), true);
+  assert.equal(Number.isNaN(parseDayInt('2026-02-29')), true);
   assert.equal(Number.isNaN(parseDayInt('2026-02-30')), true);
   assert.equal(Number.isNaN(parseDayInt('bad-date')), true);
 });
