@@ -15,7 +15,7 @@ other, with admin dispute handling, built on free tools.
 | Obj | Report objective (short) | Milestone | Done |
 |---|---|---|---|
 | 1 | Register with email or phone verification; owner and renter in one account | M2 | [x] |
-| 2 | Owners list items (photos, category, daily price, deposit, dates) | M3 | [ ] |
+| 2 | Owners list items (photos, category, daily price, deposit, dates) | M3 | [x] |
 | 3 | Renters search and filter (category, price, location, availability) | M4 | [ ] |
 | 4 | Booking flow with all statuses and double-booking-proof calendar | M5 | [ ] |
 | 5 | Negotiate via chat and counter-offers | M6 | [ ] |
@@ -48,7 +48,7 @@ flowchart LR
 | M0 | 5 | 5 | done |
 | M1 | 6 | 6 | done |
 | M2 | 6 | 6 | done |
-| M3 | 6 | 0 | not started |
+| M3 | 6 | 6 | done |
 | M4 | 4 | 0 | not started |
 | M5 | 6 | 0 | not started |
 | M6 | 5 | 0 | not started |
@@ -89,7 +89,7 @@ flowchart LR
 - [x] M3.3 `listings.js` create, update, pause, remove | accept: rules tests pass
 - [x] M3.4 Listing card and detail view with gallery | accept: matches design
 - [x] M3.5 Owner availability ranges editor | accept: stored and shown
-- [ ] M3.6 Seed script with clearly labelled sample listings | accept: 12 sample listings
+- [x] M3.6 Seed script with clearly labelled sample listings | accept: 12 sample listings
 
 ### M4 Search and filters (Obj 3)
 - [ ] M4.1 Query builder with category, price range, city | accept: each filter works, limit(12)

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Sample audio and event gear">
+  <rect width="800" height="600" fill="#1e244d"/>
+  <rect x="260" y="150" width="280" height="320" rx="28" fill="#ffffff"/>
+  <circle cx="400" cy="240" r="44" fill="#2d4be0"/>
+  <circle cx="400" cy="370" r="68" fill="#111631"/>
+  <circle cx="400" cy="370" r="24" fill="#f4b63e"/>
+</svg>

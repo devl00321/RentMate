@@ -6,21 +6,22 @@ items to `brain-archive.md` when this file nears 250 lines.
 
 ## 1. Current state
 
-- Phase: M3 Listings
-- Last completed task: M3.5
-- Next task: M3.6
+- Phase: M4 Search and filters
+- Last completed task: M3.6
+- Next task: M4.1
 - Uncommitted work: none
 - Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Firebase CLI 15.32.1; OpenJDK 21.0.10; Node v26.5.0; Python 3.14.0
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M3.6 Seed script with clearly labelled sample listings
+- Task: M4.1 Query builder with category, price range, city
 - Plan:
-  1. Create `src/config/seedListings.js` containing 12 clearly labelled sample listings (`isSample: true`, spanning all 8 categories, realistic rupee prices/deposits, real SVG data-URI or clean sample image URLs, no lorem ipsum).
-  2. Create `tools/seed.mjs` (or browser/admin helper `src/services/seed.js`) to seed the 12 sample listings into Firestore under an owner UID, plus a test validating all 12 sample listings pass `buildListingPayload` / `validateListingInput`.
-  3. Complete Milestone M3 (`m3-done`).
-- Files being edited: `src/config/seedListings.js`, `src/services/seed.js`, `tests/domain/seed.test.js`, `brain.md`, `goal.md`
-- Done when: 12 sample listings pass schema/validation tests and check-lines passes
+  1. Create `src/domain/search.js` pure query & filter logic (`buildSearchConstraints`, `filterListingsByCriteria`, `sortListings`, `doesAvailabilityCoverRange`).
+  2. Add `searchListings` in `src/services/listings.js` (or `src/services/search.js`) using Firestore `where` + `orderBy` + `limit(12)` + `startAfter` cursor pagination, plus composite indexes in `firestore.indexes.json`.
+  3. Build `dates.js` date range helpers needed for availability filtering (also used in M5.1).
+  4. Write unit tests in `tests/domain/search.test.js` testing each filter (category, price range, city) and `limit(12)`.
+- Files being edited: `src/domain/dates.js`, `src/domain/search.js`, `src/services/search.js`, `firestore.indexes.json`, `tests/domain/search.test.js`, `brain.md`, `goal.md`
+- Done when: category, price range, city query builder works with `limit(12)` and unit tests pass
 
 ## 3. Obstacles (open and resolved)
 

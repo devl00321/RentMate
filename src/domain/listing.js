@@ -4,6 +4,7 @@
 import { CATEGORIES, FIELD_LIMITS, LISTING_STATUS, MAX_LISTING_PHOTOS } from '../config/constants.js';
 
 const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+const SAFE_PHOTO_RE = /^(https:\/\/.+|\.\/assets\/samples\/[a-z0-9-]+\.svg)$/i;
 
 /**
  * Convert rupee input (string or number) to integer paise.
@@ -49,7 +50,7 @@ export function validateListingStep(step, draft) {
     const photos = Array.isArray(draft.photos) ? draft.photos : [];
     if (photos.length < 1) errors.photos = 'Add at least 1 item photo.';
     else if (photos.length > MAX_LISTING_PHOTOS) errors.photos = `Maximum ${MAX_LISTING_PHOTOS} photos allowed.`;
-    else if (photos.some((u) => !/^https:\/\/.+/i.test(String(u || '')))) {
+    else if (photos.some((u) => !SAFE_PHOTO_RE.test(String(u || '')))) {
       errors.photos = 'Every photo URL must start with https://.';
     }
   } else if (step === 2) {

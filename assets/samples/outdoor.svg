@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Sample outdoor item">
+  <rect width="800" height="600" fill="#0b4d44"/>
+  <circle cx="560" cy="180" r="95" fill="#f4b63e" opacity="0.5"/>
+  <polygon points="400,180 180,440 620,440" fill="#daf1ec"/>
+  <polygon points="400,250 320,440 480,440" fill="#0b7a6b"/>
+</svg>
