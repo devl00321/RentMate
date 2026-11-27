@@ -7,20 +7,21 @@ items to `brain-archive.md` when this file nears 250 lines.
 ## 1. Current state
 
 - Phase: M5 Booking and calendar
-- Last completed task: M5.1
-- Next task: M5.2
+- Last completed task: M5.2
+- Next task: M5.3
 - Uncommitted work: none
 - Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Firebase CLI 15.32.1; OpenJDK 21.0.10; Node v26.5.0; Python 3.14.0
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M5.2 `bookingMachine.js` table and tests
+- Task: M5.3 Calendar component (blocked, selected, range)
 - Plan:
-  1. Create `src/domain/bookingMachine.js` implementing the exact transition table and guards in `rules/02` s2 (`canTransition(from, to, actor, ctx)` returning `{ ok, reason }`, `getAllowedActions(status, actor, ctx)`).
-  2. Support all 9 statuses (`Requested`, `Negotiating`, `Accepted`, `Paid`, `Handed Over`, `Returned`, `Completed`, `Cancelled`, `Disputed`) and all actors (`owner`, `renter`, `admin`).
-  3. Write thorough table-driven legal and illegal transition tests in `tests/domain/bookingMachine.test.js` covering every row and every actor.
-- Files being edited: `src/domain/bookingMachine.js`, `tests/domain/bookingMachine.test.js`, `brain.md`, `goal.md`
-- Done when: every legal and illegal transition for every actor passes in `node --test`
+  1. Create pure month-grid and day-state helpers in `src/domain/calendarMath.js` (compute 7-column month matrix, classify each date as `past`, `unavailable`, `booked`, `available`, `start`, `in-range`, `end`).
+  2. Create accessible `src/components/calendar.js` with month navigation (Prev/Next), keyboard arrow-key navigation across days, Enter/Space range selection, clear button, and live selection announcement.
+  3. Add calendar styles to `src/styles/components.css` and unit tests in `tests/domain/calendar.test.js`.
+  4. Showcase/wire calendar into `src/views/demo.js` (and prepare for `listingDetail.js` in M5.4).
+- Files being edited: `src/domain/calendarMath.js`, `src/components/calendar.js`, `src/styles/components.css`, `tests/domain/calendar.test.js`, `src/views/demo.js`, `brain.md`, `goal.md`
+- Done when: calendar renders blocked/selected/range states, is keyboard-operable, and tests pass
 
 ## 3. Obstacles (open and resolved)
 
