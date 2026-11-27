@@ -77,7 +77,7 @@ flowchart LR
 
 ### M2 Auth and profile (Obj 1)
 - [x] M2.1 Verify current Firebase Auth email and phone APIs in docs; log | accept: doc notes in brain.md
-- [ ] M2.2 Email sign-up, sign-in, sign-out, reset | accept: manual run passes
+- [x] M2.2 Email sign-up, sign-in, sign-out, reset | accept: manual run passes
 - [ ] M2.3 Phone OTP flow with 6-cell input | accept: works with test number or logged as OQ
 - [ ] M2.4 User profile create and edit (name, city, photo) | accept: rules block role/verified writes
 - [ ] M2.5 Verified badge display; admin-set only | accept: client cannot set it

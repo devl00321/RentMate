@@ -32,6 +32,12 @@ export const ENV = {
     apiKey: 'PLACEHOLDER_GOOGLE_MAPS_API_KEY',
   },
 
+  /** Local Firebase Emulator Suite toggle */
+  useEmulator: false,
+  emulatorHost: '127.0.0.1',
+  emulatorAuthPort: 9099,
+  emulatorFirestorePort: 8081,
+
   /** Set true to log Firestore read/write quota counts in console */
   debugQuota: true,
 };

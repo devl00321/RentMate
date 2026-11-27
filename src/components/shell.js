@@ -71,11 +71,13 @@ export function renderShell(root, state = {}) {
               data-theme-toggle
               aria-pressed="${String(isDark)}"
             >${isDark ? 'Light theme' : 'Dark theme'}</button>
-            ${user
-              ? html`<a class="keep" href="#/profile/${user.uid}" data-nav="/profile" aria-label="Your profile">
-                  <span class="avatar">${initial || 'U'}</span>
-                </a>`
-              : html`<a class="keep btn btn--ghost" href="#/auth" data-nav="/auth">Sign in</a>`}
+            <span data-auth-slot>
+              ${user
+                ? html`<a class="keep" href="#/profile/${user.uid}" data-nav="/profile" aria-label="Your profile">
+                    <span class="avatar">${initial || 'U'}</span>
+                  </a>`
+                : html`<a class="keep btn btn--ghost" href="#/auth" data-nav="/auth">Sign in</a>`}
+            </span>
           </nav>
         </header>
 
@@ -103,6 +105,24 @@ export function renderShell(root, state = {}) {
     const next = getActiveTheme() === 'dark' ? 'light' : 'dark';
     applyTheme(next, themeBtn);
   });
+}
+
+/**
+ * Update only the account slot in the header without re-mounting #main-content.
+ * @param {{ uid: string, name?: string | null } | null} user
+ */
+export function updateShellUser(user) {
+  const slot = document.querySelector('[data-auth-slot]');
+  if (!slot) return;
+  const initial = user?.name ? user.name.trim().charAt(0).toUpperCase() : '';
+  renderHtml(
+    slot,
+    user
+      ? html`<a class="keep" href="#/profile/${user.uid}" data-nav="/profile" aria-label="Your profile">
+          <span class="avatar">${initial || 'U'}</span>
+        </a>`
+      : html`<a class="keep btn btn--ghost" href="#/auth" data-nav="/auth">Sign in</a>`,
+  );
 }
 
 /**

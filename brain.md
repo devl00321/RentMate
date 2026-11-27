@@ -7,21 +7,21 @@ items to `brain-archive.md` when this file nears 250 lines.
 ## 1. Current state
 
 - Phase: M2 Auth and profile
-- Last completed task: M2.1
-- Next task: M2.2
+- Last completed task: M2.2
+- Next task: M2.3
 - Uncommitted work: none
 - Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Firebase CLI 15.32.1; OpenJDK 21.0.10; Node v26.5.0; Python 3.14.0
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M2.2 Email sign-up, sign-in, sign-out, reset
+- Task: M2.3 Phone OTP flow with 6-cell input
 - Plan:
-  1. Create `src/config/firebase.js` loading `config.local.js` (or `env.example.js`), connecting Auth/Firestore emulators when `useEmulator` is set, and adding dev quota counter helper.
-  2. Create `firebase.json` + baseline `firestore.rules` + `firestore.indexes.json` so emulator works locally for M2 testing.
-  3. Create `src/services/auth.js` and `src/views/auth.js` for email sign-up, sign-in, sign-out, and password reset.
-  4. Wire `#/auth` route and verify against Firebase Auth Emulator (plus headless Chrome UI verification).
-- Files being edited: `src/config/firebase.js`, `src/config/env.example.js`, `firebase.json`, `firestore.rules`, `firestore.indexes.json`, `src/services/auth.js`, `src/views/auth.js`, `src/app.js`, `brain.md`, `goal.md`
-- Done when: email sign-up, sign-in, sign-out, reset work against Auth Emulator and console is clean
+  1. Add `sendPhoneOtp` and `verifyPhoneOtp` (`RecaptchaVerifier` + `signInWithPhoneNumber` per verified 13.4.0 docs) to `src/services/auth.js`.
+  2. Create a reusable accessible 6-cell OTP input component in `src/components/otpInput.js` (auto-advance, backspace, paste 6 digits, keyboard operable).
+  3. Add Phone OTP mode to `src/views/auth.js` with resend countdown timer (60s) and clear test-number guidance.
+  4. Verify in Auth Emulator / headless Chrome and unit-test OTP input parsing/validation.
+- Files being edited: `src/services/auth.js`, `src/components/otpInput.js`, `src/views/auth.js`, `src/styles/components.css`, `brain.md`, `goal.md`
+- Done when: Phone OTP flow with 6-cell input renders, validates, and passes Auth Emulator test-number check or logs OQ
 
 ## 3. Obstacles (open and resolved)
 
@@ -30,6 +30,7 @@ Format: `OB-n | status | symptom | attempts | cause or next idea`
 - OB-1 | OPEN (watch) | Firebase Spark quota (20,000 writes and 50,000 reads a day per the report; shutdown when exhausted) | not an error yet | mitigated by rules/01 s4; measure in M10.3
 - OB-2 | OPEN (watch) | Secure deposit release needs server-side checks (Cloud Functions, paid Blaze plan, per the report) | n/a | simulate in test mode (D-012); stretch S1
 - OB-3 | RESOLVED | Report ref 10 (community guide) says Cloud Storage for Firebase is not on Spark since 2 Feb 2026 | verified 2026-11-27 | Firebase pricing docs show Spark tier free Cloud Storage has regional restrictions (US regions) and some bucket configs require Blaze; photos use external image host regardless (rules/01 s5)
+- OB-4 | OPEN (env) | `firebase emulators:exec --only firestore` stalled at 1% downloading `cloud-firestore-emulator-v1.22.0.jar` (137MB) | 1 attempt | Auth emulator runs locally (`--only auth`); test rules/Firestore against staging Firebase project when human supplies keys, or retry jar download later (per rules/01 s6)
 
 ## 4. Open questions (report is silent; answer or keep PLACEHOLDER)
 
