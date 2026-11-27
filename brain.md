@@ -6,22 +6,21 @@ items to `brain-archive.md` when this file nears 250 lines.
 
 ## 1. Current state
 
-- Phase: M4 Search and filters
-- Last completed task: M4.3
-- Next task: M4.4
+- Phase: M5 Booking and calendar
+- Last completed task: M4.4
+- Next task: M5.1
 - Uncommitted work: none
 - Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Firebase CLI 15.32.1; OpenJDK 21.0.10; Node v26.5.0; Python 3.14.0
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M4.4 Search view UI, empty and error states
+- Task: M5.1 `dates.js`, `pricing.js` pure functions plus tests
 - Plan:
-  1. Build full `src/views/home.js` per `rules/06` s5: headline, search form (what/where/dates -> navigates to `#/search?...`), handover ribbon explainer, "Browse near you" preview grid (loading/error/sample fallback clearly labelled), and two-sentence deposit explainer.
-  2. Build full `src/views/search.js` per `rules/06` s5: filter bar (category, min/max price, city, dates, keyword, sort), URL-synced query params (preserving filters on Back navigation for session cache!), result count, 12 cards per page, "Load more" button, skeleton loading, empty state, and error state with retry.
-  3. Wire `clearSearchCache()` on listing mutations in `listingForm.js` and `dashboard.js`.
-  4. Verify `#/` and `#/search` in headless Chrome at 360 and 1280 px and complete M4 (`m4-done`).
-- Files being edited: `src/views/home.js`, `src/views/search.js`, `src/views/listingForm.js`, `src/views/dashboard.js`, `src/styles/views.css`, `brain.md`, `goal.md`
-- Done when: Home and Search views render all states (loading, empty, error, results, load more) with clean console
+  1. Create `src/domain/pricing.js` with pure integer paise calculations per `rules/02` s4 (`calculateBookingPricing`, `roundHalfUp`, `FEE_RATE` PLACEHOLDER).
+  2. Write table-driven tests in `tests/domain/pricing.test.js` covering 1 day, 7 days, zero deposit, half-up rounding edges, and large values (80,000-rupee camera).
+  3. Expand `tests/domain/dates.test.js` if needed and run `node --test` + `check-lines.sh`.
+- Files being edited: `src/domain/pricing.js`, `tests/domain/pricing.test.js`, `brain.md`, `goal.md`
+- Done when: `dates.js` and `pricing.js` table-driven tests pass and `check-lines.sh` passes
 
 ## 3. Obstacles (open and resolved)
 

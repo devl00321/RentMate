@@ -10,6 +10,7 @@ import { stepper } from '../components/stepper.js';
 import { showToast } from '../components/toast.js';
 import { buildListingPayload, buildListingUpdatePayload, rupeesToPaise, validateListingStep } from '../domain/listing.js';
 import { createListing, getListing, updateListing } from '../services/listings.js';
+import { clearSearchCache } from '../services/search.js';
 import { getUserProfile } from '../services/users.js';
 import { renderListingStep } from './listingFormSteps.js';
 
@@ -166,10 +167,12 @@ export async function render(outlet, ctx) {
       try {
         if (editId) {
           await updateListing(editId, built.data);
+          clearSearchCache();
           showToast('Listing updated', { variant: 'success' });
           ctx.navigate(`/listing/${editId}`);
         } else {
           const created = await createListing(built.data);
+          clearSearchCache();
           showToast('Listing published', { variant: 'success' });
           ctx.navigate(`/listing/${created.id}`);
         }

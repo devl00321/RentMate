@@ -124,3 +124,21 @@ export function makeSearchCacheKey(filters) {
     filters.sort,
   ]);
 }
+
+/**
+ * Build `#/search?...` hash route from form filter entries (omits empty fields).
+ * @param {Record<string, any>} raw
+ * @returns {string}
+ */
+export function buildSearchHash(raw = {}) {
+  const sp = new URLSearchParams();
+  const keys = ['q', 'category', 'city', 'minRupees', 'maxRupees', 'startDate', 'endDate', 'sort'];
+  for (const key of keys) {
+    const val = String(raw[key] || '').trim();
+    if (val && !(key === 'sort' && val === 'newest')) {
+      sp.set(key, val);
+    }
+  }
+  const qs = sp.toString();
+  return qs ? `/search?${qs}` : '/search';
+}

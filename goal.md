@@ -16,7 +16,7 @@ other, with admin dispute handling, built on free tools.
 |---|---|---|---|
 | 1 | Register with email or phone verification; owner and renter in one account | M2 | [x] |
 | 2 | Owners list items (photos, category, daily price, deposit, dates) | M3 | [x] |
-| 3 | Renters search and filter (category, price, location, availability) | M4 | [ ] |
+| 3 | Renters search and filter (category, price, location, availability) | M4 | [x] |
 | 4 | Booking flow with all statuses and double-booking-proof calendar | M5 | [ ] |
 | 5 | Negotiate via chat and counter-offers | M6 | [ ] |
 | 6 | Payments in test mode; deposit held until return | M7, M8 | [ ] |
@@ -49,7 +49,7 @@ flowchart LR
 | M1 | 6 | 6 | done |
 | M2 | 6 | 6 | done |
 | M3 | 6 | 6 | done |
-| M4 | 4 | 0 | not started |
+| M4 | 4 | 4 | done |
 | M5 | 6 | 0 | not started |
 | M6 | 5 | 0 | not started |
 | M7 | 5 | 0 | not started |
@@ -95,7 +95,7 @@ flowchart LR
 - [x] M4.1 Query builder with category, price range, city | accept: each filter works, limit(12)
 - [x] M4.2 Date-availability filter (see D-006 cost note in rules/02) | accept: booked items excluded
 - [x] M4.3 Pagination ("Load more"), session cache | accept: no refetch on back
-- [ ] M4.4 Search view UI, empty and error states | accept: all states reachable
+- [x] M4.4 Search view UI, empty and error states | accept: all states reachable
 
 ### M5 Booking and calendar (Obj 4)
 - [ ] M5.1 `dates.js`, `pricing.js` pure functions plus tests | accept: table tests pass

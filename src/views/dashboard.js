@@ -8,6 +8,7 @@ import { emptyState, errorState } from '../components/emptyState.js';
 import { openModal } from '../components/modal.js';
 import { showToast } from '../components/toast.js';
 import { listOwnerListings, setListingStatus } from '../services/listings.js';
+import { clearSearchCache } from '../services/search.js';
 
 /**
  * Render unified owner/renter dashboard.
@@ -134,6 +135,7 @@ export async function render(outlet, ctx) {
         btn.setAttribute('disabled', 'true');
         try {
           await setListingStatus(id, next);
+          clearSearchCache();
           showToast(next === LISTING_STATUS.PAUSED ? 'Listing paused' : 'Listing resumed', { variant: 'success' });
           await loadListings();
         } catch (err) {
@@ -154,6 +156,7 @@ export async function render(outlet, ctx) {
           danger: true,
           onConfirm: async () => {
             await setListingStatus(id, LISTING_STATUS.REMOVED);
+            clearSearchCache();
             showToast('Listing removed', { variant: 'success' });
             await loadListings();
           },

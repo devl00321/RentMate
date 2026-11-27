@@ -5,6 +5,7 @@ import {
   buildSearchPlan,
   filterListingsLocal,
   makeSearchCacheKey,
+  buildSearchHash,
 } from '../../src/domain/search.js';
 import { SAMPLE_LISTINGS } from '../../src/config/seedListings.js';
 
@@ -55,4 +56,9 @@ test('makeSearchCacheKey produces stable cache keys regardless of case/spacing',
   const k1 = makeSearchCacheKey(normalizeSearchFilters({ city: ' Pune ', q: 'Drill' }));
   const k2 = makeSearchCacheKey(normalizeSearchFilters({ city: 'pune', q: 'drill' }));
   assert.equal(k1, k2);
+});
+
+test('buildSearchHash serializes non-empty filters for URL-synced navigation', () => {
+  assert.equal(buildSearchHash({ category: 'Power Tools', city: 'Pune', sort: 'newest' }), '/search?category=Power+Tools&city=Pune');
+  assert.equal(buildSearchHash({}), '/search');
 });

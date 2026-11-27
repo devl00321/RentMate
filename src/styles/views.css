@@ -48,6 +48,7 @@
   .search { grid-template-columns: 1fr 1fr; }
   .search .btn { grid-column: 1 / -1; }
 }
+.search-filters { display: grid; gap: var(--s3); grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); align-items: end; }
 
 .story { padding: var(--s5); display: grid; gap: var(--s5); margin-bottom: var(--s7); }
 .story header { display: flex; flex-wrap: wrap; gap: var(--s3); align-items: baseline; justify-content: space-between; }
