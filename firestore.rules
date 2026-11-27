@@ -100,7 +100,8 @@ service cloud.firestore {
     function isValidBookingTransition(from, to, data) {
       return (from == 'Requested' && to in ['Negotiating', 'Accepted', 'Cancelled'])
         || (from == 'Negotiating' && to in ['Accepted', 'Cancelled'])
-        || (from == 'Accepted' && to in ['Paid', 'Cancelled'])
+        || (from == 'Accepted' && to == 'Paid' && data.depositState == 'held')
+        || (from == 'Accepted' && to == 'Cancelled')
         || (from == 'Paid' && to in ['Handed Over', 'Cancelled', 'Disputed'])
         || (from == 'Handed Over' && to in ['Returned', 'Disputed'])
         || (from == 'Returned' && to in ['Completed', 'Disputed'])

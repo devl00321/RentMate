@@ -52,7 +52,7 @@ flowchart LR
 | M4 | 4 | 4 | done |
 | M5 | 6 | 6 | done |
 | M6 | 5 | 5 | done |
-| M7 | 5 | 0 | not started |
+| M7 | 5 | 5 | done |
 | M8 | 6 | 0 | not started |
 | M9 | 5 | 0 | not started |
 | M10 | 5 | 0 | not started |
@@ -113,11 +113,11 @@ flowchart LR
 - [x] M6.5 Message rate and length limits | accept: over-limit blocked
 
 ### M7 Payments, test mode (Obj 6)
-- [ ] M7.1 Verify gateway docs, test keys process; log | accept: docs noted
-- [ ] M7.2 `payments.js` adapter with a Simulated provider | accept: swappable interface
-- [ ] M7.3 Checkout UI with breakdown and "Test mode" notice | accept: fee + deposit shown
-- [ ] M7.4 Paid transition and `depositState = held` | accept: event logged
-- [ ] M7.5 Failure and retry paths | accept: failed payment leaves Accepted
+- [x] M7.1 Verify gateway docs, test keys process; log | accept: docs noted
+- [x] M7.2 `payments.js` adapter with a Simulated provider | accept: swappable interface
+- [x] M7.3 Checkout UI with breakdown and "Test mode" notice | accept: fee + deposit shown
+- [x] M7.4 Paid transition and `depositState = held` | accept: event logged
+- [x] M7.5 Failure and retry paths | accept: failed payment leaves Accepted
 
 ### M8 Handover, return, reviews (Obj 6, 7)
 - [ ] M8.1 Handover confirmation by both plus condition photo | accept: Paid to Handed Over

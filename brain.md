@@ -6,23 +6,23 @@ items to `brain-archive.md` when this file nears 250 lines.
 
 ## 1. Current state
 
-- Phase: M7 Payments (test mode)
-- Last completed task: M6.5
-- Next task: M7.1
+- Phase: M8 Handover, return, reviews
+- Last completed task: M7.5
+- Next task: M8.1
 - Uncommitted work: none
 - Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Firebase CLI 15.32.1; OpenJDK 21.0.10; Node v26.5.0; Python 3.14.0
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M7.1-M7.5 Payments in test mode (gateway docs, adapter, checkout UI, Paid + held deposit, failure/retry)
+- Task: M8.1-M8.6 Handover, return, deposit release, reviews & reputation
 - Plan:
-  1. Verify Razorpay Standard Checkout test-mode API (`checkout.razorpay.com/v1/checkout.js`) and log docs in `brain.md` (M7.1).
-  2. Create `src/services/payments.js` adapter with `SimulatedPaymentProvider` and `RazorpayTestProvider` interface (pay, refund, releaseDeposit, simulateFailure toggle).
-  3. Create `src/components/checkoutModal.js` showing exact rental + service fee (5% PLACEHOLDER) + deposit breakdown, `"Test mode: no real money moves"`, test outcome selector (Success / Simulate failure) for simulated provider, and retry flow.
-  4. Wire Paid transition (`depositState = 'held'`, event logged, system message logged) into `src/services/bookings.js` / `src/views/booking.js` (`Accept -> Pay and confirm`).
-  5. Write unit tests in `tests/domain/payments.test.js` covering payment success, `depositState = 'held'`, failure leaving status `Accepted`, and retry success.
-- Files being edited: `src/domain/paymentOps.js`, `src/services/payments.js`, `src/components/checkoutModal.js`, `src/views/booking.js`, `firestore.rules`, `tests/domain/payments.test.js`, `brain.md`, `goal.md`
-- Done when: checkout breakdown renders with test-mode notice, Paid sets `depositState = 'held'`, failure leaves `Accepted` for retry, and all tests pass
+  1. Create `src/domain/handoverOps.js` (handover confirmation + condition photo planner: `Paid -> Handed Over` when both confirm & photo present; return confirmation + photo planner: `Handed Over -> Returned`; owner completion & simulated deposit release + freeing `bookedDays` locks in batch: `Returned -> Completed`).
+  2. Create `src/domain/reputation.js` (pure `computeUpdatedReputation({ currentAvg, currentCount, newRating })`, `validateReviewInput({ rating, text })`, `buildReviewDocId(bookingId, authorId)` deterministic `bookingId_authorId` preventing duplicates).
+  3. Create `src/services/handover.js` + `src/services/reviews.js` + update `firestore.rules` for `reviews/{reviewId}` (`Completed` booking, `authorId == auth.uid`, `authorId != subjectId`, deterministic ID `bookingId + '_' + auth.uid`, immutable after create).
+  4. Create `src/components/handoverPanel.js` + `src/components/reviewPanel.js`, wire into `src/views/booking.js`, and display recent reviews + reputation score on `src/views/profile.js`.
+  5. Write unit tests in `tests/domain/handover.test.js` and `tests/domain/reputation.test.js`.
+- Files being edited: `src/domain/handoverOps.js`, `src/domain/reputation.js`, `src/services/handover.js`, `src/services/reviews.js`, `src/components/handoverPanel.js`, `src/components/reviewPanel.js`, `src/views/booking.js`, `src/views/profile.js`, `firestore.rules`, `firestore.indexes.json`, `tests/domain/handover.test.js`, `tests/domain/reputation.test.js`, `brain.md`, `goal.md`
+- Done when: handover, return, simulated deposit release (locks freed), deterministic reviews, and reputation table tests pass
 
 ## 3. Obstacles (open and resolved)
 

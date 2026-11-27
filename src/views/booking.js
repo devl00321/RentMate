@@ -4,12 +4,14 @@
 import { html, renderHtml } from '../components/dom.js';
 import { renderBookingMarkup } from '../components/bookingViewMarkup.js';
 import { mountChatPanel } from '../components/chatPanel.js';
+import { openCheckoutModal } from '../components/checkoutModal.js';
 import { emptyState, errorState } from '../components/emptyState.js';
 import { openModal } from '../components/modal.js';
 import { showToast } from '../components/toast.js';
 import { resolveBookingActor } from '../domain/bookingOps.js';
 import { acceptBooking, cancelBooking } from '../services/bookings.js';
 import { listBookingEvents, watchBooking } from '../services/bookingQueries.js';
+import { processBookingPayment } from '../services/payments.js';
 
 /**
  * Mount booking view and detach all real-time listeners on route exit.
@@ -82,8 +84,21 @@ export async function render(outlet, ctx) {
           primaryBtn.disabled = false;
           primaryBtn.removeAttribute('aria-busy');
         }
+      } else if (action === 'pay') {
+        openCheckoutModal({
+          booking: currentBooking,
+          onPay: async (outcome) => {
+            await processBookingPayment({
+              booking: currentBooking,
+              actorUid: ctx.user.uid,
+              outcome,
+            });
+            await refreshEvents();
+            showToast('Payment confirmed (test mode)', { variant: 'success' });
+          },
+        });
       } else {
-        showToast(`Action "${action}" will be wired in M7/M8.`, { variant: 'info' });
+        showToast(`Action "${action}" will be wired in M8.`, { variant: 'info' });
       }
     });
 
