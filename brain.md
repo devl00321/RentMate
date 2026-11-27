@@ -7,21 +7,21 @@ items to `brain-archive.md` when this file nears 250 lines.
 ## 1. Current state
 
 - Phase: M5 Booking and calendar
-- Last completed task: M5.3
-- Next task: M5.4
+- Last completed task: M5.5
+- Next task: M5.6
 - Uncommitted work: none
 - Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Firebase CLI 15.32.1; OpenJDK 21.0.10; Node v26.5.0; Python 3.14.0
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M5.4 `bookings.js`: request, accept, cancel with event log & M5.5 `bookedDays` locks in batch
+- Task: M5.6 Booking view with ribbon and price breakdown
 - Plan:
-  1. Create `src/domain/bookingOps.js` pure booking payload + batch lock planner + double-booking conflict checker (injectable transaction/batch adapter for thorough unit testing!).
-  2. Create `src/services/bookings.js` with `createBookingRequest`, `getBooking`, `watchBooking` (real-time single doc listener with cleanup), `listBookingsByRole` (`limit(12)`), `acceptBooking` (creates `bookedDays` lock docs atomically in one `writeBatch`!), `cancelBooking` (deletes `bookedDays` lock docs in batch if any + updates status + records event in `bookings/{id}/events`), and `getBookedDaysForListing`.
-  3. Update `firestore.rules` with `bookings/{id}`, `events/{id}`, and `bookedDays/{dayStr}` create-if-not-exists + party-only read/write + status transition checks!
-  4. Write unit + double-booking batch race tests in `tests/domain/bookings.test.js`.
-- Files being edited: `src/domain/bookingOps.js`, `src/services/bookings.js`, `firestore.rules`, `firestore.indexes.json`, `tests/domain/bookings.test.js`, `brain.md`, `goal.md`
-- Done when: request/accept/cancel write audit events, batch `bookedDays` prevents double-booking, and all tests pass
+  1. Wire `mountCalendar` + live price breakdown + `createBookingRequest` into `listingDetail.js` / `listingDetailView.js` so renters pick non-booked dates and send a request.
+  2. Create `src/components/bookingViewMarkup.js` + `src/views/booking.js` displaying the Handover ribbon, price breakdown (`rental`, `serviceFee`, `deposit`, `renterPays`, test-mode note), status-specific primary action button (`Accept`, `Pay`, `Cancel`), event log timeline, and chat/handover/dispute panels.
+  3. Wire `#/booking/:id` in `src/app.js`, and wire Renting/Lending booking lists in `src/views/dashboard.js` with status ribbon chips.
+  4. Write render tests across all 9 statuses in `tests/domain/bookingView.test.js`, check `#/demo` & `#/booking` in Chrome, and complete M5 (`m5-done`).
+- Files being edited: `src/components/listingDetailView.js`, `src/views/listingDetail.js`, `src/components/bookingViewMarkup.js`, `src/views/booking.js`, `src/views/dashboard.js`, `src/app.js`, `tests/domain/bookingView.test.js`, `brain.md`, `goal.md`
+- Done when: all 9 booking statuses render in booking view with ribbon + price breakdown, calendar wired in listing detail, and all tests pass
 
 ## 3. Obstacles (open and resolved)
 

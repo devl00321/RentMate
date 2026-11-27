@@ -78,6 +78,65 @@ service cloud.firestore {
 
       match /bookedDays/{dayStr} {
         allow read: if true;
+        allow create: if isSignedIn()
+          && request.resource.data.bookingId is string
+          && (request.resource.data.ownerId == request.auth.uid
+              || request.resource.data.renterId == request.auth.uid)
+          && get(/databases/$(database)/documents/bookings/$(request.resource.data.bookingId)).data.listingId == listingId
+          && (get(/databases/$(database)/documents/bookings/$(request.resource.data.bookingId)).data.ownerId == request.auth.uid
+              || get(/databases/$(database)/documents/bookings/$(request.resource.data.bookingId)).data.renterId == request.auth.uid);
+        allow update: if false;
+        allow delete: if isSignedIn()
+          && (resource.data.ownerId == request.auth.uid
+              || resource.data.renterId == request.auth.uid
+              || isAdmin());
+      }
+    }
+
+    function isBookingParty(data) {
+      return isSignedIn() && (data.ownerId == request.auth.uid || data.renterId == request.auth.uid);
+    }
+
+    function isValidBookingTransition(from, to, data) {
+      return (from == 'Requested' && to in ['Negotiating', 'Accepted', 'Cancelled'])
+        || (from == 'Negotiating' && to in ['Accepted', 'Cancelled'])
+        || (from == 'Accepted' && to in ['Paid', 'Cancelled'])
+        || (from == 'Paid' && to in ['Handed Over', 'Cancelled', 'Disputed'])
+        || (from == 'Handed Over' && to in ['Returned', 'Disputed'])
+        || (from == 'Returned' && to in ['Completed', 'Disputed'])
+        || (from == 'Disputed' && to in ['Completed', 'Cancelled'] && isAdmin())
+        || (from == to);
+    }
+
+    match /bookings/{bookingId} {
+      allow read: if isBookingParty(resource.data) || isAdmin();
+      allow create: if isSignedIn()
+        && request.resource.data.renterId == request.auth.uid
+        && request.resource.data.ownerId != request.auth.uid
+        && request.resource.data.status == 'Requested'
+        && request.resource.data.depositState == 'none'
+        && request.resource.data.startDate is string
+        && request.resource.data.endDate is string
+        && request.resource.data.endDate > request.resource.data.startDate;
+      allow update: if (isBookingParty(resource.data) || isAdmin())
+        && !request.resource.data.diff(resource.data).affectedKeys()
+          .hasAny(['listingId', 'ownerId', 'renterId', 'createdAt'])
+        && isValidBookingTransition(resource.data.status, request.resource.data.status, request.resource.data)
+        && (!(resource.data.status in ['Accepted', 'Paid', 'Handed Over', 'Returned', 'Completed'])
+            || !request.resource.data.diff(resource.data).affectedKeys().hasAny(['terms', 'amounts', 'startDate', 'endDate']));
+      allow delete: if false;
+
+      match /events/{eventId} {
+        allow read: if isSignedIn()
+          && (get(/databases/$(database)/documents/bookings/$(bookingId)).data.ownerId == request.auth.uid
+              || get(/databases/$(database)/documents/bookings/$(bookingId)).data.renterId == request.auth.uid
+              || isAdmin());
+        allow create: if isSignedIn()
+          && request.resource.data.actorId == request.auth.uid
+          && (get(/databases/$(database)/documents/bookings/$(bookingId)).data.ownerId == request.auth.uid
+              || get(/databases/$(database)/documents/bookings/$(bookingId)).data.renterId == request.auth.uid
+              || isAdmin());
+        allow update, delete: if false;
       }
     }
 
