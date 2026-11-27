@@ -6,7 +6,7 @@ import { button, field } from '../components/ui.js';
 import { bindOtpCells, renderOtpCells } from '../components/otpInput.js';
 import { showToast } from '../components/toast.js';
 import { validatePhoneInput } from '../domain/validators.js';
-import { confirmPhoneOtp, sendPhoneOtp } from '../services/auth.js';
+import { confirmPhoneOtp, sendPhoneOtp } from '../services/phoneAuth.js';
 
 /**
  * Mount the Phone OTP flow inside a container element.

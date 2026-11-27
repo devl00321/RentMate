@@ -6,22 +6,22 @@ items to `brain-archive.md` when this file nears 250 lines.
 
 ## 1. Current state
 
-- Phase: M2 Auth and profile
-- Last completed task: M2.5
-- Next task: M2.6
+- Phase: M3 Listings
+- Last completed task: M2.6
+- Next task: M3.1
 - Uncommitted work: none
 - Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Firebase CLI 15.32.1; OpenJDK 21.0.10; Node v26.5.0; Python 3.14.0
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M2.6 Route guards: signed-out redirect, owner and renter in one account
+- Task: M3.1 `images.js`: compress and upload to image host
 - Plan:
-  1. Add `waitForAuthReady()` to `src/services/auth.js` and `requireAuth` / `sanitizeNextPath` guard helpers in `src/domain/guards.js`.
-  2. Update `src/router.js` to wait for `authReady` before checking `route.guard(ctx)` and support `?next=...` safe redirect back after sign-in.
-  3. Add stub `src/views/dashboard.js` (Renting, Lending, Listings tabs in one account) and `src/views/listingForm.js` guarded routes in `src/app.js`.
-  4. Write unit tests in `tests/domain/guards.test.js`, verify `#/dashboard` signed-out redirect in headless Chrome, and finish M2.
-- Files being edited: `src/domain/guards.js`, `src/services/auth.js`, `src/router.js`, `src/views/auth.js`, `src/views/dashboard.js`, `src/views/listingForm.js`, `src/app.js`, `tests/domain/guards.test.js`, `brain.md`, `goal.md`
-- Done when: signed-out guard redirects cleanly with safe `next`, one-account tabs render, and all tests pass
+  1. Verify Cloudinary unsigned browser upload API (`POST /v1_1/<cloudName>/image/upload`) in official docs and log in `brain.md`.
+  2. Create `src/services/images.js` with browser `<canvas>` image compression (max 1600px long edge, JPEG 0.8) and unsigned FormData upload returning `secure_url` (with explicit error when Cloudinary preset is placeholder).
+  3. Create `src/components/photoUploader.js` reusable uploader (max 5 photos, previews, remove, alt labels).
+  4. Add unit tests for compression target dimension math (`computeTargetDimensions`) and upload payload validation in `tests/domain/images.test.js`, plus browser test on a real generated image blob/canvas!
+- Files being edited: `src/services/images.js`, `src/components/photoUploader.js`, `tests/domain/images.test.js`, `brain.md`, `goal.md`
+- Done when: compression works on real image file, upload matches verified Cloudinary API, and tests pass
 
 ## 3. Obstacles (open and resolved)
 
@@ -72,6 +72,7 @@ Format: `D-n | date | decision | reason | alternatives | status`
 | 2026-11-27 | Firebase JS SDK 13.4.0 modular ES modules at `https://www.gstatic.com/firebasejs/13.4.0/firebase-{app,auth,firestore}.js` (HTTP 200 verified) | https://firebase.google.com/docs/web/setup | M0.3, `src/config/firebase.js` |
 | 2026-11-27 | Firebase Auth 13.4.0 exports verified: `getAuth`, `createUserWithEmailAndPassword`, `signInWithEmailAndPassword`, `sendPasswordResetEmail`, `signOut`, `onAuthStateChanged`, `RecaptchaVerifier(auth, containerId, opts)` (auth-first arg), `signInWithPhoneNumber`; test phone numbers configured in Console bypass real SMS/Blaze limits | https://firebase.google.com/docs/auth/web/password-auth & https://firebase.google.com/docs/auth/web/phone-auth | M2.1, `src/services/auth.js` |
 | 2026-11-27 | Firestore 13.4.0 exports verified: `getFirestore`, `doc`, `collection`, `getDoc`, `getDocs`, `setDoc`, `addDoc`, `updateDoc`, `deleteDoc`, `writeBatch`, `query`, `where`, `orderBy`, `limit`, `startAfter`, `onSnapshot`, `serverTimestamp`, `documentId` | https://firebase.google.com/docs/firestore/quickstart | M2.1, `src/services/*.js` |
+| 2026-11-27 | Cloudinary unsigned upload API verified: `POST https://api.cloudinary.com/v1_1/<cloudName>/image/upload` with `FormData` (`file`, `upload_preset`), returning `{ secure_url }` | https://cloudinary.com/documentation/upload_images#unsigned_upload | M3.1, `src/services/images.js` |
 
 ## 7. Needs human (only when truly blocked)
 

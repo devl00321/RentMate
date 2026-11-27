@@ -14,7 +14,7 @@ other, with admin dispute handling, built on free tools.
 
 | Obj | Report objective (short) | Milestone | Done |
 |---|---|---|---|
-| 1 | Register with email or phone verification; owner and renter in one account | M2 | [ ] |
+| 1 | Register with email or phone verification; owner and renter in one account | M2 | [x] |
 | 2 | Owners list items (photos, category, daily price, deposit, dates) | M3 | [ ] |
 | 3 | Renters search and filter (category, price, location, availability) | M4 | [ ] |
 | 4 | Booking flow with all statuses and double-booking-proof calendar | M5 | [ ] |
@@ -47,7 +47,7 @@ flowchart LR
 |---|---|---|---|
 | M0 | 5 | 5 | done |
 | M1 | 6 | 6 | done |
-| M2 | 6 | 0 | not started |
+| M2 | 6 | 6 | done |
 | M3 | 6 | 0 | not started |
 | M4 | 4 | 0 | not started |
 | M5 | 6 | 0 | not started |
@@ -81,7 +81,7 @@ flowchart LR
 - [x] M2.3 Phone OTP flow with 6-cell input | accept: works with test number or logged as OQ
 - [x] M2.4 User profile create and edit (name, city, photo) | accept: rules block role/verified writes
 - [x] M2.5 Verified badge display; admin-set only | accept: client cannot set it
-- [ ] M2.6 Route guards: signed-out redirect, owner and renter in one account | accept: tested
+- [x] M2.6 Route guards: signed-out redirect, owner and renter in one account | accept: tested
 
 ### M3 Listings (Obj 2)
 - [ ] M3.1 `images.js`: compress and upload to image host | accept: real file uploaded, URL stored

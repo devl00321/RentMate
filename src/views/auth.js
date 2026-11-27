@@ -5,6 +5,7 @@ import { html, renderHtml } from '../components/dom.js';
 import { button, field } from '../components/ui.js';
 import { showToast } from '../components/toast.js';
 import { validateAuthInput } from '../domain/validators.js';
+import { sanitizeNextPath } from '../domain/guards.js';
 import {
   getCurrentUser,
   resetPassword,
@@ -17,10 +18,11 @@ import { mountPhoneAuth } from './authPhone.js';
 /**
  * Render authentication view.
  * @param {Element} outlet
- * @param {{ navigate: (path: string) => void }} ctx
+ * @param {{ query?: Record<string, string>, navigate: (path: string) => void }} ctx
  * @returns {Promise<() => void>}
  */
 export async function render(outlet, ctx) {
+  const nextPath = sanitizeNextPath(ctx.query?.next);
   let mode = /** @type {'signin' | 'signup' | 'phone' | 'reset'} */ ('signin');
   let errors = /** @type {Record<string, string>} */ ({});
   let formError = '';
@@ -109,7 +111,7 @@ export async function render(outlet, ctx) {
     const panel = outlet.querySelector('[data-auth-panel]');
     if (!panel) return;
     if (mode === 'phone') {
-      phoneCleanup = mountPhoneAuth(panel, { onSuccess: () => ctx.navigate('/') });
+      phoneCleanup = mountPhoneAuth(panel, { onSuccess: () => ctx.navigate(nextPath) });
       return;
     }
 
@@ -151,11 +153,11 @@ export async function render(outlet, ctx) {
         if (mode === 'signup') {
           await signUpWithEmail(values);
           showToast('Account created', { variant: 'success' });
-          ctx.navigate('/');
+          ctx.navigate(nextPath);
         } else if (mode === 'signin') {
           await signInWithEmail(values);
           showToast('Signed in', { variant: 'success' });
-          ctx.navigate('/');
+          ctx.navigate(nextPath);
         } else {
           await resetPassword(values.email);
           showToast('Reset email sent if account exists', { variant: 'success' });

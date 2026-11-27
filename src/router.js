@@ -75,7 +75,7 @@ function renderNotFound(outlet, ctx) {
  * @param {() => Element | null} opts.getOutlet
  * @param {(path: string) => void} [opts.onRouteChange]
  */
-export function createRouter({ routes, getOutlet, onRouteChange }) {
+export function createRouter({ routes, getOutlet, getAuthContext, onRouteChange }) {
   let activeCleanup = null;
   let navId = 0;
 
@@ -103,7 +103,10 @@ export function createRouter({ routes, getOutlet, onRouteChange }) {
       return;
     }
 
-    const ctx = { path, params: match.params, query, navigate };
+    const authCtx = typeof getAuthContext === 'function' ? await getAuthContext() : {};
+    if (currentNav !== navId) return;
+
+    const ctx = { path, params: match.params, query, navigate, ...authCtx };
     if (typeof match.route.guard === 'function') {
       const redirect = match.route.guard(ctx);
       if (redirect) {
