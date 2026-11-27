@@ -10,11 +10,15 @@ import {
   signOut,
   onAuthStateChanged,
   updateProfile,
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
 } from 'https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js';
 import { doc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js';
 import { initFirebase, trackWrite } from '../config/firebase.js';
 import { USER_ROLE } from '../config/constants.js';
 import { AppError, ERROR_CODES } from '../config/errors.js';
+
+let recaptchaVerifier = null;
 
 const AUTH_ERROR_MESSAGES = Object.freeze({
   'auth/invalid-email': 'Enter a valid email address.',
@@ -23,6 +27,12 @@ const AUTH_ERROR_MESSAGES = Object.freeze({
   'auth/user-not-found': 'No account matches these credentials.',
   'auth/wrong-password': 'Incorrect email or password.',
   'auth/invalid-credential': 'Incorrect email or password.',
+  'auth/invalid-phone-number': 'Enter a valid phone number in +country format.',
+  'auth/missing-phone-number': 'Enter your phone number.',
+  'auth/invalid-verification-code': 'The 6-digit code is incorrect. Check and try again.',
+  'auth/code-expired': 'That verification code expired. Request a new one.',
+  'auth/captcha-check-failed': 'reCAPTCHA check failed. Refresh and try again.',
+  'auth/billing-not-enabled': 'Real SMS requires Firebase Blaze billing; use a Console test number.',
   'auth/too-many-requests': 'Too many attempts. Wait a moment and try again.',
   'auth/network-request-failed': 'Network unavailable. Check your connection and retry.',
 });
@@ -139,6 +149,54 @@ export async function watchAuthState(callback) {
       phoneNumber: fbUser.phoneNumber,
     });
   });
+}
+
+/**
+ * Send SMS OTP to an E.164 phone number using invisible reCAPTCHA.
+ * @param {string} phoneNumber
+ * @param {string} containerId
+ * @returns {Promise<any>} Firebase ConfirmationResult
+ */
+export async function sendPhoneOtp(phoneNumber, containerId) {
+  try {
+    const { auth } = await initFirebase();
+    if (recaptchaVerifier) {
+      recaptchaVerifier.clear();
+      recaptchaVerifier = null;
+    }
+    recaptchaVerifier = new RecaptchaVerifier(auth, containerId, { size: 'invisible' });
+    const cleanPhone = phoneNumber.replace(/[\s-]/g, '');
+    return await signInWithPhoneNumber(auth, cleanPhone, recaptchaVerifier);
+  } catch (err) {
+    if (recaptchaVerifier) {
+      try {
+        recaptchaVerifier.clear();
+      } catch {
+        // ignore clear error
+      }
+      recaptchaVerifier = null;
+    }
+    throw mapAuthError(err, 'Could not send verification code.');
+  }
+}
+
+/**
+ * Confirm 6-digit phone OTP code.
+ * @param {any} confirmationResult
+ * @param {string} code
+ * @returns {Promise<{ uid: string, phoneNumber: string | null, name: string | null }>}
+ */
+export async function confirmPhoneOtp(confirmationResult, code) {
+  try {
+    const cred = await confirmationResult.confirm(code.trim());
+    return {
+      uid: cred.user.uid,
+      phoneNumber: cred.user.phoneNumber,
+      name: cred.user.displayName,
+    };
+  } catch (err) {
+    throw mapAuthError(err, 'Could not verify code.');
+  }
 }
 
 /**

@@ -7,21 +7,21 @@ items to `brain-archive.md` when this file nears 250 lines.
 ## 1. Current state
 
 - Phase: M2 Auth and profile
-- Last completed task: M2.2
-- Next task: M2.3
+- Last completed task: M2.3
+- Next task: M2.4
 - Uncommitted work: none
 - Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Firebase CLI 15.32.1; OpenJDK 21.0.10; Node v26.5.0; Python 3.14.0
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M2.3 Phone OTP flow with 6-cell input
+- Task: M2.4 User profile create and edit (name, city, photo)
 - Plan:
-  1. Add `sendPhoneOtp` and `verifyPhoneOtp` (`RecaptchaVerifier` + `signInWithPhoneNumber` per verified 13.4.0 docs) to `src/services/auth.js`.
-  2. Create a reusable accessible 6-cell OTP input component in `src/components/otpInput.js` (auto-advance, backspace, paste 6 digits, keyboard operable).
-  3. Add Phone OTP mode to `src/views/auth.js` with resend countdown timer (60s) and clear test-number guidance.
-  4. Verify in Auth Emulator / headless Chrome and unit-test OTP input parsing/validation.
-- Files being edited: `src/services/auth.js`, `src/components/otpInput.js`, `src/views/auth.js`, `src/styles/components.css`, `brain.md`, `goal.md`
-- Done when: Phone OTP flow with 6-cell input renders, validates, and passes Auth Emulator test-number check or logs OQ
+  1. Create `src/services/users.js` with `getUserProfile`, `ensureUserProfile` (for phone sign-ins), and `updateUserProfile` (strictly whitelisting `name`, `city`, `photoUrl` — never sending `role`, `verified`, `ratingAvg`, `ratingCount`).
+  2. Create `src/components/verifiedBadge.js` for verified badge display (used in M2.5 and profile/listing views).
+  3. Create `src/views/profile.js` supporting profile view (`#/profile/:id`) and self profile create/edit (name, city, photo URL or file upload hook) with loading, empty, error, and success states.
+  4. Wire `#/profile/:id` in `src/app.js` and add static rule/payload sanitization tests in `tests/domain/users.test.js`.
+- Files being edited: `src/services/users.js`, `src/views/profile.js`, `src/components/verifiedBadge.js`, `src/app.js`, `tests/domain/users.test.js`, `brain.md`, `goal.md`
+- Done when: profile service strips privileged keys, `firestore.rules` blocks `role`/`verified` writes, profile view renders cleanly, and tests pass
 
 ## 3. Obstacles (open and resolved)
 
