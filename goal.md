@@ -87,8 +87,8 @@ flowchart LR
 - [x] M3.1 `images.js`: compress and upload to image host | accept: real file uploaded, URL stored
 - [x] M3.2 Listing form (4 steps) with validation and live preview | accept: invalid input blocked
 - [x] M3.3 `listings.js` create, update, pause, remove | accept: rules tests pass
-- [ ] M3.4 Listing card and detail view with gallery | accept: matches design
-- [ ] M3.5 Owner availability ranges editor | accept: stored and shown
+- [x] M3.4 Listing card and detail view with gallery | accept: matches design
+- [x] M3.5 Owner availability ranges editor | accept: stored and shown
 - [ ] M3.6 Seed script with clearly labelled sample listings | accept: 12 sample listings
 
 ### M4 Search and filters (Obj 3)

@@ -9,6 +9,7 @@ import { waitForAuthReady, watchAuthState } from './services/auth.js';
 const ROUTES = [
   { path: '/', title: 'Home', load: () => import('./views/home.js') },
   { path: '/search', title: 'Browse', load: () => import('./views/search.js') },
+  { path: '/listing/:id', title: 'Item details', load: () => import('./views/listingDetail.js') },
   { path: '/demo', title: 'Components', load: () => import('./views/demo.js') },
   { path: '/auth', title: 'Sign in', load: () => import('./views/auth.js') },
   { path: '/list', title: 'List an item', guard: requireAuth, load: () => import('./views/listingForm.js') },

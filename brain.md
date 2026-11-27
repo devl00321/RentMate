@@ -7,20 +7,20 @@ items to `brain-archive.md` when this file nears 250 lines.
 ## 1. Current state
 
 - Phase: M3 Listings
-- Last completed task: M3.3
-- Next task: M3.4
+- Last completed task: M3.5
+- Next task: M3.6
 - Uncommitted work: none
 - Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Firebase CLI 15.32.1; OpenJDK 21.0.10; Node v26.5.0; Python 3.14.0
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M3.4 Listing card and detail view with gallery
+- Task: M3.6 Seed script with clearly labelled sample listings
 - Plan:
-  1. Create `src/views/listingDetail.js` with keyboard-accessible photo gallery (prev/next + thumbnail buttons), hang tag daily price, refundable deposit line, owner card (verified badge + rating stars + link to `#/profile/:id`), availability windows list, report listing button (hooked in M9.1), and sticky "Request dates" panel with price breakdown (and city-only privacy note before Paid per D-011).
-  2. Wire `#/listing/:id` route in `src/app.js` and style gallery/detail layout in `src/styles/views.css`.
-  3. Add sample fallback preview / tests and verify in headless Chrome with clean console.
-- Files being edited: `src/views/listingDetail.js`, `src/app.js`, `src/styles/views.css`, `brain.md`, `goal.md`
-- Done when: `#/listing/:id` renders gallery, owner card, availability, and request panel cleanly
+  1. Create `src/config/seedListings.js` containing 12 clearly labelled sample listings (`isSample: true`, spanning all 8 categories, realistic rupee prices/deposits, real SVG data-URI or clean sample image URLs, no lorem ipsum).
+  2. Create `tools/seed.mjs` (or browser/admin helper `src/services/seed.js`) to seed the 12 sample listings into Firestore under an owner UID, plus a test validating all 12 sample listings pass `buildListingPayload` / `validateListingInput`.
+  3. Complete Milestone M3 (`m3-done`).
+- Files being edited: `src/config/seedListings.js`, `src/services/seed.js`, `tests/domain/seed.test.js`, `brain.md`, `goal.md`
+- Done when: 12 sample listings pass schema/validation tests and check-lines passes
 
 ## 3. Obstacles (open and resolved)
 
