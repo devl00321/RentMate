@@ -178,6 +178,7 @@ export const SAMPLE_LISTINGS = Object.freeze([
   },
 ].map((item) => ({
   ...item,
+  cityLower: item.city.toLowerCase(),
   availability: AVAIL_NEXT_MONTH,
   status: LISTING_STATUS.ACTIVE,
   isSample: true,

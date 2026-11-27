@@ -7,21 +7,20 @@ items to `brain-archive.md` when this file nears 250 lines.
 ## 1. Current state
 
 - Phase: M4 Search and filters
-- Last completed task: M3.6
-- Next task: M4.1
+- Last completed task: M4.1
+- Next task: M4.2
 - Uncommitted work: none
 - Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Firebase CLI 15.32.1; OpenJDK 21.0.10; Node v26.5.0; Python 3.14.0
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M4.1 Query builder with category, price range, city
+- Task: M4.2 Date-availability filter & M4.3 Pagination + session cache
 - Plan:
-  1. Create `src/domain/search.js` pure query & filter logic (`buildSearchConstraints`, `filterListingsByCriteria`, `sortListings`, `doesAvailabilityCoverRange`).
-  2. Add `searchListings` in `src/services/listings.js` (or `src/services/search.js`) using Firestore `where` + `orderBy` + `limit(12)` + `startAfter` cursor pagination, plus composite indexes in `firestore.indexes.json`.
-  3. Build `dates.js` date range helpers needed for availability filtering (also used in M5.1).
-  4. Write unit tests in `tests/domain/search.test.js` testing each filter (category, price range, city) and `limit(12)`.
-- Files being edited: `src/domain/dates.js`, `src/domain/search.js`, `src/services/search.js`, `firestore.indexes.json`, `tests/domain/search.test.js`, `brain.md`, `goal.md`
-- Done when: category, price range, city query builder works with `limit(12)` and unit tests pass
+  1. Extract pure search orchestrator / session cache + availability filter runner into `src/domain/searchSession.js` so Node tests can verify `bookedDays` exclusion, `limit(12)` pagination, and zero-refetch cache hits without touching Firebase CDN URLs.
+  2. Wire `src/services/search.js` through `searchSession.js`.
+  3. Write unit tests in `tests/domain/searchSession.test.js`, run `node --test` and `check-lines.sh`.
+- Files being edited: `src/domain/searchSession.js`, `src/services/search.js`, `tests/domain/searchSession.test.js`, `brain.md`, `goal.md`
+- Done when: booked items excluded, pagination + session cache prevent refetch on back, and tests pass
 
 ## 3. Obstacles (open and resolved)
 

@@ -75,6 +75,10 @@ service cloud.firestore {
           && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status'])
           && request.resource.data.status in ['active', 'paused', 'removed']);
       allow delete: if false;
+
+      match /bookedDays/{dayStr} {
+        allow read: if true;
+      }
     }
 
     // Default deny for everything else until later milestones

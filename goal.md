@@ -92,7 +92,7 @@ flowchart LR
 - [x] M3.6 Seed script with clearly labelled sample listings | accept: 12 sample listings
 
 ### M4 Search and filters (Obj 3)
-- [ ] M4.1 Query builder with category, price range, city | accept: each filter works, limit(12)
+- [x] M4.1 Query builder with category, price range, city | accept: each filter works, limit(12)
 - [ ] M4.2 Date-availability filter (see D-006 cost note in rules/02) | accept: booked items excluded
 - [ ] M4.3 Pagination ("Load more"), session cache | accept: no refetch on back
 - [ ] M4.4 Search view UI, empty and error states | accept: all states reachable

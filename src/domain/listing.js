@@ -116,6 +116,7 @@ export function buildListingPayload({ draft, owner }) {
       dailyPaise: rupeesToPaise(draft.dailyRupees),
       depositPaise: rupeesToPaise(draft.depositRupees === '' ? 0 : draft.depositRupees),
       city: String(draft.city).trim(),
+      cityLower: String(draft.city).trim().toLowerCase(),
       availability: draft.availability.map((r) => ({ start: r.start, end: r.end })),
       status: LISTING_STATUS.ACTIVE,
     },
@@ -146,6 +147,7 @@ export function buildListingUpdatePayload(draft) {
       dailyPaise: rupeesToPaise(draft.dailyRupees),
       depositPaise: rupeesToPaise(draft.depositRupees === '' ? 0 : draft.depositRupees),
       city: String(draft.city).trim(),
+      cityLower: String(draft.city).trim().toLowerCase(),
       availability: draft.availability.map((r) => ({ start: r.start, end: r.end })),
     },
   };
