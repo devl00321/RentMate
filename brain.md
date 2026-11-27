@@ -7,21 +7,21 @@ items to `brain-archive.md` when this file nears 250 lines.
 ## 1. Current state
 
 - Phase: M5 Booking and calendar
-- Last completed task: M5.2
-- Next task: M5.3
+- Last completed task: M5.3
+- Next task: M5.4
 - Uncommitted work: none
 - Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Firebase CLI 15.32.1; OpenJDK 21.0.10; Node v26.5.0; Python 3.14.0
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M5.3 Calendar component (blocked, selected, range)
+- Task: M5.4 `bookings.js`: request, accept, cancel with event log & M5.5 `bookedDays` locks in batch
 - Plan:
-  1. Create pure month-grid and day-state helpers in `src/domain/calendarMath.js` (compute 7-column month matrix, classify each date as `past`, `unavailable`, `booked`, `available`, `start`, `in-range`, `end`).
-  2. Create accessible `src/components/calendar.js` with month navigation (Prev/Next), keyboard arrow-key navigation across days, Enter/Space range selection, clear button, and live selection announcement.
-  3. Add calendar styles to `src/styles/components.css` and unit tests in `tests/domain/calendar.test.js`.
-  4. Showcase/wire calendar into `src/views/demo.js` (and prepare for `listingDetail.js` in M5.4).
-- Files being edited: `src/domain/calendarMath.js`, `src/components/calendar.js`, `src/styles/components.css`, `tests/domain/calendar.test.js`, `src/views/demo.js`, `brain.md`, `goal.md`
-- Done when: calendar renders blocked/selected/range states, is keyboard-operable, and tests pass
+  1. Create `src/domain/bookingOps.js` pure booking payload + batch lock planner + double-booking conflict checker (injectable transaction/batch adapter for thorough unit testing!).
+  2. Create `src/services/bookings.js` with `createBookingRequest`, `getBooking`, `watchBooking` (real-time single doc listener with cleanup), `listBookingsByRole` (`limit(12)`), `acceptBooking` (creates `bookedDays` lock docs atomically in one `writeBatch`!), `cancelBooking` (deletes `bookedDays` lock docs in batch if any + updates status + records event in `bookings/{id}/events`), and `getBookedDaysForListing`.
+  3. Update `firestore.rules` with `bookings/{id}`, `events/{id}`, and `bookedDays/{dayStr}` create-if-not-exists + party-only read/write + status transition checks!
+  4. Write unit + double-booking batch race tests in `tests/domain/bookings.test.js`.
+- Files being edited: `src/domain/bookingOps.js`, `src/services/bookings.js`, `firestore.rules`, `firestore.indexes.json`, `tests/domain/bookings.test.js`, `brain.md`, `goal.md`
+- Done when: request/accept/cancel write audit events, batch `bookedDays` prevents double-booking, and all tests pass
 
 ## 3. Obstacles (open and resolved)
 

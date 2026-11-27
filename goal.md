@@ -100,7 +100,7 @@ flowchart LR
 ### M5 Booking and calendar (Obj 4)
 - [x] M5.1 `dates.js`, `pricing.js` pure functions plus tests | accept: table tests pass
 - [x] M5.2 `bookingMachine.js` table and tests | accept: legal/illegal cases pass
-- [ ] M5.3 Calendar component (blocked, selected, range) | accept: keyboard operable
+- [x] M5.3 Calendar component (blocked, selected, range) | accept: keyboard operable
 - [ ] M5.4 `bookings.js`: request, accept, cancel with event log | accept: events written
 - [ ] M5.5 bookedDays locks in batch; double-booking test | accept: second attempt fails
 - [ ] M5.6 Booking view with ribbon and price breakdown | accept: all statuses render

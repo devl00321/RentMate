@@ -10,6 +10,7 @@ import { showToast } from '../components/toast.js';
 import { priceTag } from '../components/priceTag.js';
 import { ratingStars } from '../components/ratingStars.js';
 import { ribbon } from '../components/ribbon.js';
+import { mountCalendar } from '../components/calendar.js';
 
 const ALL_STATUSES = Object.values(BOOKING_STATUS);
 
@@ -100,6 +101,11 @@ export function render(outlet) {
       <div class="section-head"><h2>Loading skeleton</h2></div>
       ${skeletonCards(3)}
 
+      <div class="section-head"><h2>Availability calendar</h2></div>
+      <section class="card panel" style="max-width:420px">
+        <div data-demo-calendar></div>
+      </section>
+
       <div class="section-head"><h2>Empty &amp; error states</h2></div>
       <div class="grid">
         ${emptyState({
@@ -130,4 +136,15 @@ export function render(outlet) {
   outlet.querySelector('[data-show-err-toast]')?.addEventListener('click', () => {
     showToast('Payment failed in test mode. Try again.', { variant: 'error' });
   });
+
+  const calSlot = outlet.querySelector('[data-demo-calendar]');
+  if (calSlot) {
+    mountCalendar(calSlot, {
+      availability: [{ start: '2026-12-01', end: '2026-12-28' }],
+      bookedDays: ['2026-12-06', '2026-12-07'],
+      startDate: '2026-12-10',
+      endDate: '2026-12-13',
+      onChange: () => {},
+    });
+  }
 }

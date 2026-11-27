@@ -131,3 +131,19 @@
 .uploader__item { margin: 0; display: grid; gap: var(--s2); padding: var(--s2); }
 .uploader__item img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: var(--r-tag); }
 .uploader__remove { min-height: 36px; padding: 0 var(--s2); font-size: var(--fs-s); }
+
+.cal { display: grid; gap: var(--s3); }
+.cal__head { display: flex; align-items: center; justify-content: space-between; gap: var(--s2); }
+.cal__nav, .cal__clear { min-height: 36px; padding: 0 var(--s3); font-size: var(--fs-s); }
+.cal__grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.cal__dow { text-align: center; font-size: var(--fs-s); font-weight: 600; color: var(--ink-2); padding: 4px 0; }
+.cal__day {
+  min-height: 40px; border: 1px solid var(--mist); border-radius: var(--r-tag);
+  background: var(--surface); color: var(--ink); font: 600 var(--fs-s)/1 var(--font-body); cursor: pointer;
+}
+.cal__day:hover:not(:disabled) { border-color: var(--cobalt); }
+.cal__day:disabled { opacity: 0.38; cursor: not-allowed; background: var(--chalk); }
+.cal__day.is-booked { background: var(--berry-wash); color: var(--berry); text-decoration: line-through; opacity: 0.85; }
+.cal__day.is-start, .cal__day.is-end { background: var(--cobalt); color: var(--cobalt-ink); border-color: var(--cobalt); }
+.cal__day.is-in-range { background: var(--cobalt-wash); color: var(--cobalt); border-color: var(--cobalt-wash); }
+.cal__foot { display: flex; justify-content: space-between; align-items: center; gap: var(--s2); font-size: var(--fs-s); flex-wrap: wrap; }
