@@ -7,20 +7,21 @@ items to `brain-archive.md` when this file nears 250 lines.
 ## 1. Current state
 
 - Phase: M4 Search and filters
-- Last completed task: M4.1
-- Next task: M4.2
+- Last completed task: M4.3
+- Next task: M4.4
 - Uncommitted work: none
 - Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Firebase CLI 15.32.1; OpenJDK 21.0.10; Node v26.5.0; Python 3.14.0
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M4.2 Date-availability filter & M4.3 Pagination + session cache
+- Task: M4.4 Search view UI, empty and error states
 - Plan:
-  1. Extract pure search orchestrator / session cache + availability filter runner into `src/domain/searchSession.js` so Node tests can verify `bookedDays` exclusion, `limit(12)` pagination, and zero-refetch cache hits without touching Firebase CDN URLs.
-  2. Wire `src/services/search.js` through `searchSession.js`.
-  3. Write unit tests in `tests/domain/searchSession.test.js`, run `node --test` and `check-lines.sh`.
-- Files being edited: `src/domain/searchSession.js`, `src/services/search.js`, `tests/domain/searchSession.test.js`, `brain.md`, `goal.md`
-- Done when: booked items excluded, pagination + session cache prevent refetch on back, and tests pass
+  1. Build full `src/views/home.js` per `rules/06` s5: headline, search form (what/where/dates -> navigates to `#/search?...`), handover ribbon explainer, "Browse near you" preview grid (loading/error/sample fallback clearly labelled), and two-sentence deposit explainer.
+  2. Build full `src/views/search.js` per `rules/06` s5: filter bar (category, min/max price, city, dates, keyword, sort), URL-synced query params (preserving filters on Back navigation for session cache!), result count, 12 cards per page, "Load more" button, skeleton loading, empty state, and error state with retry.
+  3. Wire `clearSearchCache()` on listing mutations in `listingForm.js` and `dashboard.js`.
+  4. Verify `#/` and `#/search` in headless Chrome at 360 and 1280 px and complete M4 (`m4-done`).
+- Files being edited: `src/views/home.js`, `src/views/search.js`, `src/views/listingForm.js`, `src/views/dashboard.js`, `src/styles/views.css`, `brain.md`, `goal.md`
+- Done when: Home and Search views render all states (loading, empty, error, results, load more) with clean console
 
 ## 3. Obstacles (open and resolved)
 

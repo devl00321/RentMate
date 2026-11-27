@@ -93,8 +93,8 @@ flowchart LR
 
 ### M4 Search and filters (Obj 3)
 - [x] M4.1 Query builder with category, price range, city | accept: each filter works, limit(12)
-- [ ] M4.2 Date-availability filter (see D-006 cost note in rules/02) | accept: booked items excluded
-- [ ] M4.3 Pagination ("Load more"), session cache | accept: no refetch on back
+- [x] M4.2 Date-availability filter (see D-006 cost note in rules/02) | accept: booked items excluded
+- [x] M4.3 Pagination ("Load more"), session cache | accept: no refetch on back
 - [ ] M4.4 Search view UI, empty and error states | accept: all states reachable
 
 ### M5 Booking and calendar (Obj 4)
