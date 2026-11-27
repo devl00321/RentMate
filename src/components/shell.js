@@ -83,6 +83,10 @@ export function renderShell(root, state = {}) {
           </nav>
         </header>
 
+        <div id="offline-banner" class="offline-banner" role="status" aria-live="polite" hidden>
+          You are offline. Browsing cached views only; changes cannot be saved until you reconnect.
+        </div>
+
         <main id="main-content" tabindex="-1"></main>
 
         <footer class="app-footer muted">
@@ -107,6 +111,14 @@ export function renderShell(root, state = {}) {
     const next = getActiveTheme() === 'dark' ? 'light' : 'dark';
     applyTheme(next, themeBtn);
   });
+
+  const banner = document.getElementById('offline-banner');
+  const syncNetwork = () => {
+    if (banner) banner.hidden = navigator.onLine !== false;
+  };
+  syncNetwork();
+  window.addEventListener('online', syncNetwork);
+  window.addEventListener('offline', syncNetwork);
 }
 
 /**

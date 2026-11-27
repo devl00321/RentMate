@@ -6,23 +6,21 @@ items to `brain-archive.md` when this file nears 250 lines.
 
 ## 1. Current state
 
-- Phase: M10 Security and quota
-- Last completed task: M9.5
-- Next task: M10.1
+- Phase: M11 Tests, docs, deploy
+- Last completed task: M10.5
+- Next task: M11.1
 - Uncommitted work: none
 - Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Firebase CLI 15.32.1; OpenJDK 21.0.10; Node v26.5.0; Python 3.14.0
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M10.1-M10.5 Security rules, CSP, quota audit, offline handling, and full audit loop
+- Task: M11.1-M11.6 UI smoke tests, walkthrough doc, README, responsive/a11y pass, deploy check, final checklist
 - Plan:
-  1. Finalize `firestore.rules`, `firestore.indexes.json`, and create `tests/rules/securityRules.test.js` covering all rules/03 s6 requirements (unauth read, non-owner edit, cross-booking read, illegal status jump, duplicate review, double-booking lock, plus emulator status note per OB-4).
-  2. Verify official Firebase Auth, Firestore, Google Fonts, Cloudinary, and Razorpay origins in docs and add CSP `<meta>` in `index.html` + `headers` in `firebase.json` (M10.2).
-  3. Audit every `getDocs`/`onSnapshot` query in codebase for `limit()`, document per-flow quota counts in `docs/architecture.md` (M10.3).
-  4. Add global `offline` / `online` banner & error handling pass across views (M10.4).
-  5. Run full audit loop (`rules/07` s4) and record all rows in `brain.md` (M10.5).
-- Files being edited: `firestore.rules`, `tests/rules/securityRules.test.js`, `index.html`, `firebase.json`, `src/components/shell.js`, `src/app.js`, `docs/architecture.md`, `brain.md`, `goal.md`
-- Done when: M10.1-M10.5 checks pass, CSP verified clean in Chrome, quota & audit rows recorded, and all tests pass
+  1. Write scripted UI smoke checks across all key routes (`#/`, `#/search?sample=1`, `#/demo`, `#/auth`, `#/dashboard`, `#/admin`, `#/missing`) at 360px, 768px, and 1280px in `tests/uiSmoke.mjs` and run in headless Chrome (M11.1, M11.4).
+  2. Write `docs/demo-script.md` (two-account + admin walkthrough) and `docs/user-guide.md`, and complete `README.md` setup in under 10 steps with test-mode notice and Open Questions list (M11.2, M11.3).
+  3. Check deploy readiness (M11.5): verify whether human Firebase project keys/login exist or log exact blocker in "Needs human" (`brain.md` s7) after finishing all non-blocked tasks (M11.1-M11.4) and updating M11.6 checklist truthfully!
+- Files being edited: `tests/uiSmoke.mjs`, `docs/demo-script.md`, `docs/user-guide.md`, `README.md`, `brain.md`, `goal.md`
+- Done when: all unblocked M11 tasks verified and committed, Needs human updated if Firebase Hosting deploy requires human project/keys
 
 ## 3. Obstacles (open and resolved)
 
@@ -77,12 +75,24 @@ Format: `D-n | date | decision | reason | alternatives | status`
 | 2026-11-27 | Firestore 13.4.0 exports verified: `getFirestore`, `doc`, `collection`, `getDoc`, `getDocs`, `setDoc`, `addDoc`, `updateDoc`, `deleteDoc`, `writeBatch`, `query`, `where`, `orderBy`, `limit`, `startAfter`, `onSnapshot`, `serverTimestamp`, `documentId` | https://firebase.google.com/docs/firestore/quickstart | M2.1, `src/services/*.js` |
 | 2026-11-27 | Cloudinary unsigned upload API verified: `POST https://api.cloudinary.com/v1_1/<cloudName>/image/upload` with `FormData` (`file`, `upload_preset`), returning `{ secure_url }` | https://cloudinary.com/documentation/upload_images#unsigned_upload | M3.1, `src/services/images.js` |
 | 2026-11-27 | Razorpay Standard Checkout test mode verified: `https://checkout.razorpay.com/v1/checkout.js`, `new Razorpay({ key: 'rzp_test_...', amount, currency: 'INR', order_id, handler })`, `rzp.on('payment.failed', ...)` — requires server `order_id` & signature check for capture, matching D-012 simulated Spark adapter | https://razorpay.com/docs/payments/payment-gateway/web-integration/standard/ | M7.1, `src/services/payments.js` |
+| 2026-11-27 | CSP origins verified: Firebase (`identitytoolkit.googleapis.com`, `securetoken.googleapis.com`, `firestore.googleapis.com`, `www.gstatic.com`, `apis.google.com`, `*.firebaseapp.com`), Razorpay (`checkout.razorpay.com`, `api.razorpay.com`, `lumberjack.razorpay.com`), Cloudinary (`api.cloudinary.com`, `res.cloudinary.com`) | https://firebase.google.com/docs/web/setup & https://razorpay.com/docs/payments/payment-gateway/web-integration/standard/ | M10.2, `index.html`, `firebase.json` |
 
-## 7. Needs human (only when truly blocked)
+## 7. M10.5 Audit Loop Record (rules/07 s4)
+
+| Audit | Result (2026-11-27) |
+|---|---|
+| Size cap | PASS (`tools/check-lines.sh`: all files <= 250 lines) |
+| Quota | PASS (13 `getDocs` + 2 `onSnapshot` audited; every list uses `limit(1|12|25|50|180)` & listeners detach) |
+| Security | PASS (83/83 tests pass incl. `tests/rules/securityRules.test.js`; live emulator pending OB-4) |
+| Secrets | PASS (`git grep` zero keys; `git check-ignore` confirms `src/config/config.local.js` ignored) |
+| Hallucination | PASS (Firebase 13.4.0, Cloudinary, Razorpay Checkout & CSP traced to section 6) |
+| UI | PASS (Handover tokens, ribbon, hang tag, loading/empty/error/offline states, Chrome CSP clean) |
+
+## 8. Needs human (only when truly blocked)
 
 - None yet. Expected asks: Firebase project config, Razorpay test keys,
   image-host cloud name and unsigned preset, Google Maps key, an admin email.
 
-## 8. Lessons learned (short, reusable)
+## 9. Lessons learned (short, reusable)
 
 - Keep `https://` Firebase CDN imports isolated in `config/firebase.js` and `services/` that need Firebase; keep `config/env.js` and `domain/` free of `https://` imports so `node --test` runs cleanly without network ESM hooks.

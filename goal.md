@@ -55,7 +55,7 @@ flowchart LR
 | M7 | 5 | 5 | done |
 | M8 | 6 | 6 | done |
 | M9 | 5 | 5 | done |
-| M10 | 5 | 0 | not started |
+| M10 | 5 | 5 | done |
 | M11 | 6 | 0 | not started |
 
 ## 5. Tasks
@@ -135,11 +135,11 @@ flowchart LR
 - [x] M9.5 Reported listings moderation (pause or remove) | accept: effect visible
 
 ### M10 Security and quota (Obj 8)
-- [ ] M10.1 Finalise `firestore.rules` and indexes | accept: rules tests pass
-- [ ] M10.2 CSP and origin allow-list verified from docs | accept: no blocked legit request
-- [ ] M10.3 Quota audit using the dev counter | accept: per-flow numbers in docs
-- [ ] M10.4 Error and offline handling pass | accept: simulated offline OK
-- [ ] M10.5 Audit loop (rules/07 s4), fix findings | accept: all rows recorded
+- [x] M10.1 Finalise `firestore.rules` and indexes | accept: rules tests pass
+- [x] M10.2 CSP and origin allow-list verified from docs | accept: no blocked legit request
+- [x] M10.3 Quota audit using the dev counter | accept: per-flow numbers in docs
+- [x] M10.4 Error and offline handling pass | accept: simulated offline OK
+- [x] M10.5 Audit loop (rules/07 s4), fix findings | accept: all rows recorded
 
 ### M11 Tests, docs, deploy
 - [ ] M11.1 UI smoke tests or scripted manual checks | accept: results recorded

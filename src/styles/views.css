@@ -103,6 +103,7 @@
 .offer { max-width: 88%; padding: var(--s4); border: 1.5px dashed var(--cobalt); border-radius: var(--r-ctl); display: grid; gap: var(--s2); }
 .offer .actions { display: flex; gap: var(--s2); flex-wrap: wrap; }
 .note { padding: var(--s3) var(--s4); background: var(--held-wash); color: var(--held); border-radius: var(--r-ctl); font-size: var(--fs-m); }
+.offline-banner { padding: var(--s3) var(--s4); margin-bottom: var(--s4); background: var(--berry-wash); color: var(--berry); border-radius: var(--r-ctl); font-weight: 600; }
 
 .app-footer {
   padding: var(--s6) 0;
