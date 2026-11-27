@@ -10,6 +10,8 @@ const ROUTES = [
   { path: '/search', title: 'Browse', load: () => import('./views/search.js') },
   { path: '/demo', title: 'Components', load: () => import('./views/demo.js') },
   { path: '/auth', title: 'Sign in', load: () => import('./views/auth.js') },
+  { path: '/profile', title: 'Your profile', load: () => import('./views/profile.js') },
+  { path: '/profile/:id', title: 'Profile', load: () => import('./views/profile.js') },
 ];
 
 /**

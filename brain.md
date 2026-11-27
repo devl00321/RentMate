@@ -7,21 +7,21 @@ items to `brain-archive.md` when this file nears 250 lines.
 ## 1. Current state
 
 - Phase: M2 Auth and profile
-- Last completed task: M2.3
-- Next task: M2.4
+- Last completed task: M2.5
+- Next task: M2.6
 - Uncommitted work: none
 - Verified tool versions: Firebase JS SDK 13.4.0 (CDN ES modules); Firebase CLI 15.32.1; OpenJDK 21.0.10; Node v26.5.0; Python 3.14.0
 
 ## 2. Now (current focus; rewrite per task)
 
-- Task: M2.4 User profile create and edit (name, city, photo)
+- Task: M2.6 Route guards: signed-out redirect, owner and renter in one account
 - Plan:
-  1. Create `src/services/users.js` with `getUserProfile`, `ensureUserProfile` (for phone sign-ins), and `updateUserProfile` (strictly whitelisting `name`, `city`, `photoUrl` — never sending `role`, `verified`, `ratingAvg`, `ratingCount`).
-  2. Create `src/components/verifiedBadge.js` for verified badge display (used in M2.5 and profile/listing views).
-  3. Create `src/views/profile.js` supporting profile view (`#/profile/:id`) and self profile create/edit (name, city, photo URL or file upload hook) with loading, empty, error, and success states.
-  4. Wire `#/profile/:id` in `src/app.js` and add static rule/payload sanitization tests in `tests/domain/users.test.js`.
-- Files being edited: `src/services/users.js`, `src/views/profile.js`, `src/components/verifiedBadge.js`, `src/app.js`, `tests/domain/users.test.js`, `brain.md`, `goal.md`
-- Done when: profile service strips privileged keys, `firestore.rules` blocks `role`/`verified` writes, profile view renders cleanly, and tests pass
+  1. Add `waitForAuthReady()` to `src/services/auth.js` and `requireAuth` / `sanitizeNextPath` guard helpers in `src/domain/guards.js`.
+  2. Update `src/router.js` to wait for `authReady` before checking `route.guard(ctx)` and support `?next=...` safe redirect back after sign-in.
+  3. Add stub `src/views/dashboard.js` (Renting, Lending, Listings tabs in one account) and `src/views/listingForm.js` guarded routes in `src/app.js`.
+  4. Write unit tests in `tests/domain/guards.test.js`, verify `#/dashboard` signed-out redirect in headless Chrome, and finish M2.
+- Files being edited: `src/domain/guards.js`, `src/services/auth.js`, `src/router.js`, `src/views/auth.js`, `src/views/dashboard.js`, `src/views/listingForm.js`, `src/app.js`, `tests/domain/guards.test.js`, `brain.md`, `goal.md`
+- Done when: signed-out guard redirects cleanly with safe `next`, one-account tabs render, and all tests pass
 
 ## 3. Obstacles (open and resolved)
 

@@ -23,20 +23,27 @@ service cloud.firestore {
         && request.resource.data.ratingAvg == 0
         && request.resource.data.ratingCount == 0
         && request.resource.data.name is string
-        && request.resource.data.name.size() > 0
+        && request.resource.data.name.size() >= 2
         && request.resource.data.name.size() <= 80
         && request.resource.data.city is string
-        && request.resource.data.city.size() > 0
-        && request.resource.data.city.size() <= 80;
-      allow update: if isSelf(uid)
+        && request.resource.data.city.size() >= 2
+        && request.resource.data.city.size() <= 80
+        && (!('photoUrl' in request.resource.data)
+          || (request.resource.data.photoUrl is string && request.resource.data.photoUrl.size() <= 500));
+      allow update: if (isSelf(uid)
         && !request.resource.data.diff(resource.data).affectedKeys()
           .hasAny(['role', 'verified', 'ratingAvg', 'ratingCount', 'createdAt'])
         && request.resource.data.name is string
-        && request.resource.data.name.size() > 0
+        && request.resource.data.name.size() >= 2
         && request.resource.data.name.size() <= 80
         && request.resource.data.city is string
-        && request.resource.data.city.size() > 0
-        && request.resource.data.city.size() <= 80;
+        && request.resource.data.city.size() >= 2
+        && request.resource.data.city.size() <= 80
+        && (!('photoUrl' in request.resource.data)
+          || (request.resource.data.photoUrl is string && request.resource.data.photoUrl.size() <= 500)))
+        || (isAdmin()
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['verified'])
+          && request.resource.data.verified is bool);
       allow delete: if false;
     }
 
